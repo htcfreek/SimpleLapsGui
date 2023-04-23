@@ -1,0 +1,8 @@
+# Release Folder content
+/release/*
+
+# Allow the <dummyfile> to upload empty folders
+#!dummyfile
+
+# Backupfolder from Tidy in "ISN AutoIt Studio"
+/src/**/Backup/*
