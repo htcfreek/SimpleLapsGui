@@ -11,8 +11,8 @@ A simple and fast GUI for Microsoft LAPS (legacy) and Windows LAPS. With this to
 
 ## Features
 
-- Simple and fast: Run exe, type computer name, press ENTER key.
-- Supports Microsoft LAPS (legacy) and Windows LAPS.
+- Simple and fast: Run the executable, type the computer name, press the ENTER key.
+- Supports Microsoft LAPS (legacy) and Windows LAPS on Active Directory environments.
 - Read current password, current expiration timestamp and password history (Windows LAPS only) from the Computer objects in your local Active Directory.
 - Copy the passwords (current and history) using the context menu.
 - Change the expiration timestamp.
@@ -30,6 +30,9 @@ A simple and fast GUI for Microsoft LAPS (legacy) and Windows LAPS. With this to
 - Windows LAPS PowerShell module
 - Optional for changing the timestamp of Microsoft LAPS (legacy) passwords:
   - Microsoft LAPS PowerShell module (AdmPwd module)
+
+### Limitations
+Currently Azure AD is not supported.
 
 ## Support
 
