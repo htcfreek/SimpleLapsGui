@@ -1,8 +1,8 @@
 <#
 Name: SimpleLapsGui.ps1
-Version: 1.0
+Version: 1.1
 Developer: htcfreek (Heiko Horwedel) - https://gtihub.com/htcfreek
-Date: 22.04.2023
+Date: 25.04.2023
 Description: Gui script for Windows LAPS in AD environments.
 License: MIT License
 GitHub Repository: https://github.com/htcfreek/SimpleLapsGui
@@ -10,12 +10,12 @@ Requirements: Windows LAPS cmdlet;
 			  Powershell 5.1;
 			  (Optional: Legacy LAPS cmdlet to chenge the expiration time for Legacy LAPS passwords.)
 
-NOTE:
-Converted to exe with PS2Exe-Gui (https://github.com/MScholtes/TechNet-Gallery/tree/master/PS2EXE-GUI).
-
+NOTES:
+- Known issue: The taskbar shows the powershell icon. (GitHub#1)
 
 VERSION HISTORY:
-
+2023-04-22 / htcfreek / Initial release
+2023-04-25 / htcfreek / Don't use PS2Exe anymore because of to many virus arlerts.
 
 #>
 
