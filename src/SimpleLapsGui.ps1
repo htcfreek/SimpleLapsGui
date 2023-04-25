@@ -15,7 +15,7 @@ NOTES:
 
 VERSION HISTORY:
 2023-04-22 / htcfreek / Initial release
-2023-04-25 / htcfreek / Don't use PS2Exe anymore because of to many virus arlerts.
+2023-04-25 / htcfreek / Don't use PS2Exe anymore because of to many virus arlerts.; Small code improvements.
 
 #>
 
@@ -103,7 +103,7 @@ function GetPassword
     # Get password
     try
     {
-        $pwds = Get-LapsADPassword -Identity "$($inputComputerName)" -AsPlainText -IncludeHistory -ErrorAction Stop -WarningAction SilentlyContinue | select ComputerName,Password,PasswordUpdateTime,ExpirationTimestamp
+        $pwds = Get-LapsADPassword -Identity "$($inputComputerName)" -AsPlainText -IncludeHistory -ErrorAction Stop -WarningAction SilentlyContinue | Select-Object ComputerName,Password,PasswordUpdateTime,ExpirationTimestamp
     }
     catch
     {
@@ -195,7 +195,7 @@ function SetExpirationTime([ref]$pForm)
                 # LegacyLaps
                 Reset-AdmPwdPassword -ComputerName $Script:selectedComputer -WhenEffective $newExpTime -ErrorAction Stop -WarningAction SilentlyContinue
             }
-            $newCompTime = Get-LapsADPassword -Identity "$($Script:selectedComputer)" -ErrorAction SilentlyContinue -WarningAction SilentlyContinue | select ExpirationTimestamp
+            $newCompTime = Get-LapsADPassword -Identity "$($Script:selectedComputer)" -ErrorAction SilentlyContinue -WarningAction SilentlyContinue | Select-Object ExpirationTimestamp
 
             #Set state
             if ($newCompTime.ExpirationTimestamp.ToString() -ne $newExpTime.ToString()) {
@@ -393,7 +393,6 @@ $pwdFont = [System.Drawing.Font]::new("Consolas",14, [System.Drawing.FontStyle]:
 $pwdHistoryHeaderFont = [System.Drawing.Font]::new("Segoe UI", 10)
 $pwdHistoryFont = [System.Drawing.Font]::new("Consolas",9)
 $statusBarFont = [System.Drawing.Font]::new("Segoe UI", 8)
-$statusBarFontBold = [System.Drawing.Font]::new("Segoe UI", 8, [System.Drawing.FontStyle]::Bold)
 
 $mainForm = New-Object System.Windows.Forms.Form
 $mainForm.SuspendLayout(); # Very important to correctly size and position all controls!
