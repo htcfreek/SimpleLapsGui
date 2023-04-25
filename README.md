@@ -39,7 +39,7 @@ The user who uses the tool needs the following permissions:
 - Decrypt the Windows LAPS passowrd.
 - [Optional:] Change expiration time attribute.
 
-**Warning:** As always when granting permissions be careful whom your grant them. You should only grant the permissions to the people who need it (e.g. use Administration Tiering).
+**:warning: Warning:** As always when granting permissions be careful whom your grant them. You should only grant the permissions to the people who need it (e.g. use Administration Tiering).
 
 For more information please read the docs on learn.microsoft.com!
 
