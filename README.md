@@ -22,14 +22,26 @@ A simple and fast GUI for Microsoft LAPS (legacy) and Windows LAPS. With this to
 ## Download and Usage
 
 1. Download the archive from [here](http://github.com/htcfreek/SimpleLapsGui/releases).
+   - 'SimpleLapsGui_v<Version>_Exe.zip' Exe wrapper version. (False-positive virus alerts are possible.)
+   - 'SimpleLapsGui_v<Version>_PowerShell.zip' PowerShell script only version.
 2. Extract the downloaded archive to your preferred place.
-3. Run the tool using the executable file.
+3. Run the tool using the executable or the PowerShell file.
 
 ### System requirements
 - PowerShell 5.1
 - Windows LAPS PowerShell module
 - Optional for changing the timestamp of Microsoft LAPS (legacy) passwords:
   - Microsoft LAPS PowerShell module (AdmPwd module)
+
+### Permissions
+The user who uses the tool needs the following permissions:
+- Read LAPS password attribute(s).
+- Decrypt the Windows LAPS passowrd.
+- [Optional:] Change expiration time attribute.
+
+**Warning:** As always when granting permissions be careful whom your grant them. You should only grant the permissions to the people who need it (e.g. use Administration Tiering).
+
+For more information please read the docs on learn.microsoft.com!
 
 ### Limitations
 - Requires an Active Directory joined machine to work properly.
