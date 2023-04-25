@@ -22,8 +22,8 @@ A simple and fast GUI for Microsoft LAPS (legacy) and Windows LAPS. With this to
 ## Download and Usage
 
 1. Download the archive from [here](http://github.com/htcfreek/SimpleLapsGui/releases).
-   - 'SimpleLapsGui_v<Version>_Exe.zip' Exe wrapper version. (False-positive virus alerts are possible.)
-   - 'SimpleLapsGui_v<Version>_PowerShell.zip' PowerShell script only version.
+   - `SimpleLapsGui_v<Version>_Exe.zip`: Exe wrapper version. :exclamation: May produce false-positive virus alerts :exclamation:
+   - `SimpleLapsGui_v<Version>_PowerShell.zip`: PowerShell script only version.
 2. Extract the downloaded archive to your preferred place.
 3. Run the tool using the executable or the PowerShell file.
 
