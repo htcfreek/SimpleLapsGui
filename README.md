@@ -22,8 +22,10 @@ A simple and fast GUI for Microsoft LAPS (legacy) and Windows LAPS. With this to
 ## Download and Usage
 
 1. Download the archive from [here](http://github.com/htcfreek/SimpleLapsGui/releases).
+   - 'SimpleLapsGui_v<Version>_Exe.zip' Exe wrapper version. (False-positive virus alerts are possible.)
+   - 'SimpleLapsGui_v<Version>_PowerShell.zip' PowerShell script only version.
 2. Extract the downloaded archive to your preferred place.
-3. Run the tool using the executable file.
+3. Run the tool using the executable or the PowerShell file.
 
 ### System requirements
 - PowerShell 5.1
@@ -31,9 +33,72 @@ A simple and fast GUI for Microsoft LAPS (legacy) and Windows LAPS. With this to
 - Optional for changing the timestamp of Microsoft LAPS (legacy) passwords:
   - Microsoft LAPS PowerShell module (AdmPwd module)
 
+### Permissions
+The user who uses the tool needs the following permissions:
+- Read LAPS password attribute(s).
+- Decrypt the Windows LAPS password.
+- [Optional:] Change expiration time attribute.
+
+> **Warning**
+> As always when granting permissions, you should be careful who you grant them to. You should grant permissions only to those who need them (e.g., use administration tiering).
+
+> **Information**
+> For more information please read the docs provided by Microsoft:
+> - [Windows LAPS permission concept](https://learn.microsoft.com/en-us/windows-server/identity/laps/laps-concepts#user-group-permissions)
+> - [Windows LAPS attributes and rights](https://learn.microsoft.com/en-us/windows-server/identity/laps/laps-technical-reference#extended-rights)
+> - [Windows LAPS decryption principal](https://learn.microsoft.com/en-us/windows-server/identity/laps/laps-management-policy-settings#adpasswordencryptionprincipal)
+> - [Microsoft LAPS attribute permissions](https://techcommunity.microsoft.com/t5/itops-talk-blog/step-by-step-guide-how-to-configure-microsoft-local/ba-p/2806185)
+
 ### Limitations
 - Requires an Active Directory joined machine to work properly.
 - Currently Azure AD is not supported.
+
+## FAQ
+
+**Why did you create another LAPS (G)UI?**
+
+1. The existing standalone LAPS UI doesn't support Windows LAPS and the Windows LAPS password history.
+2. There is a built-in Windows LAPS tab in the RSAT (Active Directory Users and Computers). But to use this you have to install the RSAT for everyone who should use it. My GUI is small and portable.
+3. The LAPS tab in the RSAT (Active Directory Users and Computers) doesn't show the Windows LAPS password history.
+4. When using my GUI you don't have to learn the PowerShell modules.
+
+**Does the exe version contains viruses? It is reported on "virustotal.com".**
+
+No it doesn't. This happens because of the AutoIT v3 executable used as wrapper. You can download the PowerShell version instead. (Please note that the PowerShell script doesn't hide its window.)
+
+**Can you support Windows Server 2016?**
+
+No. As long as Microsoft doesn't provide the PowerShell cmdlets on Server 2016, I can't support this OS.
+
+> **Warning**
+> You can find instructions on how to change my script to run on Windows Server 2016. But this is not supported by me. All manipulations of the script happens at your own risk!!!
+
+**Why don't you allow side-loading the LAPS module?**
+
+I know that such a feature would make my script usable on Windows Server 2016. But loading PowerShell modules form unknown locations is a potential security risk. And it requires to lower the execution policy level which is a security risk too.
+
+**What notations are supported for the computer name?**
+
+All notations that are supported by the PowerShell module:
+
+- Distinguished Name (begins with a CN=)
+- Sam Account Name (begins with a '$")
+- DNS Hostname (contains at least one '.' character)
+- Name (for all other inputs)
+
+<!--Source: https://learn.microsoft.com/de-de/powershell/module/laps/get-lapsadpassword?view=windowsserver2022-ps#-identity -->
+
+**Why are no passwords found?**
+
+Either you don't have the permission to read them or there are no passwords stored for this computer.
+
+**Why do some computers have no history?**
+
+To have a history it must be enabled and the computer must use Windows LAPS.
+
+**Why is the password not decrypted?**
+
+This happens if you don't have the required permission.
 
 ## Support
 
