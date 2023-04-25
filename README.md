@@ -39,9 +39,15 @@ The user who uses the tool needs the following permissions:
 - Decrypt the Windows LAPS passowrd.
 - [Optional:] Change expiration time attribute.
 
-**:warning: Warning:** As always when granting permissions be careful whom your grant them. You should only grant the permissions to the people who need it (e.g. use Administration Tiering).
+> **Warning**
+> As always when granting permissions be careful whom your grant them. You should only grant the permissions to the people who need it (e.g. use Administration Tiering).
 
-For more information please read the docs on learn.microsoft.com!
+> **Information**
+> For more information please read the docs provided by Microsoft:
+> - [Windows LAPS permission concept](https://learn.microsoft.com/en-us/windows-server/identity/laps/laps-concepts#user-group-permissions)
+> - [Windows LAPS attributes and rights](https://learn.microsoft.com/en-us/windows-server/identity/laps/laps-technical-reference#extended-rights)
+> - [Windows LAPS decryption principal](https://learn.microsoft.com/en-us/windows-server/identity/laps/laps-management-policy-settings#adpasswordencryptionprincipal)
+> - [Microsoft LAPS attribute permissions](https://techcommunity.microsoft.com/t5/itops-talk-blog/step-by-step-guide-how-to-configure-microsoft-local/ba-p/2806185)
 
 ### Limitations
 - Requires an Active Directory joined machine to work properly.
