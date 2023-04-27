@@ -5,7 +5,6 @@ First off all, thanks for taking the time to contribute!
 All types of contributions are encouraged and valued. There are different ways you can help on this project to make the **Simple LAPS GUI** a great and loved tool.
 
 > And if you like the project, but just don't have time to contribute, that's fine. There are other easy ways to support the project and show your appreciation, which I would also be very happy about:
-
 > - Star the project
 > - Write about it in your blog or on social media
 > - Mention the project at local meetups and tell your friends/colleagues
@@ -28,11 +27,11 @@ On all your contributions and communication
 
 ## I Have a Question
 
-Before you ask a question, it is best to read the available [FAQ](https://github.com/htcfreek/SimpleLapsGui#FAQ) and to search for existing [Issues](https://github.com/htcfreek/SimpleLapsGui/issues) that might help you. In case you have found a suitable issue and still need clarification, you can write your question in this issue. It is also advisable to search the internet for answers first.
+Before you ask a question, it is best to read the available [FAQ](https://github.com/htcfreek/SimpleLapsGui#FAQ) and to search for existing [issues](https://github.com/htcfreek/SimpleLapsGui/issues) that might help you. In case you have found a suitable issue and still need clarification, you can write your question in this issue. It is also advisable to search the internet for answers first.
 
 If you then still feel the need to ask a question and need clarification, I recommend the following:
 
-- Open an [Issue](https://github.com/htcfreek/SimpleLapsGui/issues/new).
+- Open an [issue](https://github.com/htcfreek/SimpleLapsGui/issues/new).
 - Provide as much context as you can about what you're running into.
 - Provide project and platform versions, depending on what seems relevant.
 
