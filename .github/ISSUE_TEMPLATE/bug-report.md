@@ -1,5 +1,5 @@
 ---
-name: 🕷️ Bug report
+name: 🕷 Bug report
 about: Report bugs or any other problems
 title: ''
 labels: bug, needs-triage
@@ -16,7 +16,6 @@ assignees: ''
 - Simple LAPS GUI:
 - Operating System:
 
-
 ## 📋 Steps to reproduce
 <!--How to reproduce the behavior?-->
 
@@ -25,9 +24,6 @@ assignees: ''
 <!--A clear and concise description of what you expected to happen.-->
 
 
-## Screenshots
-<!--If applicable, add screenshots to help explain your problem.-->
+## Screenshots and additional context
+<!--If applicable, add screenshots and any additional information to help explain your problem.-->
 
-
-## Additional context
-<!--Add any other context about the problem here.-->
