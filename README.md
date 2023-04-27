@@ -39,11 +39,11 @@ The user who uses the tool needs the following permissions:
 - Decrypt the Windows LAPS password.
 - [Optional:] Change expiration time attribute.
 
-> **Warning:**
-> As always when granting permissions, you should be careful who you grant them to. You should grant permissions only to those who need them (e.g., use administration tiering).
+> **Warning**
+> <br />As always when granting permissions, you should be careful who you grant them to. You should grant permissions only to those who need them (e.g., use administration tiering).
 
-> **Note:**
-> For more information please read the docs provided by Microsoft:
+> **Note**
+> <br />For more information please read the docs provided by Microsoft:
 > - [Windows LAPS permission concept](https://learn.microsoft.com/en-us/windows-server/identity/laps/laps-concepts#user-group-permissions)
 > - [Windows LAPS attributes and rights](https://learn.microsoft.com/en-us/windows-server/identity/laps/laps-technical-reference#extended-rights)
 > - [Windows LAPS decryption principal](https://learn.microsoft.com/en-us/windows-server/identity/laps/laps-management-policy-settings#adpasswordencryptionprincipal)
@@ -71,8 +71,8 @@ No it doesn't. This happens because of the AutoIT v3 executable used as wrapper.
 
 No. As long as Microsoft doesn't provide the PowerShell cmdlets on Server 2016, I can't support this OS.
 
-> **Warning:**
-> You can find instructions on how to change my script to run on Windows Server 2016. But this is not supported by me. All manipulations of the script happens at your own risk!!!
+> **Warning**
+> <br/ >You can find instructions on how to change my script to run on Windows Server 2016. But this is not supported by me. All manipulations of the script happens at your own risk!!!
 
 **Why don't you allow side-loading the LAPS module?**
 
