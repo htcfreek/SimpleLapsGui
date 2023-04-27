@@ -107,7 +107,7 @@ If you have any problems or want to suggest a new feature please [fill an issue]
 
 If you want to report a security vulnerability, please use the form on the [SECURITY](https://github.com/htcfreek/SimpleLapsGui/security) page.
 
-Before contributing to this repository please read the [contributing guidelines](/CONTRIBUTING.md)!!
+Before contributing to this repository please read the [contributing guidelines](/CONTRIBUTING.md)!
 
 ## Credits
 
