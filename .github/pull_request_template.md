@@ -6,7 +6,8 @@
 ## PR Checklist
 - [ ] **Closes:** #xxx
 - [ ] **Tested:** I have tested the code and it works as expected.
-- [ ] **I am allowed to contribute this:** I am the owner of all the code (and graphics). (No license disallows the contribution.)
+- [ ] **I am allowed to contribute this:** No license disallows the contribution.
+- [ ] **I have read the [contributing guidelines](/CONTRIBUTING.md).**
 
 <!-- Provide a more detailed description of the PR, other things fixed or any additional comments/features here -->
 ## Detailed Description of the Pull Request / Additional comments
