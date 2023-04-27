@@ -42,7 +42,7 @@ The user who uses the tool needs the following permissions:
 > **Warning**
 > As always when granting permissions, you should be careful who you grant them to. You should grant permissions only to those who need them (e.g., use administration tiering).
 
-> **Information**
+> **Note**
 > For more information please read the docs provided by Microsoft:
 > - [Windows LAPS permission concept](https://learn.microsoft.com/en-us/windows-server/identity/laps/laps-concepts#user-group-permissions)
 > - [Windows LAPS attributes and rights](https://learn.microsoft.com/en-us/windows-server/identity/laps/laps-technical-reference#extended-rights)
