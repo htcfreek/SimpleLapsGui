@@ -15,9 +15,9 @@ All types of contributions are encouraged and valued. There are different ways y
 - [Code of Conduct](#code-of-conduct)
 - [I Have a Question](#i-have-a-question)
 - [I Want To Contribute](#i-want-to-contribute)
-- [Reporting Bugs](#reporting-bugs)
-- [Suggesting Enhancements](#suggesting-enhancements)
-- [Contribute PRs](#contributing-prs)
+   - [Reporting Bugs](#reporting-bugs)
+   - [Suggesting Enhancements](#suggesting-enhancements)
+   - [Contribute PRs](#contributing-prs)
 
 ## Code of Conduct
 
@@ -28,9 +28,7 @@ On all your contributions and communication
 
 ## I Have a Question
 
-> **Note:** If you want to ask a question, I assume that you have read the available [FAQ](https://github.com/htcfreek/SimpleLapsGui#FAQ).
-
-Before you ask a question, it is best to search for existing [Issues](https://github.com/htcfreek/SimpleLapsGui/issues) that might help you. In case you have found a suitable issue and still need clarification, you can write your question in this issue. It is also advisable to search the internet for answers first.
+Before you ask a question, it is best to read the available [FAQ](https://github.com/htcfreek/SimpleLapsGui#FAQ) and to search for existing [Issues](https://github.com/htcfreek/SimpleLapsGui/issues) that might help you. In case you have found a suitable issue and still need clarification, you can write your question in this issue. It is also advisable to search the internet for answers first.
 
 If you then still feel the need to ask a question and need clarification, I recommend the following:
 
@@ -64,7 +62,7 @@ A good suggestion describes what you like to see in the app and when this is hel
 
 ### Contributing PRs
 
-> **Note:** If you want to contribute any PRs containing code changes, documentation changes or anything else please make sure that your contribution is in compliance with the [legal requirements](#warning-legal-notice)!!
+> :warning: If you want to contribute any PRs containing code changes, documentation changes or anything else please make sure that your contribution is in compliance with the [legal requirements](#warning-legal-notice)!!
 
 Before starting the work on something please inform the repository owner in the corresponding issue and discuss implementation there.
 
