@@ -1,4 +1,4 @@
-# Simple LAPS GUI
+# Simple LAPS GUI  
 
 <!-- Name des Repositories muss immer klein geschrieben werden. -->
 <a href="https://github.com/htcfreek/SimpleLapsGui/releases"><img src="https://img.shields.io/github/release/htcfreek/SimpleLapsGui?label=stable+release"/></a> <a href="https://github.com/htcfreek/SimpleLapsGui/releases/latest"><img src="https://img.shields.io/github/release/htcfreek/SimpleLapsGui?include_prereleases&label=latest+release"/></a> <a href="LICENSE.md"><img src="https://img.shields.io/github/license/htcfreek/SimpleLapsGui" /></a>
@@ -76,7 +76,7 @@ No. As long as Microsoft doesn't provide the PowerShell cmdlets on Server 2016, 
 
 **Why don't you allow side-loading the LAPS module?**
 
-I know that such a feature would make my script usable on Windows Server 2016. But loading PowerShell modules form unknown locations is a potential security risk. And it requires to lower the execution policy level which is a security risk too.
+I know that such a feature would make my script usable on Windows Server 2016. But loading PowerShell modules from unknown locations is a potential security risk. And it requires to lower the execution policy level which is a security risk too.
 
 **What notations are supported for the computer name?**
 
@@ -101,9 +101,13 @@ To have a history it must be enabled and the computer must use Windows LAPS.
 
 This happens if you don't have the required permission.
 
-## Support
+## Support and contributions
 
-If you have any problems or want to suggest a new feature please [fill a bug in this repository](https://github.com/htcfreek/SimpleLapsGui/issues/new).
+If you have any problems or want to suggest a new feature please [fill a bug in this repository](/issues/new).
+
+If you want to report a security vulnerability, please use the form on the [SECURITY](/security) page.
+
+Before contributing to this repository please read the [contributing guidelines](/CONTRIBUTING.md)!!
 
 ## Credits
 
