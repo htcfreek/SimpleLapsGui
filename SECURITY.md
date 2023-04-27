@@ -16,6 +16,6 @@ currently being supported with security updates.
 
 ## Reporting a Vulnerability
 
-To report a security vulnerability please use the 'private reporting' feature under https://github.com/htcfreek/SimpleLapsGui/security.
+To report a security vulnerability, please use the "Report a vulnerability" feature [on this page](https://github.com/htcfreek/SimpleLapsGui/security).
 
 Neue Berichte werden so schnell wie möglich geprüft und analysiert. Nach der Prüfung des Berichts erhalten Sie ein Update über weitere geplante Maßnahmen.
