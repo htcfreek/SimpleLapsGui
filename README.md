@@ -50,8 +50,9 @@ The user who uses the tool needs the following permissions:
 > - [Microsoft LAPS attribute permissions](https://techcommunity.microsoft.com/t5/itops-talk-blog/step-by-step-guide-how-to-configure-microsoft-local/ba-p/2806185)
 
 ### Limitations
+- Currently search works only in computer's domain. ([#3](https://github.com/htcfreek/SimpleLapsGui/issues/3))
 - Requires an Active Directory joined machine to work properly.
-- Currently Azure AD is not supported.
+- Azure AD is not supported.
 
 ## FAQ
 
