@@ -28,8 +28,7 @@ On all your contributions and communication
 
 ## I Have a Question
 
-> :Note:
-> <br />If you want to ask a question, I assume that you have read the available [FAQ](https://github.com/htcfreek/SimpleLapsGui#FAQ).
+> **Note:** If you want to ask a question, I assume that you have read the available [FAQ](https://github.com/htcfreek/SimpleLapsGui#FAQ).
 
 Before you ask a question, it is best to search for existing [Issues](https://github.com/htcfreek/SimpleLapsGui/issues) that might help you. In case you have found a suitable issue and still need clarification, you can write your question in this issue. It is also advisable to search the internet for answers first.
 
@@ -43,8 +42,7 @@ I will then take care of the issue as soon as possible.
 
 ## I Want To Contribute
 
-> ### :warning: Legal Notice 
-
+> ### :warning: Legal Notice
 > When contributing to this project, you must agree that you have authored 100% of the content, that you have the necessary rights to the content and that the content you contribute may be provided under the project license.
 
 ### Reporting Bugs
@@ -66,8 +64,7 @@ A good suggestion describes what you like to see in the app and when this is hel
 
 ### Contributing PRs
 
-> **Note**
-> <br />If you want to contribute any PRs containing code changes, documentation changes or anything else please make sure that your contribution is in compliance with the [legal requirements](#warning-legal-notice)!!
+> **Note:** If you want to contribute any PRs containing code changes, documentation changes or anything else please make sure that your contribution is in compliance with the [legal requirements](#warning-legal-notice)!!
 
 Before starting the work on something please inform the repository owner in the corresponding issue and discuss implementation there.
 
