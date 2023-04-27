@@ -72,7 +72,7 @@ No it doesn't. This happens because of the AutoIT v3 executable used as wrapper.
 No. As long as Microsoft doesn't provide the PowerShell cmdlets on Server 2016, I can't support this OS.
 
 > **Warning**
-> <br/ >You can find instructions on how to change my script to run on Windows Server 2016. But this is not supported by me. All manipulations of the script happens at your own risk!!!
+> <br />You can find instructions on how to change my script to run on Windows Server 2016. But this is not supported by me. All manipulations of the script happens at your own risk!!!
 
 **Why don't you allow side-loading the LAPS module?**
 
