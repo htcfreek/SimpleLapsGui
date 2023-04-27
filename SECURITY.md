@@ -18,4 +18,4 @@ currently being supported with security updates.
 
 To report a security vulnerability, please use the "Report a vulnerability" feature [on this page](https://github.com/htcfreek/SimpleLapsGui/security).
 
-Neue Berichte werden so schnell wie möglich geprüft und analysiert. Nach der Prüfung des Berichts erhalten Sie ein Update über weitere geplante Maßnahmen.
+New reports are reviewed and analyzed as soon as possible. After the report has been reviewed, you will receive an update on further planned actions.
