@@ -1,5 +1,5 @@
 ---
-name: :star: Feature or enhancement request
+name: ⭐ Feature or enhancement request
 about: Suggest a new feature or an enhancement.
 title: ''
 labels: enhancement, needs-triage
