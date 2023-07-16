@@ -52,7 +52,7 @@ The user who uses the tool needs the following permissions:
 ### Limitations
 - Currently search works only in computer's domain. ([#3](https://github.com/htcfreek/SimpleLapsGui/issues/3))
 - Requires an Active Directory joined machine to work properly.
-- Azure AD is not supported.
+- Microsoft Entra ID (Azure AD) is not supported.
 
 ## FAQ
 
