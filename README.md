@@ -53,7 +53,7 @@ The user who uses the tool needs the following permissions:
 - Currently search works only in computer's domain. ([#3](https://github.com/htcfreek/SimpleLapsGui/issues/3))
 - Requires an Active Directory joined machine to work properly.
 - Microsoft Entra ID (Azure AD) is not supported.
-- The name of the managed user is not shown.(This can be a problem, if account name randomization is enabled.)
+- The name of the managed user is not shown. (This can be a problem, if account name randomization is enabled.)
 
 ## FAQ
 
