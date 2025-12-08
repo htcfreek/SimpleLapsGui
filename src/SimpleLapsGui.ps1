@@ -1,6 +1,6 @@
 <#
 Name: SimpleLapsGui.ps1
-Version: 1.3h
+Version: 1.3i
 Developer: htcfreek (Heiko Horwedel) - https://gtihub.com/htcfreek
 Date: 2023-12-08
 Description: Gui script for Windows LAPS in AD environments.
