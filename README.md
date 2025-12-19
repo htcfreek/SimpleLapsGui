@@ -21,7 +21,6 @@ A simple and fast GUI for Microsoft LAPS (legacy) and Windows LAPS. With this to
 - Change the expiration timestamp.
 - Close the window by pressing the ESCAPE key.
 
-
 ## Download and Usage
 
 1. Download the archive from [here](http://github.com/htcfreek/SimpleLapsGui/releases).
@@ -32,36 +31,35 @@ A simple and fast GUI for Microsoft LAPS (legacy) and Windows LAPS. With this to
 > With a shortcut using the `SimpleLapsGui.ico` from the downloaded zip file shows the correct window icon on your task bar.
 
 ### System requirements
+
 - PowerShell 5.1
 - Windows LAPS PowerShell module
 - Optional for changing the timestamp of Microsoft LAPS (legacy) passwords: Microsoft LAPS PowerShell module (AdmPwd module)
 - Requires an Active Directory joined machine to work properly.
 
-
 ### Permissions
+
 The user who uses the tool needs the following permissions:
+
 - Read LAPS password attribute(s).
 - Decrypt the Windows LAPS password.
 - [Optional:] Change expiration time attribute.
 
-
-
 > [!CAUTION]
 > As always when granting permissions, you should be careful who you grant them to. You should grant permissions only to those who need them (e.g., use administration tiering).
 
-
 > [!NOTE]
 > For more information please read the docs provided by Microsoft:
+
 > - [Windows LAPS permission concept](https://learn.microsoft.com/en-us/windows-server/identity/laps/laps-concepts#user-group-permissions)
 > - [Windows LAPS attributes and rights](https://learn.microsoft.com/en-us/windows-server/identity/laps/laps-technical-reference#extended-rights)
 > - [Windows LAPS decryption principal](https://learn.microsoft.com/en-us/windows-server/identity/laps/laps-management-policy-settings#adpasswordencryptionprincipal)
 > - [Microsoft LAPS attribute permissions](https://techcommunity.microsoft.com/t5/itops-talk-blog/step-by-step-guide-how-to-configure-microsoft-local/ba-p/2806185)
 
-
 ### Limitations
+
 - Microsoft Entra ID (Azure AD) is not supported.
 - Changing the expiration time of clients that use Microsoft LAPS (legacy) is not supported when searching in multi-domain mode.
-
 
 ## FAQ
 
@@ -72,9 +70,9 @@ The user who uses the tool needs the following permissions:
 3. The LAPS tab in the RSAT (Active Directory Users and Computers) doesn't show the Windows LAPS password history.
 4. When using my GUI you don't have to learn the PowerShell modules.
 
-**Does the exe version contains viruses? It is reported on "virustotal.com".**
+**Does the script version contains viruses? It is reported on "virustotal.com".**
 
-No it doesn't. This happens because of the AutoIT v3 executable used as wrapper. You can download the PowerShell version instead. (Please note that the PowerShell script doesn't hide its window.)
+No it doesn't. Unfortunately some scanners are triggered by PowerShell scripts in a zip file. (Feel free to report the download / script as false positive to the manufacturer of your scanner.)
 
 **Can you support Windows Server 2016?**
 
@@ -89,12 +87,12 @@ I know that such a feature would make my script usable on Windows Server 2016. B
 
 **What notations are supported for the computer name?**
 
-All notations that are supported by the PowerShell module:
+The following computer name notations are supported:
 
-- Distinguished Name (begins with a CN=)
 - Sam Account Name (begins with a '$")
-- DNS Hostname (contains at least one '.' character)
 - Name (for all other inputs)
+- DNS Hostname (contains at least one '.' character)
+- `<Domain>\<Computer name>`
 
 <!--Source: https://learn.microsoft.com/de-de/powershell/module/laps/get-lapsadpassword?view=windowsserver2022-ps#-identity -->
 
@@ -110,7 +108,7 @@ To have a history it must be enabled and the computer must use Windows LAPS.
 
 This happens if you don't have the required permission.
 
-**How to show get the correct window icon on my task bar?**
+**How to get the correct window icon on my task bar?**
 
 You have to create a shortcut to open the Simple Laps Gui and assign it the `SimpleLapsGui.ico` icon from the downloaded zip file.
 
