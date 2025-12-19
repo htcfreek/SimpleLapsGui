@@ -37,8 +37,6 @@ A simple and fast GUI for Microsoft LAPS (legacy) and Windows LAPS. With this to
 - Optional for changing the timestamp of Microsoft LAPS (legacy) passwords: Microsoft LAPS PowerShell module (AdmPwd module)
 - Requires an Active Directory joined machine to work properly.
 
-  > [!NOTE]
-  > Microsoft Entra ID (Azure AD) is not supported.
 
 ### Permissions
 The user who uses the tool needs the following permissions:
@@ -46,17 +44,23 @@ The user who uses the tool needs the following permissions:
 - Decrypt the Windows LAPS password.
 - [Optional:] Change expiration time attribute.
 
-<br />
+
+
 > [!CAUTION]
 > As always when granting permissions, you should be careful who you grant them to. You should grant permissions only to those who need them (e.g., use administration tiering).
 
-<br />
+
 > [!NOTE]
 > For more information please read the docs provided by Microsoft:
 > - [Windows LAPS permission concept](https://learn.microsoft.com/en-us/windows-server/identity/laps/laps-concepts#user-group-permissions)
 > - [Windows LAPS attributes and rights](https://learn.microsoft.com/en-us/windows-server/identity/laps/laps-technical-reference#extended-rights)
 > - [Windows LAPS decryption principal](https://learn.microsoft.com/en-us/windows-server/identity/laps/laps-management-policy-settings#adpasswordencryptionprincipal)
 > - [Microsoft LAPS attribute permissions](https://techcommunity.microsoft.com/t5/itops-talk-blog/step-by-step-guide-how-to-configure-microsoft-local/ba-p/2806185)
+
+
+### Limitations
+- Microsoft Entra ID (Azure AD) is not supported.
+- Changing the time for Microsoft LAPS (legacy) is not supported when searching in multi-domain mode.
 
 
 ## FAQ
