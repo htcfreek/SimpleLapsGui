@@ -14,10 +14,10 @@ A simple and fast GUI for Microsoft LAPS (legacy) and Windows LAPS. With this to
 - Simple and fast: Run the PowerShell script or Batch file, type the computer name and press the ENTER key.
 - Supports Microsoft LAPS (legacy) and Windows LAPS on Active Directory environments.
 - Query the user name, password and password expiration timestamp of the LAPS account.
-- Query the account history of Computer objects in your local Active Directory (Windows LAPS only).
+- Query the account history of computer objects in your local Active Directory (Windows LAPS only).
 - Multi-domain support.
 - Copy user names and passwords to the clipboard.
-- Zoom view for the user name and password.
+- Zoom view for user name and password.
 - Change the expiration timestamp.
 - Close the window by pressing the ESCAPE key.
 
@@ -26,10 +26,10 @@ A simple and fast GUI for Microsoft LAPS (legacy) and Windows LAPS. With this to
 
 1. Download the archive from [here](http://github.com/htcfreek/SimpleLapsGui/releases).
 2. Extract the downloaded archive to your preferred place.
-3. Run the tool using the Batch file or the PowerShell file.
+3. Run the tool using the Batch file or the PowerShell script.
 
-> [!TIP]
-> With a shortcut using the `SimpleLapsGui.ico` from the downloaded zip file shows the correct window icon on your task bar.
+   > [!TIP]
+   > With a shortcut using the `SimpleLapsGui.ico` from the downloaded zip file shows the correct window icon on your task bar.
 
 ### System requirements
 - PowerShell 5.1
@@ -37,8 +37,8 @@ A simple and fast GUI for Microsoft LAPS (legacy) and Windows LAPS. With this to
 - Optional for changing the timestamp of Microsoft LAPS (legacy) passwords: Microsoft LAPS PowerShell module (AdmPwd module)
 - Requires an Active Directory joined machine to work properly.
 
-> [!NOTE]
-> Microsoft Entra ID (Azure AD) is not supported.
+  > [!NOTE]
+  > Microsoft Entra ID (Azure AD) is not supported.
 
 ### Permissions
 The user who uses the tool needs the following permissions:
@@ -46,11 +46,13 @@ The user who uses the tool needs the following permissions:
 - Decrypt the Windows LAPS password.
 - [Optional:] Change expiration time attribute.
 
+<br />
 > [!CAUTION]
-> <br />As always when granting permissions, you should be careful who you grant them to. You should grant permissions only to those who need them (e.g., use administration tiering).
+> As always when granting permissions, you should be careful who you grant them to. You should grant permissions only to those who need them (e.g., use administration tiering).
 
+<br />
 > [!NOTE]
-> <br />For more information please read the docs provided by Microsoft:
+> For more information please read the docs provided by Microsoft:
 > - [Windows LAPS permission concept](https://learn.microsoft.com/en-us/windows-server/identity/laps/laps-concepts#user-group-permissions)
 > - [Windows LAPS attributes and rights](https://learn.microsoft.com/en-us/windows-server/identity/laps/laps-technical-reference#extended-rights)
 > - [Windows LAPS decryption principal](https://learn.microsoft.com/en-us/windows-server/identity/laps/laps-management-policy-settings#adpasswordencryptionprincipal)
