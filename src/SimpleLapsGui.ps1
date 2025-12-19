@@ -17,7 +17,7 @@ VERSION HISTORY:
 2023-04-22 / v1.0 / htcfreek / Initial release
 2023-04-25 / v1.1 / htcfreek / Don't use PS2Exe anymore because of to many virus arlerts.; Small code improvements.
 2023-07-16 / v1.2 / htcfreek / Fix crash in password history. [Thanks @F1reF0x (github.com/F1reF0x).]; Auto hide PS window. [Thanks @F1reF0x (github.com/F1reF0x).]; Small code improvements.; Add update link to GUI.
-2025-12-19 / v2.0 / htcfreek / Main UI redisign; Multi domain support; Zoom dialog for bigger crdential preview; Set time dialog now respects system's format settings.; Fixed bug with wrong error message after setting the time.; Support for ESCAPE key in time dialog and about dialog.; Fixed dpi scaling bug in about dialog.; Improved window size on different dpi scalings.; Various improvements.; Don't provide AutoIT-Exe-Wrapper version anymore.
+2025-12-19 / v2.0 / htcfreek / Main UI redisign; Multi domain support; Zoom dialog for bigger crdential preview; Set time dialog now respects system's format settings.; Fixed bug with wrong error message after setting the time.; Support for ESCAPE key in time dialog and about dialog.; Fixed dpi scaling bug in about dialog.; Improved window size on different dpi scalings.; Various improvements.; Replaced AutoIT wrapper executable with a Batch file.
 
 #>
 
