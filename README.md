@@ -11,49 +11,54 @@ A simple and fast GUI for Microsoft LAPS (legacy) and Windows LAPS. With this to
 
 ## Features
 
-- Simple and fast: Run the executable, type the computer name and press the ENTER key.
+- Simple and fast: Run the PowerShell script or Batch file, type the computer name and press the ENTER key.
 - Supports Microsoft LAPS (legacy) and Windows LAPS on Active Directory environments.
-- Read current password, current expiration timestamp and password history (Windows LAPS only) from the Computer objects in your local Active Directory.
-- Copy the passwords (current and history) using the context menu.
+- Query the user name, password and password expiration timestamp of the LAPS account.
+- Query the account history of computer objects in your local Active Directory (Windows LAPS only).
+- Multi-domain support.
+- Copy user names and passwords to the clipboard.
+- Zoom view for user name and password.
 - Change the expiration timestamp.
 - Close the window by pressing the ESCAPE key.
-
 
 ## Download and Usage
 
 1. Download the archive from [here](http://github.com/htcfreek/SimpleLapsGui/releases).
-   - `SimpleLapsGui_v<Version>_Exe.zip`: Exe wrapper version. :exclamation: May produce false-positive virus alerts :exclamation:
-   - `SimpleLapsGui_v<Version>_PowerShell.zip`: PowerShell script only version.
 2. Extract the downloaded archive to your preferred place.
-3. Run the tool using the executable or the PowerShell file.
+3. Run the tool using the Batch file or the PowerShell script.
+
+> [!TIP]
+> Using a shortcut with the `SimpleLapsGui.ico` from the downloaded zip file shows the correct window icon on your task bar.
 
 ### System requirements
+
 - PowerShell 5.1
 - Windows LAPS PowerShell module
-- Optional for changing the timestamp of Microsoft LAPS (legacy) passwords:
-  - Microsoft LAPS PowerShell module (AdmPwd module)
+- Active Directory Domain joined machine and user account
+- Optional for changing the timestamp of Microsoft LAPS (legacy) passwords: Microsoft LAPS PowerShell module (AdmPwd module)
 
 ### Permissions
-The user who uses the tool needs the following permissions:
+
+The user account who uses the tool needs the following permissions:
+
 - Read LAPS password attribute(s).
 - Decrypt the Windows LAPS password.
 - [Optional:] Change expiration time attribute.
 
-> **Warning**
-> <br />As always when granting permissions, you should be careful who you grant them to. You should grant permissions only to those who need them (e.g., use administration tiering).
+> [!CAUTION]
+> As always when granting permissions, you should be careful who you grant them to. You should grant permissions only to those who need them (e.g., use administration tiering).
 
-> **Note**
-> <br />For more information please read the docs provided by Microsoft:
+> [!NOTE]
+> For more information please read the docs provided by Microsoft:
 > - [Windows LAPS permission concept](https://learn.microsoft.com/en-us/windows-server/identity/laps/laps-concepts#user-group-permissions)
 > - [Windows LAPS attributes and rights](https://learn.microsoft.com/en-us/windows-server/identity/laps/laps-technical-reference#extended-rights)
 > - [Windows LAPS decryption principal](https://learn.microsoft.com/en-us/windows-server/identity/laps/laps-management-policy-settings#adpasswordencryptionprincipal)
 > - [Microsoft LAPS attribute permissions](https://techcommunity.microsoft.com/t5/itops-talk-blog/step-by-step-guide-how-to-configure-microsoft-local/ba-p/2806185)
 
 ### Limitations
-- Currently search works only in computer's domain. ([#3](https://github.com/htcfreek/SimpleLapsGui/issues/3))
-- Requires an Active Directory joined machine to work properly.
+
 - Microsoft Entra ID (Azure AD) is not supported.
-- The name of the managed user is not shown. (This can be a problem, if account name randomization is enabled.)
+- Changing the expiration time of clients that use Microsoft LAPS (legacy) is not supported when searching in multi-domain mode.
 
 ## FAQ
 
@@ -64,16 +69,16 @@ The user who uses the tool needs the following permissions:
 3. The LAPS tab in the RSAT (Active Directory Users and Computers) doesn't show the Windows LAPS password history.
 4. When using my GUI you don't have to learn the PowerShell modules.
 
-**Does the exe version contains viruses? It is reported on "virustotal.com".**
+**Does the script version contains viruses? It is reported on "virustotal.com".**
 
-No it doesn't. This happens because of the AutoIT v3 executable used as wrapper. You can download the PowerShell version instead. (Please note that the PowerShell script doesn't hide its window.)
+No it doesn't. Unfortunately some scanners are triggered by PowerShell scripts in a zip file. (Feel free to report the download / script as false positive to the manufacturer of your scanner.)
 
 **Can you support Windows Server 2016?**
 
 No. As long as Microsoft doesn't provide the PowerShell cmdlets on Server 2016, I can't support this OS.
 
-> **Warning**
-> <br />You can find instructions on how to change my script to run on Windows Server 2016. But this is not supported by me. All manipulations of the script happens at your own risk!!!
+> [!WARNING]
+> You can find instructions on how to change my script to run on Windows Server 2016. But this is not supported by me. All manipulations of the script happens at your own risk!!!
 
 **Why don't you allow side-loading the LAPS module?**
 
@@ -81,14 +86,21 @@ I know that such a feature would make my script usable on Windows Server 2016. B
 
 **What notations are supported for the computer name?**
 
-All notations that are supported by the PowerShell module:
+The following computer name notations are supported:
 
-- Distinguished Name (begins with a CN=)
 - Sam Account Name (begins with a '$")
-- DNS Hostname (contains at least one '.' character)
 - Name (for all other inputs)
+- DNS Hostname (contains at least one '.' character)
+- `<Domain>\<Computer name>`
 
 <!--Source: https://learn.microsoft.com/de-de/powershell/module/laps/get-lapsadpassword?view=windowsserver2022-ps#-identity -->
+
+**How to query an other domain than my computer/user is joined to?**
+
+To do this please use one of the following computer name notations:
+
+- DNS Hostname (contains at least one '.' character)
+- `<Domain>\<Computer name>`
 
 **Why are no passwords found?**
 
@@ -100,7 +112,11 @@ To have a history it must be enabled and the computer must use Windows LAPS.
 
 **Why is the password not decrypted?**
 
-This happens if you don't have the required permission.
+This happens if you don't have the required permission to decrypt the password.
+
+**How to get the correct window icon shown on my task bar?**
+
+You have to create a shortcut to open the Simple Laps Gui and assign it the `SimpleLapsGui.ico` icon from the downloaded zip file.
 
 ## Support and contributions
 
