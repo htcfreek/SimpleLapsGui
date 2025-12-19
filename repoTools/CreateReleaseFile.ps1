@@ -20,7 +20,7 @@ Param(
 
 # Settings
 [String]$RepoDir=Resolve-Path -LiteralPath "..\"
-[String]$ReleaseDir="\Release\zip"
+[String]$ReleaseDir="\Release"
 
 [String[]]$CompressFiles1 = @(
     "$($RepoDir)\src\SimpleLapsGui.ps1",
