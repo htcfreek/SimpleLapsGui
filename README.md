@@ -28,18 +28,18 @@ A simple and fast GUI for Microsoft LAPS (legacy) and Windows LAPS. With this to
 3. Run the tool using the Batch file or the PowerShell script.
 
 > [!TIP]
-> With a shortcut using the `SimpleLapsGui.ico` from the downloaded zip file shows the correct window icon on your task bar.
+> Using a shortcut with the `SimpleLapsGui.ico` from the downloaded zip file shows the correct window icon on your task bar.
 
 ### System requirements
 
 - PowerShell 5.1
 - Windows LAPS PowerShell module
+- Active Directory Domain joined machine and user account
 - Optional for changing the timestamp of Microsoft LAPS (legacy) passwords: Microsoft LAPS PowerShell module (AdmPwd module)
-- Requires an Active Directory joined machine to work properly.
 
 ### Permissions
 
-The user who uses the tool needs the following permissions:
+The user account who uses the tool needs the following permissions:
 
 - Read LAPS password attribute(s).
 - Decrypt the Windows LAPS password.
@@ -96,6 +96,13 @@ The following computer name notations are supported:
 
 <!--Source: https://learn.microsoft.com/de-de/powershell/module/laps/get-lapsadpassword?view=windowsserver2022-ps#-identity -->
 
+**How to query an other domain than my computer/user is joined to?**
+
+To do this please use one of the following computer name notations:
+
+- DNS Hostname (contains at least one '.' character)
+- `<Domain>\<Computer name>`
+
 **Why are no passwords found?**
 
 Either you don't have the permission to read them or there are no passwords stored for this computer.
@@ -106,9 +113,9 @@ To have a history it must be enabled and the computer must use Windows LAPS.
 
 **Why is the password not decrypted?**
 
-This happens if you don't have the required permission.
+This happens if you don't have the required permission to decrypt the password.
 
-**How to get the correct window icon on my task bar?**
+**How to get the correct window icon shown on my task bar?**
 
 You have to create a shortcut to open the Simple Laps Gui and assign it the `SimpleLapsGui.ico` icon from the downloaded zip file.
 
