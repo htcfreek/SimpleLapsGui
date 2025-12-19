@@ -658,15 +658,15 @@ $aboutLicense.Size = "300, 20"
 $aboutLicense.Text = "MIT License"
 $aboutForm.Controls.Add($aboutLicense)
 
-$aboutLicenseLink = New-Object System.Windows.Forms.LinkLabel
-$aboutLicenseLink.Font = New-Object Drawing.Font("Segeo UI", 8)
-$aboutLicenseLink.Location = "110, 85"
-$aboutLicenseLink.Size = "300, 20"
-$aboutLicenseLink.Text = "Check for new version online"
-$aboutLicenseLink.add_Click({[system.Diagnostics.Process]::start("https://github.com/htcfreek/SimpleLapsGui/releases/latest")})
-$aboutForm.Controls.Add($aboutLicenseLink)
+$aboutDownloadLink = New-Object System.Windows.Forms.LinkLabel
+$aboutDownloadLink.Font = New-Object Drawing.Font("Segeo UI", 8)
+$aboutDownloadLink.Location = "110, 85"
+$aboutDownloadLink.Size = "300, 20"
+$aboutDownloadLink.Text = "Check for new version online"
+$aboutDownloadLink.add_Click({[system.Diagnostics.Process]::start("https://github.com/htcfreek/SimpleLapsGui/releases/latest")})
+$aboutForm.Controls.Add($aboutDownloadLink)
 $tt1 = New-Object System.Windows.Forms.ToolTip
-$tt1.SetToolTip($aboutLicenseLink, "https://github.com/htcfreek/SimpleLapsGui/releases/latest")
+$tt1.SetToolTip($aboutDownloadLink, "https://github.com/htcfreek/SimpleLapsGui/releases/latest")
 
 $aboutLicenseLink = New-Object System.Windows.Forms.LinkLabel
 $aboutLicenseLink.Font = New-Object Drawing.Font("Segeo UI", 8)
@@ -1018,12 +1018,23 @@ $statusText.Padding = New-Object System.Windows.Forms.Padding(15,0,0,5);
 $statusText.Text = "Tip: You can copy the history data using the context menu."
 [void]$statusBar.Items.Add($statusText)
 
+$helpText = New-Object System.Windows.Forms.ToolStripButton
+$helpText.Font = $statusBarFont
+$helpText.ForeColor = "Black"
+$helpText.Alignment = "Right"
+$helpText.Text = "?"
+$helpText.ToolTipText = "Open online FAQ"
+$helpText.AccessibleName = "Open online FAQ"
+$helpText.Add_Click({[system.Diagnostics.Process]::Start("https://github.com/htcfreek/SimpleLapsGui/#faq")})
+[void]$statusBar.Items.Add($helpText)
+
 $aboutText = New-Object System.Windows.Forms.ToolStripButton
 $aboutText.Font = $statusBarFont
 $aboutText.ForeColor = "Black"
 $aboutText.Alignment = "Right"
 $aboutText.Text = "Version: $scriptVersion"
 $aboutText.ToolTipText = "About this tool"
+$aboutText.AccessibleName = "About this tool"
 $aboutText.Add_Click({$aboutForm.ShowDialog($mainForm)})
 [void]$statusBar.Items.Add($aboutText)
 
