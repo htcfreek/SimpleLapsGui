@@ -28,7 +28,7 @@ Param(
 	"$($env:temp)\SimpleLapsGui.ico",
     "$($RepoDir)\LICENSE.md"
 )
-[String]$OutFileName1="$($ReleaseName)_v$($ReleaseVersion)_Exe.zip"
+[String]$OutFileName1="$($ReleaseName)_v$($ReleaseVersion).zip"
 [String]$HashFile1="$($RepoDir)$($ReleaseDir)\$($OutFileName1).sha256"
 
 # Create Zip
