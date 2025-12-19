@@ -11,10 +11,13 @@ A simple and fast GUI for Microsoft LAPS (legacy) and Windows LAPS. With this to
 
 ## Features
 
-- Simple and fast: Run the executable, type the computer name and press the ENTER key.
+- Simple and fast: Run the PowerShell script or Batch file, type the computer name and press the ENTER key.
 - Supports Microsoft LAPS (legacy) and Windows LAPS on Active Directory environments.
-- Read current password, current expiration timestamp and password history (Windows LAPS only) from the Computer objects in your local Active Directory.
-- Copy the passwords (current and history) using the context menu.
+- Query the user name, password and password expiration timestamp of the LAPS account.
+- Query the account history of Computer objects in your local Active Directory (Windows LAPS only).
+- Multi-domain support.
+- Copy user names and passwords to the clipboard.
+- Zoom view for the user name and password.
 - Change the expiration timestamp.
 - Close the window by pressing the ESCAPE key.
 
@@ -22,16 +25,20 @@ A simple and fast GUI for Microsoft LAPS (legacy) and Windows LAPS. With this to
 ## Download and Usage
 
 1. Download the archive from [here](http://github.com/htcfreek/SimpleLapsGui/releases).
-   - `SimpleLapsGui_v<Version>_Exe.zip`: Exe wrapper version. :exclamation: May produce false-positive virus alerts :exclamation:
-   - `SimpleLapsGui_v<Version>_PowerShell.zip`: PowerShell script only version.
 2. Extract the downloaded archive to your preferred place.
-3. Run the tool using the executable or the PowerShell file.
+3. Run the tool using the Batch file or the PowerShell file.
+
+> [!TIP]
+> With a shortcut using the `SimpleLapsGui.ico` from the downloaded zip file shows the correct window icon on your task bar.
 
 ### System requirements
 - PowerShell 5.1
 - Windows LAPS PowerShell module
-- Optional for changing the timestamp of Microsoft LAPS (legacy) passwords:
-  - Microsoft LAPS PowerShell module (AdmPwd module)
+- Optional for changing the timestamp of Microsoft LAPS (legacy) passwords: Microsoft LAPS PowerShell module (AdmPwd module)
+- Requires an Active Directory joined machine to work properly.
+
+> [!NOTE]
+> Microsoft Entra ID (Azure AD) is not supported.
 
 ### Permissions
 The user who uses the tool needs the following permissions:
@@ -39,21 +46,16 @@ The user who uses the tool needs the following permissions:
 - Decrypt the Windows LAPS password.
 - [Optional:] Change expiration time attribute.
 
-> **Warning**
+> [!CAUTION]
 > <br />As always when granting permissions, you should be careful who you grant them to. You should grant permissions only to those who need them (e.g., use administration tiering).
 
-> **Note**
+> [!NOTE]
 > <br />For more information please read the docs provided by Microsoft:
 > - [Windows LAPS permission concept](https://learn.microsoft.com/en-us/windows-server/identity/laps/laps-concepts#user-group-permissions)
 > - [Windows LAPS attributes and rights](https://learn.microsoft.com/en-us/windows-server/identity/laps/laps-technical-reference#extended-rights)
 > - [Windows LAPS decryption principal](https://learn.microsoft.com/en-us/windows-server/identity/laps/laps-management-policy-settings#adpasswordencryptionprincipal)
 > - [Microsoft LAPS attribute permissions](https://techcommunity.microsoft.com/t5/itops-talk-blog/step-by-step-guide-how-to-configure-microsoft-local/ba-p/2806185)
 
-### Limitations
-- Currently search works only in computer's domain. ([#3](https://github.com/htcfreek/SimpleLapsGui/issues/3))
-- Requires an Active Directory joined machine to work properly.
-- Microsoft Entra ID (Azure AD) is not supported.
-- The name of the managed user is not shown. (This can be a problem, if account name randomization is enabled.)
 
 ## FAQ
 
@@ -101,6 +103,10 @@ To have a history it must be enabled and the computer must use Windows LAPS.
 **Why is the password not decrypted?**
 
 This happens if you don't have the required permission.
+
+**How to show get the correct window icon on my task bar?**
+
+You have to create a shortcut to open the Simple Laps Gui and assign it the `SimpleLapsGui.ico` icon from the downloaded zip file.
 
 ## Support and contributions
 
