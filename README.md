@@ -28,8 +28,8 @@ A simple and fast GUI for Microsoft LAPS (legacy) and Windows LAPS. With this to
 2. Extract the downloaded archive to your preferred place.
 3. Run the tool using the Batch file or the PowerShell script.
 
-   > [!TIP]
-   > With a shortcut using the `SimpleLapsGui.ico` from the downloaded zip file shows the correct window icon on your task bar.
+> [!TIP]
+> With a shortcut using the `SimpleLapsGui.ico` from the downloaded zip file shows the correct window icon on your task bar.
 
 ### System requirements
 - PowerShell 5.1
@@ -60,7 +60,7 @@ The user who uses the tool needs the following permissions:
 
 ### Limitations
 - Microsoft Entra ID (Azure AD) is not supported.
-- Changing the time for Microsoft LAPS (legacy) is not supported when searching in multi-domain mode.
+- Changing the expiration time of clients that use Microsoft LAPS (legacy) is not supported when searching in multi-domain mode.
 
 
 ## FAQ
@@ -80,8 +80,8 @@ No it doesn't. This happens because of the AutoIT v3 executable used as wrapper.
 
 No. As long as Microsoft doesn't provide the PowerShell cmdlets on Server 2016, I can't support this OS.
 
-> **Warning**
-> <br />You can find instructions on how to change my script to run on Windows Server 2016. But this is not supported by me. All manipulations of the script happens at your own risk!!!
+> [!WARNING]
+> You can find instructions on how to change my script to run on Windows Server 2016. But this is not supported by me. All manipulations of the script happens at your own risk!!!
 
 **Why don't you allow side-loading the LAPS module?**
 
