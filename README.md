@@ -5,6 +5,8 @@
 
 <a href="https://github.com/htcfreek/SimpleLapsGui/releases"><img src="https://img.shields.io/github/downloads/htcfreek/SimpleLapsGui/total?label=Downloads"/></a> <a href="https://github.com/htcfreek/SimpleLapsGui/stargazers"><img src="https://img.shields.io/github/stars/htcfreek/SimpleLapsGui" /></a> <a href="https://github.com/htcfreek/SimpleLapsGui/watchers"><img src="https://img.shields.io/github/watchers/htcfreek/SimpleLapsGui" /></a> <a href="https://github.com/htcfreek/SimpleLapsGui/network/members"><img src="https://img.shields.io/github/forks/htcfreek/SimpleLapsGui" /></a>
 
+<img src="https://img.shields.io/badge/Mady%20by-Humans-lightblue" /> <img src="https://img.shields.io/badge/AI%20free%20repository-yes-lightgreen" /> <img src="https://img.shields.io/badge/AI%20created%20code-no-red" />
+
 A simple and fast GUI for Microsoft LAPS (legacy) and Windows LAPS. With this tool you can query passwords and change the expiration timestamp.
 
 ![Hero image for Simple LAPS GUI](/images/github-social-preview.png)
@@ -72,6 +74,13 @@ The user account who uses the tool needs the following permissions:
 **Does the script version contains viruses? It is reported on "virustotal.com".**
 
 No it doesn't. Unfortunately some scanners are triggered by PowerShell scripts in a zip file. (Feel free to report the download / script as false positive to the manufacturer of your scanner.)
+
+**Why is there a copilopt-workspace directory? Have you used AI like copilot?**
+
+This folder conatins a configuration file that disallows GitHub Copilot to create Issue comments and Pull Requests.
+
+> [!NOTE]
+> This tool is developed by me and not by any AI. There was no AI used to create code that is written in this script.
 
 **Can you support Windows Server 2016?**
 
