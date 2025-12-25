@@ -5,7 +5,7 @@
 
 <a href="https://github.com/htcfreek/SimpleLapsGui/releases"><img src="https://img.shields.io/github/downloads/htcfreek/SimpleLapsGui/total?label=Downloads"/></a> <a href="https://github.com/htcfreek/SimpleLapsGui/stargazers"><img src="https://img.shields.io/github/stars/htcfreek/SimpleLapsGui" /></a> <a href="https://github.com/htcfreek/SimpleLapsGui/watchers"><img src="https://img.shields.io/github/watchers/htcfreek/SimpleLapsGui" /></a> <a href="https://github.com/htcfreek/SimpleLapsGui/network/members"><img src="https://img.shields.io/github/forks/htcfreek/SimpleLapsGui" /></a>
 
-<img src="https://img.shields.io/badge/Mady%20by-Humans-lightblue" /> <img src="https://img.shields.io/badge/AI%20free-Yes-lightgreen" /> <img src="https://img.shields.io/badge/AI%20created%20code-NO-lightgreen" /> <!--img src="https://img.shields.io/badge/AI%20created%20code-No-darkred" /-->
+<img src="https://img.shields.io/badge/Mady%20by-Humans-lightblue" /> <img src="https://img.shields.io/badge/AI%20free-Yes-lightgreen" /> <img src="https://img.shields.io/badge/AI%20created%20code-NO-darkred" />
 
 A simple and fast GUI for Microsoft LAPS (legacy) and Windows LAPS. With this tool you can query passwords and change the expiration timestamp.
 
