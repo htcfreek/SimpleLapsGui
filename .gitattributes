@@ -4,6 +4,11 @@
 * text=auto
 
 ###############################################################################
+# Binary files
+###############################################################################
+.ico binary
+
+###############################################################################
 # diff behavior for common document formats
 # 
 # Convert binary document formats to text before diffing them. This feature
