@@ -1511,8 +1511,8 @@ try {
     $runSpace.Dispose()
 }
 catch {}
-$mainForm.Dispose()
 $contextMenu.Dispose()
+$mainForm.Dispose()
 $windowIconStream.Dispose()
 $windowIconImage.Dispose()
 $magnifyIconStream.Dispose()
