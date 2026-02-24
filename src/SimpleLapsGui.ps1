@@ -1,8 +1,8 @@
 <#
 Name: SimpleLapsGui.ps1
-Version: 2.2
+Version: 2.3
 Developer: htcfreek (Heiko Horwedel) - https://gtihub.com/htcfreek
-Date: 2026-02-18
+Date: 2026-02-24
 Description: Gui script for Windows LAPS in AD environments.
 License: MIT License
 GitHub Repository: https://github.com/htcfreek/SimpleLapsGui
@@ -20,10 +20,11 @@ VERSION HISTORY:
 2025-12-19 / v2.0 / htcfreek / Main UI redisign; Multi domain support; Zoom dialog for bigger crdential preview; Set time dialog now respects system's format settings.; Fixed bug with wrong error message after setting the time.; Support for ESCAPE key in time dialog and about dialog.; Fixed dpi scaling bug in about dialog.; Improved window size on different dpi scalings.; Various improvements.; Replaced AutoIT wrapper executable with a Batch file.
 2026-02-17 / v2.1 / htcfreek / Development version towards version 2.2
 2026-02-18 / v2.2 / htcfreek / Code improvements; Improvements for screen readers; Improvements on error handling; Added indicators for long running tasks; Improvements on the code that validates the time set result.; Fixed "window not responding" crashes by moving LDAP requests into background jobs.; Fix the bug that on long error detail messages the tooltip exceeds the monitor wide.
+2026-02-24 / v2.3 / htcfreek / Fixed: Ampersand (&) is not displayed in the user name and password.; Fixed: Empty history if only one password is present in the history.
 
 #>
 
-$scriptVersion = "2.2"
+$scriptVersion = "2.3"
 $windowTitle = "Simple LAPS GUI"
 # set-clipboard ([Convert]::ToBase64String((Get-Content ".\copyIcon.ico" -Encoding Byte)))
 # All the images were created by me. They are not copied from the internet.
@@ -718,7 +719,7 @@ function Update-PasswordHistoryListView ($pwdList) {
     [Int]$resizePasswordColumnStyle = [System.Windows.Forms.ColumnHeaderAutoResizeStyle]::HeaderSize
 
     # Update listview content
-    if ($pwdList.length -gt 0)
+    if ($pwdList -ne $null)
     {
         foreach ($hPwd in $pwdList) {
             if ($null -eq $hPwd) {
@@ -824,6 +825,7 @@ $zoomDlgAccount.Size = New-Object System.Drawing.Point(400,50)
 $zoomDlgAccount.Font = [System.Drawing.Font]::new("Consolas", 20, [System.Drawing.FontStyle]::Bold)
 $zoomDlgAccount.ForeColor = "Black"
 $zoomDlgAccount.AutoEllipsis = $true
+$zoomDlgAccount.UseMnemonic = $false
 $zoomDlgAccount.Text = ""
 $zoomDialog.Controls.Add($zoomDlgAccount)
 
@@ -851,6 +853,7 @@ $zoomDlgPassword.Size = New-Object System.Drawing.Point(400,100)
 $zoomDlgPassword.Font = [System.Drawing.Font]::new("Consolas", 20, [System.Drawing.FontStyle]::Bold)
 $zoomDlgPassword.ForeColor = "Black"
 $zoomDlgPassword.AutoEllipsis = $true
+$zoomDlgPassword.UseMnemonic = $false
 $zoomDlgPassword.Text = ""
 $zoomDialog.Controls.Add($zoomDlgPassword)
 
@@ -906,6 +909,7 @@ $compNameText.ForeColor = "Gray"
 $compNameText.Height = 30
 $compNameText.Width = $timeDialog.Width
 $compNameText.Location = "0,45"
+$compNameText.UseMnemonic = $false
 $timeDialog.Controls.Add($compNameText)
 
 $currentDTFormat = [cultureinfo]::CurrentCulture.DateTimeFormat
@@ -1168,6 +1172,7 @@ $AccountNameData.Font = $pwdFont
 $AccountNameData.ForeColor = "Black"
 $AccountNameData.Text = ""
 $AccountNameData.AccessibleDescription = 'User name of current account'
+$AccountNameData.UseMnemonic = $false
 $mainForm.Controls.Add($AccountNameData)
 
 $AccountNameCopyButton = New-Object System.Windows.Forms.Button
@@ -1213,6 +1218,7 @@ $PasswordData.ForeColor = "Black"
 $PasswordData.Text = ""
 $PasswordData.AutoEllipsis = $true
 $PasswordData.AccessibleDescription = 'Password of current account'
+$PasswordData.UseMnemonic = $false
 $mainForm.Controls.Add($PasswordData)
 
 $PasswordCopyButton = New-Object System.Windows.Forms.Button
