@@ -25,5 +25,5 @@ assignees: ''
 
 
 ## Screenshots and additional context
-<!--If applicable, add screenshots and any additional information to help explain your problem.-->
+<!--If applicable, add screenshots and any additional information to help explain your problem. (For security reasons please DON'T UPLOAD IMAGES CONTAINING REAL CREDENTIALS!)-->
 
