@@ -275,7 +275,7 @@ $script:BgJobTimer.Add_Tick({
         }
         else {
            $pwds = Get-LapsADPassword -Identity "$($ThreadSyncHash.DomainComputer_Identity)" -Domain "$($ThreadSyncHash.DomainComputer_Domain)" -AsPlainText -IncludeHistory -ErrorAction Stop -WarningAction SilentlyContinue | Select-Object ComputerName,Account,Password,PasswordUpdateTime,ExpirationTimestamp
-        }		
+        }
     }
     catch
     {
@@ -1538,7 +1538,7 @@ $AccountNamePreviewButton.Hide()
 $AccountNamePreviewButton.Add_Click({
     Set-MainWindowControlsDisabled
     $zoomDlgAccount.Text = $AccountNameData.Text;
-    $zoomDlgPassword.Text = AddLineBreaksForPasswordPreview $PasswordData.Text;    
+    $zoomDlgPassword.Text = AddLineBreaksForPasswordPreview $PasswordData.Text;
     $zoomDialog.ShowDialog($mainForm)
     Set-MainWindowControlsEnabled})
 $mainForm.Controls.Add($AccountNamePreviewButton)
