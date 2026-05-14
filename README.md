@@ -33,7 +33,7 @@ A simple and fast GUI for Microsoft LAPS (legacy) and Windows LAPS. With this to
 > Using a shortcut with the `SimpleLapsGui.ico` from the downloaded zip file shows the correct window icon on your task bar.
 
 > [!NOTE]
-> You can enforce that links are copied instead of opened by starting the script with the parameter `-CopyLinkTargetsToClipboard`.
+> You can enforce that links are copied instead of opened by starting the script with the parameter `‑CopyLinkTargetsToClipboard`.
 
 ### System requirements
 
