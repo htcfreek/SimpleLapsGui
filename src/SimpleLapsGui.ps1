@@ -22,7 +22,7 @@ VERSION HISTORY:
 2026-02-17 / v2.1 / htcfreek / Development version towards version 2.2
 2026-02-18 / v2.2 / htcfreek / Code improvements; Improvements for screen readers; Improvements on error handling; Added indicators for long running tasks; Improvements on the code that validates the time set result.; Fixed "window not responding" crashes by moving LDAP requests into background jobs.; Fix the bug that on long error detail messages the tooltip exceeds the monitor wide.
 2026-02-24 / v2.3 / htcfreek / Fixed: Ampersand (&) is not displayed in the user name and password.; Fixed: Empty history if only one password is present in the history.
-2026-05-13 / v2.4 / htcfreek / Added support for PowerShell 7.6 and newer.; Add text formatting and zoom feature to zoom view.; Switched password font to "Cascadia Mono" and "Consolas" as fallback.; Fix escape key in zoom dialog.; Added a parameter to enforce that links are copied instead of opened.
+2026-05-14 / v2.4 / htcfreek / Added support for PowerShell 7.6 and newer.; Add text formatting and zoom feature to zoom view.; Switched password font to "Cascadia Mono" and "Consolas" as fallback.; Fix escape key in zoom dialog.; Added a parameter to enforce that links are copied instead of opened.
 
 #>
 
