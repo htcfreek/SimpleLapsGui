@@ -135,7 +135,7 @@ You have to create a shortcut to open the Simple Laps Gui and assign it the `Sim
 
 **Can I configure the tool to copy links instead of opening them?**
 
-Yes this is possible by starting the PowerShell script with the parameter `-CopyLinkTargetsToClipboard`.
+Yes this is possible by starting the PowerShell script with the parameter `‑CopyLinkTargetsToClipboard`.
 
 **How can I improve the range of characters supported for account name and password at the zoom view?**
 
