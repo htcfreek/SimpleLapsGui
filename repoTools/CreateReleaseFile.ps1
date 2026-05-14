@@ -1,4 +1,4 @@
-﻿# This file is licensed under th GNU LGPL v3 license.
+﻿# This file is licensed under th MIT license.
 # See the LICENSE file in the project root for more information.
 
 # Name: CreateReleaseFile.ps1
@@ -25,6 +25,7 @@ Param(
 [String[]]$CompressFiles1 = @(
     "$($RepoDir)\src\SimpleLapsGui.ps1",
 	"$($RepoDir)\src\Start_SimpleLapsGui.bat",
+	"$($RepoDir)\src\Start_PS7_SimpleLapsGui.bat",
 	"$($env:temp)\SimpleLapsGui.ico",
     "$($RepoDir)\LICENSE.md"
 )
