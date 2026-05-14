@@ -19,7 +19,7 @@ A simple and fast GUI for Microsoft LAPS (legacy) and Windows LAPS. With this to
 - Query the account history of computer objects in your local Active Directory (Windows LAPS only).
 - Multi-domain support.
 - Copy user names and passwords to the clipboard.
-- Zoom view for user name and password.
+- Zoom view for user name and password with text formatting to distinguish different character groups.
 - Change the expiration timestamp.
 - Close the window by pressing the ESCAPE key.
 
@@ -27,17 +27,23 @@ A simple and fast GUI for Microsoft LAPS (legacy) and Windows LAPS. With this to
 
 1. Download the archive from [here](http://github.com/htcfreek/SimpleLapsGui/releases).
 2. Extract the downloaded archive to your preferred place.
-3. Run the tool using the Batch file or the PowerShell script.
+3. Run the tool using one of the Batch files or the PowerShell script.
 
 > [!TIP]
 > Using a shortcut with the `SimpleLapsGui.ico` from the downloaded zip file shows the correct window icon on your task bar.
 
+> [!NOTE]
+> You can enforce that links are copied instead of opened by starting the script with the parameter `-CopyLinkTargetsToClipboard`.
+
 ### System requirements
 
-- PowerShell 5.1
+- Windows PowerShell 5.1 / PowerShell 7.6 and newer
 - Windows LAPS PowerShell module
 - Active Directory Domain joined machine and user account
 - Optional for changing the timestamp of Microsoft LAPS (legacy) passwords: Microsoft LAPS PowerShell module (AdmPwd module)
+
+> [!TIP]
+> In PowerShell 7.6 and newer the zoom view has better Unicode support and text wrapping behavior.
 
 ### Permissions
 
@@ -126,6 +132,14 @@ This happens if you don't have the required permission to decrypt the password.
 **How to get the correct window icon shown on my task bar?**
 
 You have to create a shortcut to open the Simple Laps Gui and assign it the `SimpleLapsGui.ico` icon from the downloaded zip file.
+
+**Can I configure the tool to copy links instead of opening them?**
+
+Yes this is possible by starting the PowerShell script with the parameter `-CopyLinkTargetsToClipboard`.
+
+**How can I improve the range of characters supported for account name and password at the zoom view?**
+
+You can try if running the script in PowerShell 7 fixes this. The GUI framework in PowerShell 7 has better Unicode support.
 
 ## Support and contributions
 

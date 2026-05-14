@@ -1,17 +1,18 @@
 <#
 Name: SimpleLapsGui.ps1
-Version: 2.3
+Version: 2.4
 Developer: htcfreek (Heiko Horwedel) - https://gtihub.com/htcfreek
-Date: 2026-02-24
+Date: 2026-05-14
 Description: Gui script for Windows LAPS in AD environments.
 License: MIT License
 GitHub Repository: https://github.com/htcfreek/SimpleLapsGui
 Requirements: Windows LAPS cmdlet;
-			  Powershell 5.1;
+			  Windows PowerShell 5.1 or PowerShell 7.6+;
 			  (Optional: Legacy LAPS cmdlet to chenge the expiration time for Legacy LAPS passwords.)
 
 NOTES:
 - Known issue: The taskbar shows the powershell icon. (GitHub#1)
+- The Parameter -CopyLinkTargetsToClipboard can be used to force copy links (faq, repository, ...) to clipboard instead of opening them.
 
 VERSION HISTORY:
 2023-04-22 / v1.0 / htcfreek / Initial release
@@ -21,10 +22,17 @@ VERSION HISTORY:
 2026-02-17 / v2.1 / htcfreek / Development version towards version 2.2
 2026-02-18 / v2.2 / htcfreek / Code improvements; Improvements for screen readers; Improvements on error handling; Added indicators for long running tasks; Improvements on the code that validates the time set result.; Fixed "window not responding" crashes by moving LDAP requests into background jobs.; Fix the bug that on long error detail messages the tooltip exceeds the monitor wide.
 2026-02-24 / v2.3 / htcfreek / Fixed: Ampersand (&) is not displayed in the user name and password.; Fixed: Empty history if only one password is present in the history.
+2026-05-13 / v2.4 / htcfreek / Added support for PowerShell 7.6 and newer.; Add text formatting and zoom feature to zoom view.; Switched password font to "Cascadia Mono" and "Consolas" as fallback.; Fix escape key in zoom dialog.; Added a parameter to enforce that links are copied instead of opened.
 
 #>
 
-$scriptVersion = "2.3"
+
+param(
+    [Switch]$CopyLinkTargetsToClipboard
+)
+
+
+$scriptVersion = "2.4"
 $windowTitle = "Simple LAPS GUI"
 # set-clipboard ([Convert]::ToBase64String((Get-Content ".\copyIcon.ico" -Encoding Byte)))
 # All the images were created by me. They are not copied from the internet.
@@ -77,22 +85,29 @@ public class ProcessDPIAwareness {
 '@#>
 # ------------ Make process DPI aware --------------------
 
+
+# ------------ Check for correct PS-Version --------------
+if (!$PSVersionTable.PSVersion.ToString().StartsWith("5.1") -and $PSVersionTable.PSVersion.ToString() -lt 7.6)
+{
+    [System.Windows.Forms.MessageBox]::Show("Windows PowerShell version 5.1 or PowerShell 7.6 and newer required!!", $windowTitle + " - ERROR", "OK", "Error");
+    exit 501
+}
+# ------------ Check for correct PS-Version --------------
+
 # ------------ Check for available LAPS cmdlets ----
 if (-Not (Get-Module -Name Laps -ListAvailable))
 {
     [System.Windows.Forms.MessageBox]::Show("Windows LAPS PowerShell module not found!!", $windowTitle + " - ERROR", "OK", "Error");
     exit 501
 }
+
+if ($PSVersionTable.PSVersion.ToString() -gt 7.6) {
+    # On PowerShell 7.6 and newer load old AdmPwd.PS legacy module if installed.
+    Import-Module -Name "AdmPwd.PS" -UseWindowsPowerShell -ErrorAction Ignore -WarningAction Ignore
+}
 $Script:IsLegacyLapsInstalled = [bool](Get-Module -Name "AdmPwd.PS" -ListAvailable)
 # ------------ Check for available LAPS cmdlets ----
 
-# ------------ Check for correct PS-Version --------------
-if (-Not $PSVersionTable.PSVersion.ToString().StartsWith("5.1"))
-{
-    [System.Windows.Forms.MessageBox]::Show("Windows PowerShell version 5.1 required!!", $windowTitle + " - ERROR", "OK", "Error");
-    exit 501
-}
-# ------------ Check for correct PS-Version --------------
 
 # ------------- Create icon images ---------------------
 $windowIconBytes = [Convert]::FromBase64String($windowIcon)
@@ -260,7 +275,7 @@ $script:BgJobTimer.Add_Tick({
         }
         else {
            $pwds = Get-LapsADPassword -Identity "$($ThreadSyncHash.DomainComputer_Identity)" -Domain "$($ThreadSyncHash.DomainComputer_Domain)" -AsPlainText -IncludeHistory -ErrorAction Stop -WarningAction SilentlyContinue | Select-Object ComputerName,Account,Password,PasswordUpdateTime,ExpirationTimestamp
-        }
+        }		
     }
     catch
     {
@@ -767,40 +782,244 @@ function Update-PasswordHistoryListView ($pwdList) {
 }
 
 # Code to add line breaks to password in preview window. (Not realted to background job logic.)
+## - On PowerShell 5.1: The WinForms Richtext box does not support Unicode. We only replace hyphens with non-breaking hyphens.
+## - On PowerShell 7.6+: Add a zero-width-space character after each character to allow line breaks after all characters.
 function AddLineBreaksForPasswordPreview ([string]$pwdString) {
-    if ($pwdString.Length -gt 24) {
-        $pwdString = $pwdString.Insert(24, [System.Environment]::NewLine)
+    if ($PSVersionTable.PSVersion.ToString() -gt 7.6) {
+        return $pwdString -replace '(.)',"`$1$([char]0x200B)"
     }
-    if ($pwdString.Length -gt 50) {
-        $pwdString = $pwdString.Insert(50, [System.Environment]::NewLine)
+    else {
+        return $pwdString -replace '-',[char]0x2011
     }
-    return $pwdString
 }
 
 
+
+#### GUI related methods
+############################################################################
+# test if the primary password font "Cascadia Mono" is installed
+$isCascadiaMonoInstalled = [System.Drawing.Text.InstalledFontCollection]::new().Families.Name.Contains("Cascadia Mono")
+
+# Execute every gui command that references to a link
+## - Based on the script paraneter -CopyLinkTargetsToClipboard admins can control if the links are copied or opened 
+function Execute-LinkCommand ([string]$LinkUri, [System.Windows.Forms.Control]$LinkControl) {
+    if ($CopyLinkTargetsToClipboard) {
+        Set-Clipboard -Value $LinkUri
+        $mousePos = [System.Windows.Forms.Control]::MousePosition
+        [System.Windows.Forms.Help]::ShowPopup($LinkControl, "Link copied to clipboard.", $mousePos);
+    }
+    else {
+        Start-Process $LinkUri
+    }
+}
+
+# Format the text in a RichtTextBox (e.g. passwords, acoount names)
+function Set-RichTextFormat ([string]$formatSheme, [System.Windows.Forms.Control]$control) {
+    $Text = $control.Text
+
+    for ($i = 0; $i -lt $Text.Length; $i++) {
+        $char = $Text[$i].ToString()
+        $control.Select($i, 1)
+
+        $cS = $zoomDlgFormatShemes | where {$_.Name -eq $formatSheme}
+        if ($cS -ne $null) {
+            if ([regex]::IsMatch($char,'\p{Lu}')) {
+                $control.SelectionColor = $cS.UpperCase
+                $control.SelectionFont = [System.Drawing.Font]::new($control.Font, $cs.UpperCaseStyle)
+            }
+            elseif ([regex]::IsMatch($char,'\p{Ll}')) {
+                $control.SelectionColor = $cS.LowerCase
+                $control.SelectionFont = [System.Drawing.Font]::new($control.Font, $cs.LowerCaseStyle)
+            }
+            elseif ([regex]::IsMatch($char,'\p{Nd}')) {
+                $control.SelectionColor = $cS.Number
+                $control.SelectionFont = [System.Drawing.Font]::new($control.Font, $cs.NumberStyle)
+            }
+            elseif ([regex]::IsMatch($char,'[^\p{L}\p{Nd}\s]')) {
+                $control.SelectionColor = $cS.SpecialChars
+                $control.SelectionFont = [System.Drawing.Font]::new($control.Font, $cs.SpecialCharsStyle)
+            }
+        }
+        else {
+            $control.SelectionColor = [Drawing.Color]::Black
+            $control.SelectionFont = [System.Drawing.Font]::new($control.Font, "Regular")
+        }
+    }
+
+    $control.Select($Text.Length, 0)
+    $control.SelectionStart = 0
+}
+
+function Get-RegSettingOrDefault ([string]$ValueName, $DefaultValue, $AllowedValues = $null) {
+    try {
+        $val = Get-ItemPropertyValue -Path "HKCU:\Software\htcfreek\Simple LAPS GUI" -Name $ValueName -ErrorAction Stop -WarningAction Stop
+        if ($null -ne $AllowedValues) {
+            if ($val -notin $AllowedValues) { throw "wrong value" }
+        }
+        return $val
+    }
+    catch {
+        return $DefaultValue
+    }
+}
+
+function Save-RegSetting ($ValueName, $ValueData, [ValidateSet("String", "DWord")]$ValueType) {
+    if (-Not (Test-Path "HKCU:\Software\htcfreek\Simple LAPS GUI" -ErrorAction SilentlyContinue)) {
+        New-Item -Path "HKCU:\Software\htcfreek\Simple LAPS GUI" -ErrorAction SilentlyContinue
+    }
+    New-ItemProperty -Path "HKCU:\Software\htcfreek\Simple LAPS GUI" -Name $ValueName -PropertyType $ValueType -Value $ValueData -Force -ErrorAction SilentlyContinue
+}
 
 
 
 ### Zoom dialog
 ############################################################################
+if ($isCascadiaMonoInstalled) {
+    $pwdZoomFont = [System.Drawing.Font]::new("Cascadia Mono",19, [System.Drawing.FontStyle]::Bold)
+}
+else {
+    $pwdZoomFont = [System.Drawing.Font]::new("Consolas",20, [System.Drawing.FontStyle]::Bold)
+}
+
+$zoomDlgFormatShemes = @(
+    [pscustomobject]@{
+        Name="Formatted text";
+        Description="";
+        UpperCase=[Drawing.Color]::FromArgb(0x00,0x00,0x00); # black
+        UpperCaseStyle="Underline";
+        LowerCase=[Drawing.Color]::FromArgb(0x00,0x00,0x00); # black
+        LowerCaseStyle="Italic";
+        Number=[Drawing.Color]::FromArgb(0x00,0x00,0x00); # black
+        NumberStyle="Bold";
+        SpecialChars=[Drawing.Color]::FromArgb(0x00,0x00,0x00); # black
+        SpecialCharsStyle="Regular"},
+    [pscustomobject]@{
+        Name="Black";
+        Description="";
+        UpperCase=[Drawing.Color]::FromArgb(0x00,0x00,0x00); # black
+        UpperCaseStyle="Bold";
+        LowerCase=[Drawing.Color]::FromArgb(0x00,0x00,0x00); # black
+        LowerCaseStyle="Bold";
+        Number=[Drawing.Color]::FromArgb(0x00,0x00,0x00); # black
+        NumberStyle="Bold";
+        SpecialChars=[Drawing.Color]::FromArgb(0x00,0x00,0x00); # black
+        SpecialCharsStyle="Bold"},
+    [pscustomobject]@{
+        Name="Color 1";
+        Description="";
+        UpperCase=[Drawing.Color]::FromArgb(0x00,0x00,0xFF); # blue
+        UpperCaseStyle="Bold";
+        LowerCase=[Drawing.Color]::FromArgb(0x00,0x00,0x00); # black
+        LowerCaseStyle="Bold";
+        Number=[Drawing.Color]::FromArgb(0x53,0xC7,0x00); # green
+        NumberStyle="Bold";
+        SpecialChars=[Drawing.Color]::FromArgb(0xFF,0x55,0x99); # pink
+        SpecialCharsStyle="Bold"},
+    [pscustomobject]@{
+        Name="Color 2";
+        Description="";
+        UpperCase=[Drawing.Color]::FromArgb(0x00,0x66,0xCC); # blue
+        UpperCaseStyle="Bold";
+        LowerCase=[Drawing.Color]::FromArgb(0x00,0x00,0x00); # black
+        LowerCaseStyle="Bold";
+        Number=[Drawing.Color]::FromArgb(0x00,0x99,0x33); # green
+        NumberStyle="Bold";
+        SpecialChars=[Drawing.Color]::FromArgb(0xCC,0x00,0x00); # red
+        SpecialCharsStyle="Bold"},
+    [pscustomobject]@{
+        Name="Protanopia";
+        Description="For red-blind people.";
+        UpperCase=[Drawing.Color]::FromArgb(0x84,0x1F,0xE9); # blue
+        UpperCaseStyle="Bold";
+        LowerCase=[Drawing.Color]::FromArgb(0x00,0x00,0x00); # black
+        LowerCaseStyle="Bold";
+        Number=[Drawing.Color]::FromArgb(0x77,0xC7,0x27); # green
+        NumberStyle="Bold";
+        SpecialChars=[Drawing.Color]::FromArgb(0xee,0x44,0x44); # red
+        SpecialCharsStyle="Bold"},
+    [pscustomobject]@{
+        Name="Deuteranopia";
+        Description="For green-blind people.";
+        UpperCase=[Drawing.Color]::FromArgb(0x71,0x20,0xE9); # blue
+        UpperCaseStyle="Bold";
+        LowerCase=[Drawing.Color]::FromArgb(0x00,0x00,0x00); # black
+        LowerCaseStyle="Bold";
+        Number=[Drawing.Color]::FromArgb(0x28,0xC8,0x3A); # green
+        NumberStyle="Bold";
+        SpecialChars=[Drawing.Color]::FromArgb(0xEE,0x44,0xD7); # pink
+        SpecialCharsStyle="Bold"},
+    [pscustomobject]@{
+        Name="Tritanopia";
+        Description="For blue-blind people.";
+        UpperCase=[Drawing.Color]::FromArgb(0x9B,0x06,0xFF); # blue
+        UpperCaseStyle="Bold";
+        LowerCase=[Drawing.Color]::FromArgb(0x00,0x00,0x00); # black
+        LowerCaseStyle="Bold";
+        Number=[Drawing.Color]::FromArgb(0x6B,0xDC,0x00); # green
+        NumberStyle="Bold";
+        SpecialChars=[Drawing.Color]::FromArgb(0xC9,0x2C,0x0F); # orange
+        SpecialCharsStyle="Bold"}
+)
+
+$Script:zoomDlgRtfEditsInitialized = $false
+$Script:zoomDlgRtfZoom = Get-RegSettingOrDefault -ValueName PasswordPreviewZoomValue -DefaultValue 100 -AllowedValues (100..250)
+$Script:zoomDlgTextFormat = Get-RegSettingOrDefault -ValueName PasswordPreviewTextFormat -DefaultValue "Color 1" -AllowedValues $zoomDlgFormatShemes.Name
 
 $zoomDialog = New-Object system.Windows.Forms.Form
 $zoomDialog.SuspendLayout(); # Very important to correctly size and position all controls!
 $zoomDialog.AutoScaleDimensions =  New-Object System.Drawing.SizeF(96, 96)
 $zoomDialog.AutoScaleMode  = [System.Windows.Forms.AutoScaleMode]::DPI
 $zoomDialog.StartPosition = 'CenterParent'
-$zoomDialog.Size = "470,320"
+$zoomDialog.Size = "470,350"
 $zoomDialog.text = ""
 $zoomDialog.BackColor = 'GhostWhite'
 $zoomDialog.FormBorderStyle='FixedToolWindow'
 $zoomDialog.ShowInTaskbar = $False
 $zoomDialog.ControlBox = $false
 $zoomDialog.KeyPreview = $true
-$zoomDialog.AccessibleName = 'Zoom preview'
+$zoomDialog.AccessibleName = 'Zoom view'
 $zoomDialog.AccessibleRole = 'Window'
-$zoomDialog.Add_KeyUp({if ($_.KeyCode -eq "Escape") {$timeDialog.Close()}})
+$zoomDialog.Add_KeyUp({
+    if ($_.KeyCode -eq "Escape") {
+        $zoomDialog.Close()
+        $_.SuppressKeyPress = $true;
+    }
+})
+$zoomDialog.Add_KeyDown({
+    if ($_.Control -and ($_.KeyCode -eq "D0" -or $_.KeyCode -eq "NumPad0")) {
+        # Ctrl+0 = reset zoom
+		$zoomDlgZoomSlider.Value = 100
+        $_.SuppressKeyPress = $true;
+    }
+    if ($_.Control -and ($_.KeyCode -eq "Oemplus" -or $_.KeyCode -eq "Add")) {
+        # Ctrl+Plus = increase zoom
+        if (($zoomDlgPassword.ZoomFactor + 0.1) -ge 2.5) {
+			$zoomDlgZoomSlider.Value = 250
+        }
+        else { $zoomDlgZoomSlider.Value += 10 }
+        $_.SuppressKeyPress = $true;
+    }
+    if ($_.Control -and ($_.KeyCode -eq "OemMinus" -or $_.KeyCode -eq "Subtract")) {
+        # Ctrl+Minus = decrease zoom
+        if (($zoomDlgPassword.ZoomFactor - 0.1) -le 1) {
+			$zoomDlgZoomSlider.Value = 100
+        }
+        else { $zoomDlgZoomSlider.Value -= 10 }
+        $_.SuppressKeyPress = $true;
+    }
+})
+$zoomDialog.Add_Load({
+    $zoomDlgZoomSlider.Value = $Script:zoomDlgRtfZoom
+	Set-RichTextFormat -formatSheme $Script:zoomDlgTextFormat -control $zoomDlgAccount
+    Set-RichTextFormat -formatSheme $Script:zoomDlgTextFormat -control $zoomDlgPassword
+    # Hide/show accout name control based on account name data
+    $zoomDlgAccount.Visible = ($zoomDlgAccount.Text -notmatch "^\s+$")
+    
+    $Script:zoomDlgRtfEditsInitialized = $true
+})
+$zoomDialog.Add_Closed({ $Script:zoomDlgRtfEditsInitialized = $false })
 
-
+# ----- Area: Account ----------------------
 $zoomDlgAccountHeaderLabel = New-Object system.Windows.Forms.Label
 $zoomDlgAccountHeaderLabel.Location = New-Object System.Drawing.Point(10,6)
 $zoomDlgAccountHeaderLabel.Size = New-Object System.Drawing.Point(95,25)
@@ -819,18 +1038,58 @@ $zoomDlgAccountHeaderLine.AutoSize = $flase
 $zoomDlgAccountHeaderLine.AccessibleRole = 'Separator'
 $zoomDialog.Controls.Add($zoomDlgAccountHeaderLine)
 
-$zoomDlgAccount = New-Object system.Windows.Forms.Label
+$zoomDlgAccount = New-Object System.Windows.Forms.RichTextBox
 $zoomDlgAccount.Location = New-Object System.Drawing.Point(30,35)
-$zoomDlgAccount.Size = New-Object System.Drawing.Point(400,50)
-$zoomDlgAccount.Font = [System.Drawing.Font]::new("Consolas", 20, [System.Drawing.FontStyle]::Bold)
+$zoomDlgAccount.Size = New-Object System.Drawing.Point(400,90)
+$zoomDlgAccount.AccessibleName = "User name"
+$zoomDlgAccount.AccessibleRole = "Text"
+$zoomDlgAccount.Font = $pwdZoomFont
 $zoomDlgAccount.ForeColor = "Black"
-$zoomDlgAccount.AutoEllipsis = $true
-$zoomDlgAccount.UseMnemonic = $false
 $zoomDlgAccount.Text = ""
+$zoomDlgAccount.ReadOnly = $true
+$zoomDlgAccount.BorderStyle = 'None'
+$zoomDlgAccount.BackColor = 'GhostWhite'
+$zoomDlgAccount.Add_KeyDown({
+    if ($_.Control -and ($_.KeyCode -eq "C" -or $_.KeyCode -eq "X" -or $_.KeyCode -eq "A")) {
+        # block copy and select all
+        $_.SuppressKeyPress = $true;
+    }
+    if ($_.Shift) {
+        # block select pressing Shift key
+        $_.SuppressKeyPress = $true;
+    }
+})
+$zoomDlgAccount.Add_MouseDown({
+    # block selection by mouse
+    $bZoomClose.Focus()
+})
+$zoomDlgAccount.Add_MouseUp({
+    # make sure the control can get focus by mouse but selection is not possible
+    $zoomDlgAccount.DeselectAll()
+    $zoomDlgAccount.Focus()
+})
+$zoomDlgAccount.Add_ContentsResized({
+    if (-Not $Script:zoomDlgRtfEditsInitialized) {
+        # Before form loaded, we need to skip changes to not break last zoom factor
+        return
+    }
+    elseif ($zoomDlgAccount.ZoomFactor -ge 2.5) {
+        $zoomDlgAccount.ZoomFactor = 2.5
+        $zoomDlgZoomSlider.Value = 250
+    }
+    elseif ($zoomDlgAccount.ZoomFactor -lt 1) {
+        $zoomDlgAccount.ZoomFactor = 1
+        $zoomDlgZoomSlider.Value = 100
+    }
+    else {
+        $zoomDlgZoomSlider.Value = ($zoomDlgAccount.ZoomFactor * 100)
+    }
+})
 $zoomDialog.Controls.Add($zoomDlgAccount)
 
+# ----- Area: Password ----------------------
 $zoomDlgPasswordHeaderLabel = New-Object system.Windows.Forms.Label
-$zoomDlgPasswordHeaderLabel.Location = New-Object System.Drawing.Point(10,106)
+$zoomDlgPasswordHeaderLabel.Location = New-Object System.Drawing.Point(10,146)
 $zoomDlgPasswordHeaderLabel.Size = New-Object System.Drawing.Point(85,25)
 $zoomDlgPasswordHeaderLabel.Font = [System.Drawing.Font]::new("Segoe UI", 12, [System.Drawing.FontStyle]::Bold)
 $zoomDlgPasswordHeaderLabel.ForeColor = "Black"
@@ -839,7 +1098,7 @@ $zoomDlgPasswordHeaderLabel.Text = "Password"
 $zoomDialog.Controls.Add($zoomDlgPasswordHeaderLabel)
 
 $zoomDlgPasswordHeaderLine = New-Object system.Windows.Forms.Label
-$zoomDlgPasswordHeaderLine.Location = New-Object System.Drawing.Point(20,117)
+$zoomDlgPasswordHeaderLine.Location = New-Object System.Drawing.Point(20,157)
 $zoomDlgPasswordHeaderLine.Size = New-Object System.Drawing.Point(435,4)
 $zoomDlgPasswordHeaderLine.BackColor = "LightGray"
 $zoomDlgPasswordHeaderLine.BorderStyle = "None"
@@ -847,25 +1106,101 @@ $zoomDlgPasswordHeaderLine.AutoSize = $flase
 $zoomDlgPasswordHeaderLine.AccessibleRole = 'Separator'
 $zoomDialog.Controls.Add($zoomDlgPasswordHeaderLine)
 
-$zoomDlgPassword = New-Object system.Windows.Forms.Label
-$zoomDlgPassword.Location = New-Object System.Drawing.Point(30,135)
+$zoomDlgPassword = New-Object System.Windows.Forms.RichTextBox
+$zoomDlgPassword.Location = New-Object System.Drawing.Point(30,175)
 $zoomDlgPassword.Size = New-Object System.Drawing.Point(400,100)
-$zoomDlgPassword.Font = [System.Drawing.Font]::new("Consolas", 20, [System.Drawing.FontStyle]::Bold)
+$zoomDlgPassword.AccessibleName = "Password"
+$zoomDlgPassword.AccessibleRole = "Text"
+$zoomDlgPassword.Font = $pwdZoomFont
 $zoomDlgPassword.ForeColor = "Black"
-$zoomDlgPassword.AutoEllipsis = $true
-$zoomDlgPassword.UseMnemonic = $false
 $zoomDlgPassword.Text = ""
+$zoomDlgPassword.ReadOnly = $true
+$zoomDlgPassword.BorderStyle = 'None'
+$zoomDlgPassword.BackColor = 'GhostWhite'
+$zoomDlgPassword.Add_KeyDown({
+    if ($_.Control -and ($_.KeyCode -eq "C" -or $_.KeyCode -eq "X" -or $_.KeyCode -eq "A")) {
+        # block copy and select all
+        $_.SuppressKeyPress = $true;
+    }
+    if ($_.Shift) {
+        # block selection by pressing Shift key
+        $_.SuppressKeyPress = $true;
+    }
+})
+$zoomDlgPassword.Add_MouseDown({
+    # block selection by pressing Shift key
+    $bZoomClose.Focus()
+})
+$zoomDlgPassword.Add_MouseUp({
+    # make sure the control can get focus by mouse but selection is not possible
+    $zoomDlgPassword.DeselectAll()
+    $zoomDlgPassword.Focus()
+})
+$zoomDlgPassword.Add_ContentsResized({
+    if (-Not $Script:zoomDlgRtfEditsInitialized) {
+        # Before form loaded, we need to skip changes to not break last zoom factor
+        return
+    }
+    elseif ($zoomDlgPassword.ZoomFactor -ge 2.5) {
+        $zoomDlgPassword.ZoomFactor = 2.5
+        $zoomDlgZoomSlider.Value = 250
+    }
+    elseif ($zoomDlgPassword.ZoomFactor -lt 1) {
+        $zoomDlgPassword.ZoomFactor = 1
+        $zoomDlgZoomSlider.Value = 100
+    }
+    else {
+        $zoomDlgZoomSlider.Value = ($zoomDlgPassword.ZoomFactor * 100)
+    }
+})
 $zoomDialog.Controls.Add($zoomDlgPassword)
 
-$bZoomCloes = New-Object System.Windows.Forms.Button
-$bZoomCloes.Text = "Close"
-$bZoomCloes.Font = [System.Drawing.Font]::new("Segoe UI", 12, [System.Drawing.FontStyle]::Bold)
-$bZoomCloes.ForeColor = "blue"
-$bZoomCloes.Size = "150,30"
-$bZoomCloes.Location = "160,260"
-$bZoomCloes.Add_Click({$zoomDialog.Close()})
-$bZoomCloes.DialogResult = "Cancel"
-$zoomDialog.Controls.Add($bZoomCloes)
+# ----- Area: Command controls ----------------------
+$zoomDlgZoomSlider = New-Object Windows.Forms.TrackBar
+$zoomDlgZoomSlider.AccessibleName = "Zoom"
+$zoomDlgZoomSlider.Location = "25,308"
+$zoomDlgZoomSlider.Width = "100"
+$zoomDlgZoomSlider.Minimum = 100
+$zoomDlgZoomSlider.Maximum = 250
+$zoomDlgZoomSlider.TickFrequency = 10
+$zoomDlgZoomSlider.SmallChange = 10
+$zoomDlgZoomSlider.LargeChange = 10
+$zoomDlgZoomSlider.TickStyle = [System.Windows.Forms.TickStyle]::None
+[System.Windows.Forms.ToolTip]::new().SetToolTip($zoomDlgZoomSlider, "Zoom")
+$zoomDlgZoomSlider.Add_ValueChanged({
+	$Script:zoomDlgRtfZoom = $zoomDlgZoomSlider.Value;
+    $zoomDlgPassword.ZoomFactor = $Script:zoomDlgRtfZoom / 100
+    $zoomDlgAccount.ZoomFactor = $Script:zoomDlgRtfZoom / 100
+    Save-RegSetting -ValueName PasswordPreviewZoomValue -ValueData $Script:zoomDlgRtfZoom -ValueType DWord
+})
+$zoomDialog.Controls.Add($zoomDlgZoomSlider)
+
+$bZoomClose = New-Object System.Windows.Forms.Button
+$bZoomClose.Text = "Close"
+$bZoomClose.Font = [System.Drawing.Font]::new("Segoe UI", 12, [System.Drawing.FontStyle]::Bold)
+$bZoomClose.ForeColor = "blue"
+$bZoomClose.Size = "150,30"
+$bZoomClose.Location = "160,300"
+$bZoomClose.Add_Click({$zoomDialog.Close()})
+$bZoomClose.DialogResult = "Cancel"
+$zoomDialog.Controls.Add($bZoomClose)
+$zoomDialog.AcceptButton = $bZoomClose
+
+$zoomDlgFormatDropdown = New-Object System.Windows.Forms.ComboBox
+$zoomDlgFormatDropdown.Size = "100,20"
+$zoomDlgFormatDropdown.Location = "340,304"
+$zoomDlgFormatDropdown.Font = [System.Drawing.Font]::new("Segoe UI", 8, [System.Drawing.FontStyle]::Regular)
+$zoomDlgFormatDropdown.DropDownStyle = 'DropDownList'
+$zoomDlgFormatShemes.Name | ForEach-Object {[void] $zoomDlgFormatDropdown.Items.Add($_)}
+$zoomDlgFormatDropdown.SelectedItem = $Script:zoomDlgTextFormat
+$zoomDlgFormatDropdown.Add_SelectedIndexChanged({
+    $Script:zoomDlgTextFormat = $zoomDlgFormatDropdown.SelectedItem
+    Set-RichTextFormat -formatSheme $Script:zoomDlgTextFormat -control $zoomDlgAccount
+    Set-RichTextFormat -formatSheme $Script:zoomDlgTextFormat -control $zoomDlgPassword
+    Save-RegSetting -ValueName PasswordPreviewTextFormat -ValueData $Script:zoomDlgTextFormat -ValueType String
+})
+$zoomDialog.Controls.Add($zoomDlgFormatDropdown)
+
 
 # Very important to correctly size and position all controls!
 $zoomDialog.ResumeLayout();
@@ -1011,7 +1346,7 @@ $aboutDownloadLink.Location = "110, 85"
 $aboutDownloadLink.Size = "300, 20"
 $aboutDownloadLink.AccessibleRole = 'Link'
 $aboutDownloadLink.Text = "Check for new version online"
-$aboutDownloadLink.add_Click({[system.Diagnostics.Process]::start("https://github.com/htcfreek/SimpleLapsGui/releases/latest")})
+$aboutDownloadLink.add_Click({Execute-LinkCommand -LinkUri "https://github.com/htcfreek/SimpleLapsGui/releases/latest" -LinkControl $aboutDownloadLink})
 $aboutForm.Controls.Add($aboutDownloadLink)
 $tt1 = New-Object System.Windows.Forms.ToolTip
 $tt1.SetToolTip($aboutDownloadLink, "https://github.com/htcfreek/SimpleLapsGui/releases/latest")
@@ -1022,7 +1357,7 @@ $aboutLicenseLink.Location = "110, 105"
 $aboutLicenseLink.Size = "300, 20"
 $aboutLicenseLink.AccessibleRole = 'Link'
 $aboutLicenseLink.Text = "Read license file online"
-$aboutLicenseLink.add_Click({[system.Diagnostics.Process]::start("https://github.com/htcfreek/SimpleLapsGui/blob/main/LICENSE.md")})
+$aboutLicenseLink.add_Click({Execute-LinkCommand -LinkUri "https://github.com/htcfreek/SimpleLapsGui/blob/main/LICENSE.md" -LinkControl $aboutLicenseLink})
 $aboutForm.Controls.Add($aboutLicenseLink)
 $tt2 = New-Object System.Windows.Forms.ToolTip
 $tt2.SetToolTip($aboutLicenseLink, "https://github.com/htcfreek/SimpleLapsGui/blob/main/LICENSE.md")
@@ -1033,7 +1368,7 @@ $aboutFormRepoLink.Location = "110, 125"
 $aboutFormRepoLink.Size = "300, 20"
 $aboutFormRepoLink.AccessibleRole = 'Link'
 $aboutFormRepoLink.Text = "GitHub Repository"
-$aboutFormRepoLink.add_Click({[system.Diagnostics.Process]::start("https://github.com/htcfreek/SimpleLapsGui")})
+$aboutFormRepoLink.add_Click({Execute-LinkCommand -LinkUri "https://github.com/htcfreek/SimpleLapsGui" -LinkControl $aboutFormRepoLink})
 $aboutForm.Controls.Add($aboutFormRepoLink)
 $tt3 = New-Object System.Windows.Forms.ToolTip
 $tt3.SetToolTip($aboutFormRepoLink, "https://github.com/htcfreek/SimpleLapsGui")
@@ -1044,7 +1379,7 @@ $aboutFormAuthorLink.Location = "110, 145"
 $aboutFormAuthorLink.Size = "300, 20"
 $aboutFormAuthorLink.AccessibleRole = 'Link'
 $aboutFormAuthorLink.Text = "GitHub Profile"
-$aboutFormAuthorLink.add_Click({[system.Diagnostics.Process]::start("https://github.com/htcfreek")})
+$aboutFormAuthorLink.add_Click({Execute-LinkCommand -LinkUri "https://github.com/htcfreek" -LinkControl $aboutFormAuthorLink})
 $aboutForm.Controls.Add($aboutFormAuthorLink)
 $tt4 = New-Object System.Windows.Forms.ToolTip
 $tt4.SetToolTip($aboutFormAuthorLink, "https://github.com/htcfreek")
@@ -1060,12 +1395,18 @@ $aboutForm.ResumeLayout();
 ############################################################################
 
 $headerFont = [System.Drawing.Font]::new("Segoe UI", 12, [System.Drawing.FontStyle]::Bold)
-$pwdFont = [System.Drawing.Font]::new("Consolas",10, [System.Drawing.FontStyle]::Bold)
 $textFont = [System.Drawing.Font]::new("Segoe UI",10, [System.Drawing.FontStyle]::Regular)
 $hintFont = [System.Drawing.Font]::new("Segoe UI",8, [System.Drawing.FontStyle]::Italic)
 $pwdHistoryHeaderFont = [System.Drawing.Font]::new("Segoe UI", 8)
-$pwdHistoryFont = [System.Drawing.Font]::new("Consolas",8)
 $statusBarFont = [System.Drawing.Font]::new("Segoe UI", 8)
+if ($isCascadiaMonoInstalled) {
+    $pwdFont = [System.Drawing.Font]::new("Cascadia Mono",9.2, [System.Drawing.FontStyle]::Bold)
+    $pwdHistoryFont = [System.Drawing.Font]::new("Cascadia Mono",7.5)
+}
+else {
+    $pwdFont = [System.Drawing.Font]::new("Consolas",10, [System.Drawing.FontStyle]::Bold)
+    $pwdHistoryFont = [System.Drawing.Font]::new("Consolas",8)
+}
 
 $mainForm = New-Object System.Windows.Forms.Form
 $mainForm.SuspendLayout(); # Very important to correctly size and position all controls!
@@ -1189,7 +1530,7 @@ $AccountNamePreviewButton = New-Object System.Windows.Forms.Button
 $AccountNamePreviewButton.Location = New-Object System.Drawing.Size(480,109)
 $AccountNamePreviewButton.Size = New-Object System.Drawing.Size(25,25)
 $AccountNamePreviewButton.Text = ""
-$AccountNamePreviewButton.AccessibleName = "Zoom preview"
+$AccountNamePreviewButton.AccessibleName = "Zoom view"
 $AccountNamePreviewButton.Font = $textFont
 $AccountNamePreviewButton.BackgroundImage = $magnifyIconImage
 $AccountNamePreviewButton.BackgroundImageLayout = 'Stretch'
@@ -1197,7 +1538,7 @@ $AccountNamePreviewButton.Hide()
 $AccountNamePreviewButton.Add_Click({
     Set-MainWindowControlsDisabled
     $zoomDlgAccount.Text = $AccountNameData.Text;
-    $zoomDlgPassword.Text = AddLineBreaksForPasswordPreview $PasswordData.Text;
+    $zoomDlgPassword.Text = AddLineBreaksForPasswordPreview $PasswordData.Text;    
     $zoomDialog.ShowDialog($mainForm)
     Set-MainWindowControlsEnabled})
 $mainForm.Controls.Add($AccountNamePreviewButton)
@@ -1235,7 +1576,7 @@ $PasswordPreviewButton = New-Object System.Windows.Forms.Button
 $PasswordPreviewButton.Location = New-Object System.Drawing.Size(480,138)
 $PasswordPreviewButton.Size = New-Object System.Drawing.Size(25,25)
 $PasswordPreviewButton.Text = ""
-$PasswordPreviewButton.AccessibleName = "Zoom preview"
+$PasswordPreviewButton.AccessibleName = "Zoom view"
 $PasswordPreviewButton.Font = $textFont
 $PasswordPreviewButton.BackgroundImage = $magnifyIconImage
 $PasswordPreviewButton.BackgroundImageLayout = 'Stretch'
@@ -1355,7 +1696,7 @@ $menuClick11 = {Set-Clipboard $ListPwdHistory.SelectedItems[0].SubItems[2].Text}
 $menuItem11.add_Click($menuClick11)
 $menuItem11.Image = $copyPasswordIconImage
 [void]$contextMenu.Items.Add("-")
-$menuItem12 = $contextMenu.Items.Add("Zoom preview")
+$menuItem12 = $contextMenu.Items.Add("Zoom view")
 $menuItem12.Font = $pwdHistoryHeaderFont
 $menuClick12 = ({
     Set-MainWindowControlsDisabled
@@ -1427,7 +1768,7 @@ $helpText.Text = "?"
 $helpText.ToolTipText = "Open online FAQ"
 $helpText.AccessibleName = "Open online FAQ"
 $helpText.AccessibleRole = 'Link'
-$helpText.Add_Click({[system.Diagnostics.Process]::Start("https://github.com/htcfreek/SimpleLapsGui/#faq")})
+$helpText.Add_Click({Execute-LinkCommand -LinkUri "https://github.com/htcfreek/SimpleLapsGui/#faq" -LinkControl $statusBar})
 [void]$statusBar.Items.Add($helpText)
 
 $aboutText = New-Object System.Windows.Forms.ToolStripButton
