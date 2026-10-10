@@ -24,7 +24,7 @@ VERSION HISTORY:
 2026-02-18 / v2.2 / htcfreek / Code improvements; Improvements for screen readers; Improvements on error handling; Added indicators for long running tasks; Improvements on the code that validates the time set result.; Fixed "window not responding" crashes by moving LDAP requests into background jobs.; Fix the bug that on long error detail messages the tooltip exceeds the monitor wide.
 2026-02-24 / v2.3 / htcfreek / Fixed: Ampersand (&) is not displayed in the user name and password.; Fixed: Empty history if only one password is present in the history.
 2026-05-14 / v2.4 / htcfreek / Added support for PowerShell 7.6 and newer.; Add text formatting and zoom feature to zoom view.; Switched password font to "Cascadia Mono" and "Consolas" as fallback.; Fix escape key in zoom dialog.; Added a parameter to enforce that links are copied instead of opened.
-2026-??-?? / v2.5 / htcfreek / Added group policies and new logging Parameter.
+2026-??-?? / v2.5 / htcfreek / Added group policies and new logging Parameter.; Added logging to the app.
 
 #>
 
@@ -49,97 +49,6 @@ $copyUserIcon = "AAABAAEAICAAAAEAIACoEAAAFgAAACgAAAAgAAAAQAAAAAEAIAAAAAAAAAAAAAA
 $copyPasswordIcon = "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AACAbFwAgGxcAIBtXACBbVwAgW1cAIJtXACzz93kf/j//4D4//+A+P//gfj//4H4//+B+P//gvj//4L5//9+x9v/AK/v/wCW0f8Ase//AMz//wBEa7cAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIBsXACAbVwAgW1cAIFtXACCbVwAx7y0PVTw//+A+P//gPj//4D4//+B+P//gfj//4L4//+C+P//gvn//4P5//88ka//AMj//wBnk/8Ay///AK3r/wAAAGynlokzg2pVHwAAAAAAAAAAAAAAAAAAAAAAAAAAgGxcAIFtXACBbVwAgm1cAIJtXQDFubFcaPT//4D4//+A+P//gfj//4H4//+C+P//gvj//4L5//+D+f//g/n//3Da9f8AjsH+ALz+/wCPyv8Ay///AJ7Y/wCq4f8AhsH/HoSu4AAAAHoAAAAKAAAAAAAAAACBbVwAgW1cAIJtXACCbV0Agm5dALuvplab6P//gPj//4H4//+B+P//gvj//4L4//+C+f//g/n//4P5//+E+f//hPn//16DkesAuvf/AK7t/wDL//8Ay///AMv//wDM//8AzP//AML//wBgiOJiNwArAAAAAIFtXACBbVwAgm1dAIJuXQCDbl0A3dPMKKrc8f+B+P//gfj//4H4//+C+P//gvn//7Lp//+Z2vH/u+b6/4T5//+E+f//aKjCuzmx5P8Ay///AMv//wDL//8Ay///AMz//wDM//8AzP//AM///x9aeeeQemcVgW1dAIJtXQCCbl0Ag25dAINuXQCDbl0Ajcfisn74//+B+P//gvj//4L5//+D+f//e9///4z5//+X2/T/qPL//7nq//8ZaInrAMv//wDL//8Ay///AMv//wDM//8AzP//AMz//wDM//8AzP//ALb2/wAAAGGCbV0Agm1dAINuXQCDbl0Ag25dAIRuXQDo39gnmdbw53/4//+C+f//g/n//4P5//+r1Ob/quP4/7Lb7f96+P//jKOwswCPzf8Ay///AMv//wDL//8AzP//AMz//wDM//8AzP//AMz//wDM//8AzP//AABPuIJtXQCCbl0Ag25dAINuXQCEbl0AhG9dAIRvXQCFb10ftc7ezZDq//+D+f//g/n//4T5//+o7P//reH2/5i+04hGAABcAKvs/wDL//8Ay///AMz//wDM//8AzP//AMz//wDM//8AzP//AMz//wDN//8AaqDcgm5dAINuXQCDbl0AhG5dAIRvXQCEb10AhW9dAIVvXQCGcF0Ayr21ZtDU2K+92+rMtsnVy6Kvu4/m29QgiHFeACEAAFYAquj/AMv//wDL//8AzP//AMz//wDM//8AzP//AMz//wDM//8AzP//AM3//wBmkdcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAinRhKACJvf8Ay///AMz//wDM//8AzP//AMz//wCq4f8Adqb/HqTV/wDN//8Azf//AAAdkgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAChcsgDJ//8AzP//AMz//wDM//8AzP//AHSp/wDP//8AfK7/AMH//xCv5f9EAABGAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACjkoQnAG+j5wDJ//8AzP//AMz//wDM//8Ab5n/AJ7T/wCKuf8Avf//ADVamwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAfB2KGzQCo5/8AzP//AMz//wDM//8Asu//AJfM/wAAHYgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAVhcAZmp4hq8jibPMJFJrywAAAI+einogAAAAAAAAAAAAAAAAD///+Af///gH///4B///+AH///iB4f/4geD/+MDg//jgYP/44CA/+PAwP/j4AD/4+AAf+PwAD/j8AAf4/AAH+PgAAPj4AAAY+AAACPgAAAD8AAAA/AAAAP4AAAD/gQAA//8AAP//gAD//4AI///AGP//8Dg="
 $progressRunningGif = "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"
 
-
-
-######## Important methods for logging and settings ###############
-function Get-SLGPolicySetting ([string]$Name, $ParameterValue) {
-    # Returns the policy setting if set or the script parameter value.
-    # Source priority: HKLM over HKCU over script parameter value.
-
-    [string]$policyPath = "Software\Policies\htcfreek\SimpleLapsGUI"
-
-    # return HKLM
-    try {
-        $policyValue = Get-ItemPropertyValue -Path "HKLM:\$($policyPath)" -Name $name -ErrorAction Stop -WarningAction Stop
-        if (-Not [string]::IsNullOrWhiteSpace($policyValue)) {
-            return $policyValue
-        }
-    }
-    catch {}
-
-    try {
-        # return HKCU
-        $policyValue = Get-ItemPropertyValue -Path "HKCU:\$($policyPath)" -Name $name -ErrorAction Stop -WarningAction Stop
-        if (-Not [string]::IsNullOrWhiteSpace($policyValue)) {
-            return $policyValue
-        }
-    }
-    catch {}
-
-    # Script parameter value
-    return $parameterValue
-}
-
-enum SlgLogCategory {
-    APP
-    QuerySerach
-    SetTime
-}
-
-function Write-SLGLogEntry {
-    # Function to write into Windows Event Log.
-    # Level config:
-    #	= Error: Error events
-    #	= Warning: Warning and error events
-    #	= Information: Informational, warning and error events
-    # * GPO and parameter default to Warning *
-
-    param(
-        [ValidateSet('INFO', 'WARNING', 'ERROR')]
-	    [string]$EventLogLevel,
-        [int]$EventID,
-        [string]$EventMessage,
-        [SlgLogCategory]$EventCategory
-    )
-
-    if (-Not $configWindowsEventLogEnabled) {
-        # logging disabled
-        return
-    }
-    elseif (($EventLogLevel = "INFO") -and ($configLogLevel -ceq "INFO")) {
-        # Write INFORMATION log, if config is Info
-        Write-EventLog -LogName "Simple LAPS GUI" -Source "Simple LAPS GUI" -EntryType Information -Category [int]$EventCategory -EventId $EventID -Message $EventMessage
-    }
-    elseif (($EventLogLevel = "WARNING") -and ($configLogLevel -cin "WARNING","INFO")) {
-        # Write WARNING log, if config is Warning or Info
-        Write-EventLog -LogName "Simple LAPS GUI" -Source "Simple LAPS GUI" -EntryType Warning -Category [int]$EventCategory -EventId $EventID -Message $EventMessage
-    }
-    elseif (($EventLogLevel = "ERROR") -and ($configLogLevel -cin "ERROR","WARNING","INFO")) {
-        # Write ERROR log, if config is Error, Warning, Info
-        Write-EventLog -LogName "Simple LAPS GUI" -Source "Simple LAPS GUI" -EntryType Error -Category [int]$EventCategory -EventId $EventID -Message $EventMessage
-    }
-    else {
-        # do nothig
-    }
-}
-######## Important methods for logging and settings ###############
-
-
-
-# ------------- Show user info in PS window and initialize features -------------
-Write-Host "Starting application and loading graphical user interface ..."
-
-# Load app configuration
-[bool]$configCopyLinkTargetsToClipboard = Get-SLGPolicySetting -Name CopyLinkTargetsToClipboard -ParameterValue $CopyLinkTargetsToClipboard
-[bool]$configWindowsEventLogEnabled = Get-SLGPolicySetting -Name WindowsEventLogEnabled -ParameterValue $WindowsEventLogEnabled
-[bool]$configLogLevel = Get-SLGPolicySetting -Name WindowsEventLogLevel -ParameterValue $LogLevel
-
-# Initialize logging
-
-
-# Write first event log
-Write-SLGLogEntry -EventLogLevel INFO -EventCategory APP -EventID 1 -EventMessage "Starting app ...`n`nSettings:`nCopyLinkTargetsToClipboard:$($configCopyLinkTargetsToClipboard)`nWindowsEventLogEnabled:$($configWindowsEventLogEnabled)`nLogLevel:$($configLogLevel)"
-# ------------- Show user info in PS window and initialize features -------------
 
 # ------------- Load WinForms Assembly --------------------
 [void] [System.Reflection.Assembly]::LoadWithPartialName("System.Drawing")
@@ -183,7 +92,7 @@ public class ProcessDPIAwareness {
 # ------------ Check for correct PS-Version --------------
 if (!$PSVersionTable.PSVersion.ToString().StartsWith("5.1") -and $PSVersionTable.PSVersion.ToString() -lt 7.6)
 {
-    [System.Windows.Forms.MessageBox]::Show("Windows PowerShell version 5.1 or PowerShell 7.6 and newer required!!", $windowTitle + " - ERROR", "OK", "Error");
+    [System.Windows.Forms.MessageBox]::Show("Windows PowerShell version 5.1 or PowerShell 7.6 and newer required!!", $windowTitle + " - ERROR", "OK", "Error") | Out-Null;
     exit 501
 }
 # ------------ Check for correct PS-Version --------------
@@ -191,7 +100,7 @@ if (!$PSVersionTable.PSVersion.ToString().StartsWith("5.1") -and $PSVersionTable
 # ------------ Check for available LAPS cmdlets ----
 if (-Not (Get-Module -Name Laps -ListAvailable))
 {
-    [System.Windows.Forms.MessageBox]::Show("Windows LAPS PowerShell module not found!!", $windowTitle + " - ERROR", "OK", "Error");
+    [System.Windows.Forms.MessageBox]::Show("Windows LAPS PowerShell module not found!!", $windowTitle + " - ERROR", "OK", "Error") | Out-Null;
     exit 501
 }
 
@@ -201,6 +110,106 @@ if ($PSVersionTable.PSVersion.ToString() -gt 7.6) {
 }
 $Script:IsLegacyLapsInstalled = [bool](Get-Module -Name "AdmPwd.PS" -ListAvailable)
 # ------------ Check for available LAPS cmdlets ----
+
+
+
+######## Important methods for logging and settings ###############
+function Get-SLGPolicySetting ([string]$Name, $ParameterValue) {
+    # Returns the policy setting if set or the script parameter value.
+    # Source priority: HKLM over HKCU over script parameter value.
+
+    [string]$policyPath = "Software\Policies\htcfreek\SimpleLapsGUI"
+
+    # return HKLM
+    try {
+        $policyValue = Get-ItemPropertyValue -Path "HKLM:\$($policyPath)" -Name $name -ErrorAction Stop -WarningAction Stop
+        if (-Not [string]::IsNullOrWhiteSpace($policyValue)) {
+            return $policyValue
+        }
+    }
+    catch {}
+
+    try {
+        # return HKCU
+        $policyValue = Get-ItemPropertyValue -Path "HKCU:\$($policyPath)" -Name $name -ErrorAction Stop -WarningAction Stop
+        if (-Not [string]::IsNullOrWhiteSpace($policyValue)) {
+            return $policyValue
+        }
+    }
+    catch {}
+
+    # Script parameter value
+    return $parameterValue
+}
+
+enum SlgLogCategory {
+    APP = 1
+    QuerySerach = 2
+    SetTime = 3
+}
+
+function Write-SLGLogEntry {
+    # Function to write into Windows Event Log.
+    # Level config:
+    #	= Error: Error events
+    #	= Warning: Warning and error events
+    #	= Information: Informational, warning and error events
+    # * GPO and parameter default to Warning *
+
+    param(
+        [ValidateSet('INFO', 'WARNING', 'ERROR')]
+	    [string]$EventLogLevel,
+        [int]$EventID,
+        [string]$EventMessage,
+        [SlgLogCategory]$EventCategory
+    )
+
+    if (-Not $configWindowsEventLogEnabled) {
+        # logging disabled
+        return
+    }
+    elseif (($EventLogLevel -eq "INFO") -and ($configLogLevel -ceq "INFO")) {
+        # Write INFORMATION log, if config is Info
+        Write-EventLog -LogName "Simple LAPS GUI" -Source "Simple LAPS GUI" -EntryType Information -Category ([int]$EventCategory) -EventId $EventID -Message "$($EventMessage)`n`nAction performed by user: $($env:USERDOMAIN)\$($env:USERNAME)"
+    }
+    elseif (($EventLogLevel -eq "WARNING") -and ($configLogLevel -cin "WARNING","INFO")) {
+        # Write WARNING log, if config is Warning or Info
+        Write-EventLog -LogName "Simple LAPS GUI" -Source "Simple LAPS GUI" -EntryType Warning -Category ([int]$EventCategory) -EventId $EventID -Message "$($EventMessage)`n`nAction performed by user: $($env:USERDOMAIN)\$($env:USERNAME)"
+    }
+    elseif (($EventLogLevel -eq "ERROR") -and ($configLogLevel -cin "ERROR","WARNING","INFO")) {
+        # Write ERROR log, if config is Error, Warning, Info
+        Write-EventLog -LogName "Simple LAPS GUI" -Source "Simple LAPS GUI" -EntryType Error -Category ([int]$EventCategory) -EventId $EventID -Message "$($EventMessage)`n`nAction performed by user: $($env:USERDOMAIN)\$($env:USERNAME)"
+    }
+    else {
+        # do nothig
+    }
+}
+######## Important methods for logging and settings ###############
+
+
+
+# ------------- Initialize settings and features -------------
+# Load app configuration
+[bool]$configCopyLinkTargetsToClipboard = Get-SLGPolicySetting -Name CopyLinkTargetsToClipboard -ParameterValue $CopyLinkTargetsToClipboard
+[bool]$configWindowsEventLogEnabled = Get-SLGPolicySetting -Name WindowsEventLogEnabled -ParameterValue $WindowsEventLogEnabled
+[string]$configLogLevel = Get-SLGPolicySetting -Name WindowsEventLogLevel -ParameterValue $LogLevel
+
+# Initialize logging
+ if ($configWindowsEventLogEnabled) {
+    if ((Get-EventLog -LogName *).Log -notcontains "Simple LAPS GUI") {
+        try {
+            New-EventLog -LogName "Simple LAPS GUI" -Source "Simple LAPS GUI" -ErrorAction Stop -WarningAction Stop
+        }
+        catch {
+            [System.Windows.Forms.MessageBox]::Show("Failed to initialize logging! Please restart with administrative permissions.", $windowTitle + " - ERROR", "OK", "Error") | Out-Null;
+            exit 501   
+        }
+    }
+}
+
+# Write first event log
+Write-SLGLogEntry -EventLogLevel INFO -EventCategory APP -EventID 1 -EventMessage "Starting application ...`n`nSettings:`n* CopyLinkTargetsToClipboard: $($configCopyLinkTargetsToClipboard)`n* WindowsEventLogEnabled: $($configWindowsEventLogEnabled)`n* LogLevel: $($configLogLevel)"
+# ------------- Show user info in PS window and initialize features -------------
 
 
 # ------------- Create icon images ---------------------
@@ -1935,7 +1944,7 @@ else {
     $mainForm.WindowState = [System.Windows.Forms.FormWindowState]::Maximized
 }
 
-# ----- Area: Show form ----------------------
+# ----- Area: Show form and shutdown app ----------------------
 $mainForm.ResumeLayout(); # Very important to correctly size and position all controls!
 $mainForm.KeyPreview = $True
 $mainForm.Add_KeyUp({if ($_.KeyCode -eq "Escape") {$mainForm.Close()}})
@@ -1944,7 +1953,10 @@ $mainForm.Add_FormClosing({ $script:BgJobTimer.Stop() })
 Show-Console -Hide;
 [void]$mainForm.ShowDialog()
 
-# Dispose objects after windows is closed
+# Write shutdown event log after window is closed
+Write-SLGLogEntry -EventLogLevel INFO -EventCategory APP -EventID 2 -EventMessage "Window closed by user. Shutting down application..."
+
+# Dispose objects after window is closed
 try {
     $RunspaceInstanceCache.PsInstance.EndInvoke($RunspaceInstanceCache.PsInvokationHandle)
     $psThreadInstance.Dispose()
