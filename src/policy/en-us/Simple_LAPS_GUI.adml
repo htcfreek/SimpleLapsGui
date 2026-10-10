@@ -1,0 +1,45 @@
+<?xml version="1.0" ?>
+<policyDefinitionResources xmlns="http://schemas.microsoft.com/GroupPolicy/2006/07/PolicyDefinitions" revision="1.0" schemaVersion="1.0">
+  <displayName/>
+  <description/>
+  <resources>
+    <stringTable>
+      <string id="CATEGORY_SimpleLAPSGUI">Simple LAPS GUI</string>
+	  <string id="SUPPORTED_Version_2_5">At least Simple LAPS GUI 2.5</string>
+	  
+	  <string id="CopyLinkTargetsToClipboard">Copy links instead of opening them</string>
+	  <string id="CopyLinkTargetsToClipboard_EXPLAIN">The app contains multiple web links. This policy helps you to control how they are handled.
+
+If you enable this policy, all links are copied to the clipboard.
+
+If you disable this policy, links are opened in the default browser.
+
+If you do not configure this policy, the script parameter controls the behavior.
+</string>
+	  
+	  <string id="WindowsEventLog">Enable logging to Windows Event Log</string>
+	  <string id="WindowsEventLog_EXPLAIN">Configure the app to write a log into Windows Event Log
+
+If you enable this policy, the app writes a log to Windows Event Log, and you can select the log level:
+	- Error: Error events
+	- Warning (default): Warning and error events
+	- Information: Informational, warning and error events
+
+If you disable this policy, no log is written.
+
+If you do not configure this policy, the script parameter controls the behavior.
+
+Note: To initialize this feature the app has to be installed using the setup.exe or you have to start the app once with administrative permissions.
+</string>
+	  <string id="WindowsEventLogLevel_ERROR">Error</string>
+	  <string id="WindowsEventLogLevel_WARNING">Warning (default)</string>
+	  <string id="WindowsEventLogLevel_INFO">Information</string>
+    </stringTable>
+
+	<presentationTable>
+	  <presentation id="WindowsEventLog">
+        <dropdownList refId="WindowsEventLogLevel" noSort="true" defaultItem="1">Log level:</dropdownList>
+      </presentation>
+	</presentationTable>
+  </resources>
+</policyDefinitionResources>

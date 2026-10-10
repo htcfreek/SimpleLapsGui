@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<policyDefinitions xmlns="http://schemas.microsoft.com/GroupPolicy/2006/07/PolicyDefinitions" revision="1.0" schemaVersion="1.0">
+  <policyNamespaces>
+    <target prefix="SimpleLapsGUI" namespace="htcfreek.Policies.SimpleLapsGUI"/>
+    <using prefix="htcfreek" namespace="htcfreek.Policies"/>
+  </policyNamespaces>
+  <resources minRequiredRevision="1.0"/>
+  <supportedOn>
+    <definitions>
+      <definition name="SUPPORTED_Version_2_5" displayName="$(string.SUPPORTED_Version_2_5)" />
+    </definitions>
+  </supportedOn>
+  <categories>
+    <category name="CATEGORY_SimpleLAPSGUI" displayName="$(string.CATEGORY_SimpleLAPSGUI)">
+      <parentCategory ref="htcfreek:CATEGORY_htcfreek" />
+    </category>
+  </categories>
+  <policies>
+    <policy name="CopyLinkTargetsToClipboard" class="Both" displayName="$(string.CopyLinkTargetsToClipboard)" explainText="$(string.CopyLinkTargetsToClipboard_EXPLAIN)" key="Software\Policies\htcfreek\SimpleLapsGUI" valueName="CopyLinkTargetsToClipboard">
+      <parentCategory ref="CATEGORY_SimpleLAPSGUI"/>
+      <supportedOn ref="SUPPORTED_Version_2_5"/>
+      <enabledValue>
+        <decimal value="1"/>
+      </enabledValue>
+      <disabledValue>
+        <decimal value="0"/>
+      </disabledValue>
+    </policy>
+ <policy name="WindowsEventLog" class="Both" displayName="$(string.WindowsEventLog)" explainText="$(string.WindowsEventLog_EXPLAIN)" key="Software\Policies\htcfreek\SimpleLapsGUI" valueName="WindowsEventLogEnabled" presentation="$(presentation.WindowsEventLog)">
+      <parentCategory ref="CATEGORY_SimpleLAPSGUI"/>
+      <supportedOn ref="SUPPORTED_Version_2_5"/>
+      <enabledValue>
+        <decimal value="1"/>
+      </enabledValue>
+      <disabledValue>
+        <decimal value="0"/>
+      </disabledValue>
+      <elements>
+        <enum id="WindowsEventLogLevel" valueName="WindowsEventLogLevel">
+          <item displayName="$(string.WindowsEventLogLevel_ERROR)">
+            <value>
+              <string>ERROR</string>
+            </value>
+          </item>
+          <item displayName="$(string.WindowsEventLogLevel_WARNING)">
+            <value>
+              <string>WARNING</string>
+            </value>
+          </item>
+          <item displayName="$(string.WindowsEventLogLevel_INFO)">
+            <value>
+              <string>INFO</string>
+            </value>
+          </item>
+        </enum>
+      </elements>
+    </policy>
+  </policies>
+</policyDefinitions>

@@ -1,0 +1,10 @@
+<?xml version="1.0" ?>
+<policyDefinitions xmlns="http://schemas.microsoft.com/GroupPolicy/2006/07/PolicyDefinitions" revision="1.0" schemaVersion="1.0">
+  <policyNamespaces>
+    <target namespace="htcfreek.Policies" prefix="htcfreek"/>
+  </policyNamespaces>
+  <resources minRequiredRevision="1.0" />
+  <categories>
+    <category displayName="$(string.CATEGORY_htcfreek)" name="CATEGORY_htcfreek"/>
+  </categories>
+</policyDefinitions>
