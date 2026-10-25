@@ -219,7 +219,9 @@ if ($configUseLogFile -eq 0) {$configLogFilePath = [string]::Empty}
 
 # Initialize logging
  if ($configWindowsEventLogEnabled) {
+	# Logging enabled
 	if ([string]::IsNullOrWhiteSpace($configLogFilePath)) {
+		# Use Windows Event Logging
 		if ((Get-EventLog -LogName *).Log -notcontains "Simple LAPS GUI") {
 			try {
 				New-EventLog -LogName "Simple LAPS GUI" -Source "Simple LAPS GUI" -ErrorAction Stop -WarningAction Stop
@@ -231,6 +233,7 @@ if ($configUseLogFile -eq 0) {$configLogFilePath = [string]::Empty}
 		}
 	}
 	else {
+		# Use a log file
 		if (-Not (Test-Path ($configLogFilePath | Split-Path) -ErrorAction SilentlyContinue)) {
 			[System.Windows.Forms.MessageBox]::Show("Failed to initialize logging! Wrong log file path or directory does not exist: $($configLogFilePath)", $windowTitle + " - ERROR", "OK", "Error") | Out-Null;
 			exit 501
