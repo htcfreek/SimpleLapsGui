@@ -34,11 +34,29 @@ Note: To initialize this feature the app has to be installed using the setup.exe
 	  <string id="WindowsEventLogLevel_ERROR">Error</string>
 	  <string id="WindowsEventLogLevel_WARNING">Warning (default)</string>
 	  <string id="WindowsEventLogLevel_INFO">Information</string>
+
+	  <string id="LogFile">Log to file instead of Windows Eventlog</string>
+	  <string id="LogFile_EXPLAIN">Configure the app to write a log into a files instead using Windows Eventlog
+
+If you enable this policy, the app writes a log to the specified file instaed the Windows Eventlog.
+
+If you disable this policy, Windows Eventlog is enforced as log target.
+
+If you do not configure this policy, the script parameter controls the behavior.
+
+Notes:
+* The folder has to exist on the disk.
+</string>
     </stringTable>
 
 	<presentationTable>
 	  <presentation id="WindowsEventLog">
         <dropdownList refId="WindowsEventLogLevel" noSort="true" defaultItem="1">Log level:</dropdownList>
+      </presentation>
+	  <presentation id="LogFile">
+		<textBox refId="LogFilePath">
+			<label>Log file path:</label>
+		</textBox>
       </presentation>
 	</presentationTable>
   </resources>

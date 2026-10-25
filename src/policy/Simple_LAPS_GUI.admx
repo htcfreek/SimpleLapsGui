@@ -55,5 +55,18 @@
         </enum>
       </elements>
     </policy>
+  <policy name="LogFile" class="Both" displayName="$(string.LogFile)" explainText="$(string.LogFile_EXPLAIN)" key="Software\Policies\htcfreek\SimpleLapsGUI" valueName="UseLogFile" presentation="$(presentation.LogFile)">
+      <parentCategory ref="CATEGORY_SimpleLAPSGUI"/>
+      <supportedOn ref="SUPPORTED_Version_2_5"/>
+	  <enabledValue>
+        <decimal value="1"/>
+      </enabledValue>
+      <disabledValue>
+        <decimal value="0"/>
+      </disabledValue>
+      <elements>
+        <text id="LogFilePath" valueName="LogFilePath" expandable="true" />
+      </elements>
+    </policy>
   </policies>
 </policyDefinitions>

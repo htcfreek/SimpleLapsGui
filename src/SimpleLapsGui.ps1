@@ -8,18 +8,19 @@ License: MIT License
 GitHub Repository: https://github.com/htcfreek/SimpleLapsGui
 Requirements: Windows LAPS cmdlet;
 			  Windows PowerShell 5.1 or PowerShell 7.6+;
-			  (Optional: Legacy LAPS cmdlet to chenge the expiration time for Legacy LAPS passwords.)
+			  (Optional: Legacy LAPS cmdlet to change the expiration time for Legacy LAPS passwords.)
 
 NOTES:
 - Known issue: The taskbar shows the powershell icon. (GitHub#1)
 - The parameter -CopyLinkTargetsToClipboard can be used to force copy links (faq, repository, ...) to clipboard instead of opening them, if not overwritten by policy.
 - The parameters -WindowsEventLogEnabled and -LogLevel can be used to control logging behavior, if not overwritten by policy.
+- The parameter -LogFilePath can be used to write the log to a file instead of using Windows Event Log, if not overwritten by policy.
 
 VERSION HISTORY:
 2023-04-22 / v1.0 / htcfreek / Initial release
-2023-04-25 / v1.1 / htcfreek / Don't use PS2Exe anymore because of to many virus arlerts.; Small code improvements.
+2023-04-25 / v1.1 / htcfreek / Don't use PS2Exe anymore because of to many virus alerts.; Small code improvements.
 2023-07-16 / v1.2 / htcfreek / Fix crash in password history. [Thanks @F1reF0x (github.com/F1reF0x).]; Auto hide PS window. [Thanks @F1reF0x (github.com/F1reF0x).]; Small code improvements.; Add update link to GUI.
-2025-12-19 / v2.0 / htcfreek / Main UI redisign; Multi domain support; Zoom dialog for bigger crdential preview; Set time dialog now respects system's format settings.; Fixed bug with wrong error message after setting the time.; Support for ESCAPE key in time dialog and about dialog.; Fixed dpi scaling bug in about dialog.; Improved window size on different dpi scalings.; Various improvements.; Replaced AutoIT wrapper executable with a Batch file.
+2025-12-19 / v2.0 / htcfreek / Main UI redesign; Multi domain support; Zoom dialog for bigger credential preview; Set time dialog now respects system's format settings.; Fixed bug with wrong error message after setting the time.; Support for ESCAPE key in time dialog and about dialog.; Fixed dpi scaling bug in about dialog.; Improved window size on different dpi scaling.; Various improvements.; Replaced AutoIT wrapper executable with a Batch file.
 2026-02-17 / v2.1 / htcfreek / Development version towards version 2.2
 2026-02-18 / v2.2 / htcfreek / Code improvements; Improvements for screen readers; Improvements on error handling; Added indicators for long running tasks; Improvements on the code that validates the time set result.; Fixed "window not responding" crashes by moving LDAP requests into background jobs.; Fix the bug that on long error detail messages the tooltip exceeds the monitor wide.
 2026-02-24 / v2.3 / htcfreek / Fixed: Ampersand (&) is not displayed in the user name and password.; Fixed: Empty history if only one password is present in the history.
@@ -35,7 +36,9 @@ param(
 	[Switch]$WindowsEventLogEnabled = $false,
 	[Parameter(ParameterSetName = 'EnableLogging')]
 	[ValidateSet('INFO', 'WARNING', 'ERROR')]
-	[string]$LogLevel = "WARNING"
+	[string]$LogLevel = "WARNING",
+	[Parameter(ParameterSetName = 'EnableLogging')]
+	[string]$LogFilePath = ""
 )
 
 
@@ -164,21 +167,36 @@ function Write-SLGLogEntry {
         [SlgLogCategory]$EventCategory
     )
 
-    if (-Not $configWindowsEventLogEnabled) {
+    if ($configWindowsEventLogEnabled -eq $false) {
         # logging disabled
         return
     }
     elseif (($EventLogLevel -eq "INFO") -and ($configLogLevel -ceq "INFO")) {
         # Write INFORMATION log, if config is Info
-        Write-EventLog -LogName "Simple LAPS GUI" -Source "Simple LAPS GUI" -EntryType Information -Category ([int]$EventCategory) -EventId $EventID -Message "$($EventMessage)`n`nAction performed by user: $($env:USERDOMAIN)\$($env:USERNAME)"
+		if ([string]::IsNullOrWhiteSpace($configLogFilePath)) {
+			Write-EventLog -LogName "Simple LAPS GUI" -Source "Simple LAPS GUI" -EntryType Information -Category ([int]$EventCategory) -EventId $EventID -Message "$($EventMessage)`n`nAction performed by user: $($env:USERDOMAIN)\$($env:USERNAME)"
+		} else {
+			$lText = "$(Get-Date -Format G) | INFO | $($EventCategory) | Event:$($EventID) | $($env:USERDOMAIN)\$($env:USERNAME) | $($EventMessage -replace "`n`n","; " -replace "`n"," " -replace "\* ")"
+			Out-File -FilePath $configLogFilePath -InputObject $lText -Append -ErrorAction Stop -WarningAction Stop
+		}
     }
     elseif (($EventLogLevel -eq "WARNING") -and ($configLogLevel -cin "WARNING","INFO")) {
         # Write WARNING log, if config is Warning or Info
-        Write-EventLog -LogName "Simple LAPS GUI" -Source "Simple LAPS GUI" -EntryType Warning -Category ([int]$EventCategory) -EventId $EventID -Message "$($EventMessage)`n`nAction performed by user: $($env:USERDOMAIN)\$($env:USERNAME)"
+        if ([string]::IsNullOrWhiteSpace($configLogFilePath)) {
+			Write-EventLog -LogName "Simple LAPS GUI" -Source "Simple LAPS GUI" -EntryType Warning -Category ([int]$EventCategory) -EventId $EventID -Message "$($EventMessage)`n`nAction performed by user: $($env:USERDOMAIN)\$($env:USERNAME)"
+		} else {
+			$lText = "$(Get-Date -Format G) | WARNING | $($EventCategory) | Event:$($EventID) | $($env:USERDOMAIN)\$($env:USERNAME) | $($EventMessage -replace "`n`n","; " -replace "`n"," " -replace "\* ")"
+			Out-File -FilePath $configLogFilePath -InputObject $lText -Append -ErrorAction Stop -WarningAction Stop
+		}
     }
     elseif (($EventLogLevel -eq "ERROR") -and ($configLogLevel -cin "ERROR","WARNING","INFO")) {
         # Write ERROR log, if config is Error, Warning, Info
-        Write-EventLog -LogName "Simple LAPS GUI" -Source "Simple LAPS GUI" -EntryType Error -Category ([int]$EventCategory) -EventId $EventID -Message "$($EventMessage)`n`nAction performed by user: $($env:USERDOMAIN)\$($env:USERNAME)"
+        if ([string]::IsNullOrWhiteSpace($configLogFilePath)) {
+			Write-EventLog -LogName "Simple LAPS GUI" -Source "Simple LAPS GUI" -EntryType Error -Category ([int]$EventCategory) -EventId $EventID -Message "$($EventMessage)`n`nAction performed by user: $($env:USERDOMAIN)\$($env:USERNAME)"
+		} else {
+			$lText = "$(Get-Date -Format G) | ERROR | $($EventCategory) | Event:$($EventID) | $($env:USERDOMAIN)\$($env:USERNAME) | $($EventMessage -replace "`n`n","; " -replace "`n"," " -replace "\* ")"
+			Out-File -FilePath $configLogFilePath -InputObject $lText -Append -ErrorAction Stop -WarningAction Stop
+		}
     }
     else {
         # do nothig
@@ -193,22 +211,35 @@ function Write-SLGLogEntry {
 [bool]$configCopyLinkTargetsToClipboard = Get-SLGPolicySetting -Name CopyLinkTargetsToClipboard -ParameterValue $CopyLinkTargetsToClipboard
 [bool]$configWindowsEventLogEnabled = Get-SLGPolicySetting -Name WindowsEventLogEnabled -ParameterValue $WindowsEventLogEnabled
 [string]$configLogLevel = Get-SLGPolicySetting -Name WindowsEventLogLevel -ParameterValue $LogLevel
+[string]$configLogFilePath = Get-SLGPolicySetting -Name LogFilePath -ParameterValue $LogFilePath
+
+# Enforce Windows Eventlog if policy is disabled
+[int]$configUseLogFile = Get-SLGPolicySetting -Name UseLogFile -ParameterValue -1
+if ($configUseLogFile -eq 0) {$configLogFilePath = [string]::Empty}
 
 # Initialize logging
  if ($configWindowsEventLogEnabled) {
-    if ((Get-EventLog -LogName *).Log -notcontains "Simple LAPS GUI") {
-        try {
-            New-EventLog -LogName "Simple LAPS GUI" -Source "Simple LAPS GUI" -ErrorAction Stop -WarningAction Stop
-        }
-        catch {
-            [System.Windows.Forms.MessageBox]::Show("Failed to initialize logging! Please restart with administrative permissions.", $windowTitle + " - ERROR", "OK", "Error") | Out-Null;
-            exit 501   
-        }
-    }
+	if ([string]::IsNullOrWhiteSpace($configLogFilePath)) {
+		if ((Get-EventLog -LogName *).Log -notcontains "Simple LAPS GUI") {
+			try {
+				New-EventLog -LogName "Simple LAPS GUI" -Source "Simple LAPS GUI" -ErrorAction Stop -WarningAction Stop
+			}
+			catch {
+				[System.Windows.Forms.MessageBox]::Show("Failed to initialize logging! Please restart with administrative permissions.", $windowTitle + " - ERROR", "OK", "Error") | Out-Null;
+				exit 501
+			}
+		}
+	}
+	else {
+		if (-Not (Test-Path ($configLogFilePath | Split-Path) -ErrorAction SilentlyContinue)) {
+			[System.Windows.Forms.MessageBox]::Show("Failed to initialize logging! Wrong log file path or directory does not exist: $($configLogFilePath)", $windowTitle + " - ERROR", "OK", "Error") | Out-Null;
+			exit 501
+		}
+	}
 }
 
 # Write first event log
-Write-SLGLogEntry -EventLogLevel INFO -EventCategory APP -EventID 1 -EventMessage "Starting application ...`n`nSettings:`n* CopyLinkTargetsToClipboard: $($configCopyLinkTargetsToClipboard)`n* WindowsEventLogEnabled: $($configWindowsEventLogEnabled)`n* LogLevel: $($configLogLevel)"
+Write-SLGLogEntry -EventLogLevel INFO -EventCategory APP -EventID 1 -EventMessage "Starting application ...`n`nSettings:`n* CopyLinkTargetsToClipboard: $($configCopyLinkTargetsToClipboard)`n* WindowsEventLogEnabled: $($configWindowsEventLogEnabled)`n* LogLevel: $($configLogLevel)`n* LogFilePath: $($configLogFilePath)`n`nNote: If settings are not equal to parameter values, they are overwritten by policy or their defaults are used."
 # ------------- Show user info in PS window and initialize features -------------
 
 
