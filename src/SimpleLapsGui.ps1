@@ -39,7 +39,7 @@ param(
 )
 
 
-$scriptVersion = "2.5a"
+$scriptVersion = "2.5b"
 $windowTitle = "Simple LAPS GUI"
 # set-clipboard ([Convert]::ToBase64String((Get-Content ".\copyIcon.ico" -Encoding Byte)))
 # All the images were created by me. They are not copied from the internet.
@@ -113,7 +113,7 @@ $Script:IsLegacyLapsInstalled = [bool](Get-Module -Name "AdmPwd.PS" -ListAvailab
 
 
 
-######## Important methods for logging and settings ###############
+######## Important methods for logging and policy settings ###############
 function Get-SLGPolicySetting ([string]$Name, $ParameterValue) {
     # Returns the policy setting if set or the script parameter value.
     # Source priority: HKLM over HKCU over script parameter value.
@@ -144,7 +144,7 @@ function Get-SLGPolicySetting ([string]$Name, $ParameterValue) {
 
 enum SlgLogCategory {
     APP = 1
-    QuerySerach = 2
+    QuerySearch = 2
     SetTime = 3
 }
 
@@ -501,6 +501,9 @@ function Invoke-GetPasswordBtnCmd ([switch]$UpdateAfterTimeSet)
     }
     Start-Sleep -Milliseconds 250 # To show status correct.
 
+    # Write Log Entry
+    Write-SLGLogEntry -EventLogLevel INFO -EventCategory QuerySearch -EventID 11 -EventMessage "Password(s) requested for computer: $($compTextBox.Text)`nRunning on computer: $($env:COMPUTERNAME)`n`nNote: If user input is '.\', the search is executed for the computer where Simple LAPS GUI is running on."
+
     # Check computer name input
     [string]$inputComputerName = $compTextBox.Text
     if ([string]::IsNullOrWhiteSpace($inputComputerName))
@@ -677,6 +680,9 @@ function Invoke-SetExpirationTimeBtnCmd($pForm)
 
         Set-StatusText -Text "Changing the time ..." -Color Black
         Start-Sleep -Milliseconds 250 # To show status correct.
+
+        # Write log event
+        Write-SLGLogEntry -EventLogLevel INFO -EventCategory SetTime -EventID 21 -EventMessage "Reset of expiration time requested for computer: $($compTextBox.Text)`nNew time to set: $newExpTime`n`nComputer details:`n* Computer: $($ThreadSyncHash.DomainComputer_Identity)`n* Domain: $($ThreadSyncHash.DomainComputer_Domain)`n* Windows LAPS: $($ThreadSyncHash.DomainComputer_HasWinLaps)"
         
         <# Test for required commandlet for legacy laps pc
         if (!$ThreadSyncHash.DomainComputer_HasWinLaps -and !$Script:IsLegacyLapsInstalled) {
@@ -733,6 +739,9 @@ function Invoke-SetExpirationTimeBtnCmd($pForm)
 function Update-WindowAfterBgJob([ValidateSet('SearchPassword', 'SetTime')]$Job, [ValidateSet('Success', 'Aborted', 'Failed')]$JobResult) {
     # Search / get password => failed
     if ( ($Job -eq 'SearchPassword') -and ($JobResult -eq 'Failed') ) {
+		# write event log
+		Write-SLGLogEntry -EventLogLevel ERROR -EventCategory QuerySearch -EventID 14 -EventMessage "Failed to execute search/password query for computer $($ThreadSyncHash.SearchComputerInput_Text).`n`nReason: $($ThreadSyncHash.ThreadCommand_Data.StatusMessage)`n`nReason details: $($ThreadSyncHash.ThreadCommand_Data.StatusExplain)`n`nComputer details:`n* Computer: $($ThreadSyncHash.DomainComputer_Identity)`n* Domain: $($ThreadSyncHash.DomainComputer_Domain)`n* Windows LAPS: $($ThreadSyncHash.DomainComputer_HasWinLaps)"
+		
         $compTextBox.Enabled = $true
         $ListPwdHistory.Enabled = $true
         $SearchRunningGif.Image = $null
@@ -759,6 +768,16 @@ function Update-WindowAfterBgJob([ValidateSet('SearchPassword', 'SetTime')]$Job,
     }
     # Search / get password => success
     elseif ( ($Job -eq 'SearchPassword') -and ($JobResult -eq 'Success') ) {
+        # write log event
+		if ($null -ne $ThreadSyncHash.ThreadCommand_Data.Password) {
+			# passwords found
+			Write-SLGLogEntry -EventLogLevel INFO -EventCategory QuerySearch -EventID 12 -EventMessage "Password request for computer $($compTextBox.Text) successfully executed. Passwords shown to the user.`n`nComputer details:`n* Computer: $($ThreadSyncHash.DomainComputer_Identity)`n* Domain: $($ThreadSyncHash.DomainComputer_Domain)`n* Windows LAPS: $($ThreadSyncHash.DomainComputer_HasWinLaps)"
+		}
+		else {
+			# no passwords found
+            Write-SLGLogEntry -EventLogLevel WARNING -EventCategory QuerySearch -EventID 13 -EventMessage "No passwords found for computer $($compTextBox.Text). Either there are no passwords stored or the user does not have the permissions to read them.`n`nComputer details:`n* Computer: $($ThreadSyncHash.DomainComputer_Identity)`n* Domain: $($ThreadSyncHash.DomainComputer_Domain)`n* Windows LAPS: $($ThreadSyncHash.DomainComputer_HasWinLaps)"
+		}
+
         # -- enabled states after time set
         $AccountNameCopyButton.Enabled = $true
         $AccountNamePreviewButton.Enabled = $true
@@ -802,6 +821,9 @@ function Update-WindowAfterBgJob([ValidateSet('SearchPassword', 'SetTime')]$Job,
     }
     # Time set => failed
     elseif ( ($Job -eq 'SetTime') -and ($JobResult -eq 'Failed') ) {
+		# write log Event
+		Write-SLGLogEntry -EventLogLevel ERROR -EventCategory SetTime -EventID 23 -EventMessage "Failed to send change request for expiration time of computer $($ThreadSyncHash.SearchComputerInput_Text) to the Domain Controller.`n`nReason: $($ThreadSyncHash.ThreadCommand_Data.StatusMessage)`n`nReason details: $($ThreadSyncHash.ThreadCommand_Data.StatusExplain)`n`nComputer details:`n* Computer: $($ThreadSyncHash.DomainComputer_Identity)`n* Domain: $($ThreadSyncHash.DomainComputer_Domain)`n* Windows LAPS: $($ThreadSyncHash.DomainComputer_HasWinLaps)"
+		
         $compTextBox.Enabled = $true
         $GoButton.Enabled = $true
         $AccountNameCopyButton.Enabled = $true
@@ -824,6 +846,9 @@ function Update-WindowAfterBgJob([ValidateSet('SearchPassword', 'SetTime')]$Job,
     }
     # Time set => success
     elseif ( ($Job -eq 'SetTime') -and ($JobResult -eq 'Success') ) {
+        # write log event
+        Write-SLGLogEntry -EventLogLevel INFO -EventCategory SetTime -EventID 22 -EventMessage "Change request for expiration time of computer $($ThreadSyncHash.SearchComputerInput_Text) successfully sent to the Domain Controller.`n`nComputer details:`n* Computer: $($ThreadSyncHash.DomainComputer_Identity)`n* Domain: $($ThreadSyncHash.DomainComputer_Domain)`n* Windows LAPS: $($ThreadSyncHash.DomainComputer_HasWinLaps)"
+
         # Gui elements are enabled later after datat update
         Set-StatusText -Text $ThreadSyncHash.ThreadCommand_Data.StatusMessage -Color Green
         Start-Sleep -Milliseconds 25 # To show status correct.
@@ -972,6 +997,13 @@ function Save-RegSetting ($ValueName, $ValueData, [ValidateSet("String", "DWord"
     }
     New-ItemProperty -Path "HKCU:\Software\htcfreek\Simple LAPS GUI" -Name $ValueName -PropertyType $ValueType -Value $ValueData -Force -ErrorAction SilentlyContinue
 }
+
+# Used for copy account data
+function Set-ClipboardWithLog ($data) {
+	Write-SLGLogEntry -EventLogLevel INFO -EventCategory APP -EventID 3 -EventMessage "Account data for computer $($ThreadSyncHash.SearchComputerInput_Text) copied to clipboard.`n`nComputer details:`n* Computer: $($ThreadSyncHash.DomainComputer_Identity)`n* Domain: $($ThreadSyncHash.DomainComputer_Domain)`n* Windows LAPS: $($ThreadSyncHash.DomainComputer_HasWinLaps)"
+	Set-Clipboard $data
+}
+
 
 
 
@@ -1626,7 +1658,7 @@ $AccountNameCopyButton.Text = "Copy"
 $AccountNameCopyButton.AccessibleName = 'Copy user name'
 $AccountNameCopyButton.Font = $textFont
 $AccountNameCopyButton.Hide()
-$AccountNameCopyButton.Add_Click({Set-Clipboard $AccountNameData.Text})
+$AccountNameCopyButton.Add_Click({Set-ClipboardWithLog $AccountNameData.Text})
 $mainForm.Controls.Add($AccountNameCopyButton)
 
 $AccountNamePreviewButton = New-Object System.Windows.Forms.Button
@@ -1672,7 +1704,7 @@ $PasswordCopyButton.Text = "Copy"
 $PasswordCopyButton.AccessibleName = 'Copy password'
 $PasswordCopyButton.Font = $textFont
 $PasswordCopyButton.Hide()
-$PasswordCopyButton.Add_Click({Set-Clipboard $PasswordData.Text.Trim()})
+$PasswordCopyButton.Add_Click({Set-ClipboardWithLog $PasswordData.Text.Trim()})
 $mainForm.Controls.Add($PasswordCopyButton)
 
 $PasswordPreviewButton = New-Object System.Windows.Forms.Button
@@ -1790,12 +1822,12 @@ $mainForm.Controls.Add($ListPwdHistory)
 $contextMenu = [System.Windows.Forms.ContextMenuStrip]@{}
 $menuItem1 = $contextMenu.Items.Add("Copy user name")
 $menuItem1.Font = $pwdHistoryHeaderFont
-$menuClick1 = {Set-Clipboard $ListPwdHistory.SelectedItems[0].SubItems[1].Text}
+$menuClick1 = {Set-ClipboardWithLog $ListPwdHistory.SelectedItems[0].SubItems[1].Text}
 $menuItem1.add_Click($menuClick1)
 $menuItem1.Image = $copyUserIconImage
 $menuItem11 = $contextMenu.Items.Add("Copy password")
 $menuItem11.Font = $pwdHistoryHeaderFont
-$menuClick11 = {Set-Clipboard $ListPwdHistory.SelectedItems[0].SubItems[2].Text}
+$menuClick11 = {Set-ClipboardWithLog $ListPwdHistory.SelectedItems[0].SubItems[2].Text}
 $menuItem11.add_Click($menuClick11)
 $menuItem11.Image = $copyPasswordIconImage
 [void]$contextMenu.Items.Add("-")
@@ -1812,11 +1844,11 @@ $menuItem12.Image = $magnifyIconImage
 [void]$contextMenu.Items.Add("-")
 $menuItem2 = $contextMenu.Items.Add("Copy entry")
 $menuItem2.Font = $pwdHistoryHeaderFont
-$menuClick2 = {Set-Clipboard $($ListPwdHistory.SelectedItems[0].SubItems[0].Text + " " + $ListPwdHistory.SelectedItems[0].SubItems[1].Text + " " + $ListPwdHistory.SelectedItems[0].SubItems[2].Text)}
+$menuClick2 = {Set-ClipboardWithLog $($ListPwdHistory.SelectedItems[0].SubItems[0].Text + " " + $ListPwdHistory.SelectedItems[0].SubItems[1].Text + " " + $ListPwdHistory.SelectedItems[0].SubItems[2].Text)}
 $menuItem2.add_Click($menuClick2)
 $menuItem3 = $contextMenu.Items.Add("Copy all entries")
 $menuItem3.Font = $pwdHistoryHeaderFont
-$menuClick3 = {Set-Clipboard (GetAllListViewData)}
+$menuClick3 = {Set-ClipboardWithLog (GetAllListViewData)}
 $menuItem3.add_Click($menuClick3)
 
 $ListPwdHistory.Add_MouseClick({param($sender,$e)
