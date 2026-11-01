@@ -27,13 +27,13 @@ Param(
 	"$($RepoDir)\src\Start_SimpleLapsGui.bat",
 	"$($RepoDir)\src\Start_PS7_SimpleLapsGui.bat",
 	"$($env:temp)\SimpleLapsGui.ico",
-    "$($RepoDir)\LICENSE.md"
+    "$($RepoDir)\LICENSE.txt"
 )
 [String]$OutFileName1="$($ReleaseName)_v$($ReleaseVersion).zip"
 [String]$HashFile1="$($RepoDir)$($ReleaseDir)\$($OutFileName1).sha256"
 
 # Create Zip
-Copy-Item "$($RepoDir)\src\appIcon.ico" "$($env:temp)\SimpleLapsGui.ico" -Force
+Copy-Item "$($RepoDir)\src\images\appIcon.ico" "$($env:temp)\SimpleLapsGui.ico" -Force
 if (-Not (Test-Path -Path "$($RepoDir)$($ReleaseDir)" -ErrorAction SilentlyContinue)) {
     Write-Host "Creating release dir..."
     New-Item -Path "$($RepoDir)$($ReleaseDir)" -Type Directory | Out-Null
