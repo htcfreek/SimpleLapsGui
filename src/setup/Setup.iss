@@ -25,6 +25,8 @@ SetupMutex=SimpleLAPSGUISetup,Global\SimpleLAPSGUISetup
 DefaultDirName={autopf}\{#MyAppName}
 DefaultGroupName={#MyAppName}
 LicenseFile=..\..\LICENSE.txt
+;SetupLogging=yes
+;UninstallLogging=yes
 PrivilegesRequired=admin
 PrivilegesRequiredOverridesAllowed=
 ArchitecturesAllowed=x64compatible
@@ -39,14 +41,14 @@ OutputBaseFilename={#MyAppName} {#MyAppVersion}
 Name: "english"; MessagesFile: "compiler:Default.isl"
 
 [Components]
-Name: "main"; Description: "Main Files"; Types: full custom; Flags: fixed
+Name: "main"; Description: "Main files"; Types: full custom; Flags: fixed
 Name: "pwsh7"; Description: "PowerShell 7 support"; Types: full
 Name: "policy"; Description: "Extract ADMX files"; Types: full
 
 [Tasks]
-Name: "registerEventlog"; Description: "Register Windows Event Log"; GroupDescription: "Additional install tasks:"
-Name: "installPolicy"; Description: "Install ADMX files to this computer"; GroupDescription: "Additional install tasks:"; Components: policy; Flags: unchecked
-Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
+Name: "registerEventlog"; Description: "Register Windows Event Log on this computer"; GroupDescription: "Additional install tasks:"; Flags: checkedonce
+Name: "installPolicy"; Description: "Install the ADMX files on this computer after extraction"; GroupDescription: "Additional install tasks:"; Components: policy; Flags: unchecked
+Name: "desktopicon"; Description: "Create desktop shortcuts"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files.
@@ -54,17 +56,17 @@ Source: "..\SimpleLapsGui.ps1"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\Start_SimpleLapsGui.bat"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\Start_PS7_SimpleLapsGui.bat"; DestDir: "{app}"; Flags: ignoreversion; Components: pwsh7
 Source: "..\images\appIcon.ico"; DestDir: "{app}"; DestName: "SimpleLapsGui.ico"; Flags: ignoreversion
+Source: "..\..\LICENSE.txt"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\policy\*"; DestDir: "{app}\Administrative Templates"; Flags: ignoreversion recursesubdirs createallsubdirs; Components: policy
 Source: "..\policy\*"; DestDir: "{win}\PolicyDefinitions"; Flags: ignoreversion; Components: policy; Tasks: installPolicy
 Source: "..\policy\en-us\*"; DestDir: "{win}\PolicyDefinitions\en-us"; Flags: ignoreversion; Components: policy; Tasks: installPolicy
-Source: "..\..\LICENSE.txt"; DestDir: "{app}"; Flags: ignoreversion
 
 [Run]
 Filename: "{sys}\{#PowerShellExe}"; Parameters: "{#PowerShellCommandParam} \
   ""if ((Get-EventLog -LogName *).Log -notcontains 'Simple LAPS GUI') {{ \
   try {{ New-EventLog -LogName 'Simple LAPS GUI' -Source 'Simple LAPS GUI' -ErrorAction Stop -WarningAction Stop } \
-  catch {{ Write-Host 'Failed to initialize logging! Please restart with administrative permissions.'  exit 501 } }"""; \
-  StatusMsg: "Register event log category ..."; Flags: runhidden logoutput; Tasks: registerEventlog
+  catch {{ Write-Host 'Failed to initialize logging! Please restart with administrative permissions.'  exit 501 } } exit 5"""; \
+  StatusMsg: "Register event log category ..."; Flags: runhidden logoutput dontlogparameters; Tasks: registerEventlog
 
 [Icons]
 Name: "{group}\{#MyAppName}"; Filename: "{app}\Start_SimpleLapsGui.bat"; IconFilename: "{app}\SimpleLapsGui.ico"
