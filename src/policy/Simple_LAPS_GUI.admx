@@ -65,7 +65,7 @@
         <decimal value="0"/>
       </disabledValue>
       <elements>
-        <text id="LogFilePath" valueName="LogFilePath" expandable="true" />
+        <text id="LogFilePath" valueName="LogFilePath" expandable="true" required="true"/>
       </elements>
     </policy>
   </policies>
