@@ -65,8 +65,10 @@ Source: "..\policy\en-us\*"; DestDir: "{win}\PolicyDefinitions\en-us"; Flags: ig
 Filename: "{sys}\{#PowerShellExe}"; Parameters: "{#PowerShellCommandParam} \
   ""if ((Get-EventLog -LogName *).Log -notcontains 'Simple LAPS GUI') {{ \
   try {{ New-EventLog -LogName 'Simple LAPS GUI' -Source 'Simple LAPS GUI' -ErrorAction Stop -WarningAction Stop } \
-  catch {{ Write-Host 'Failed to initialize logging! Please restart with administrative permissions.'  exit 501 } } exit 5"""; \
+  catch {{ Write-Host 'Failed to initialize logging! Please restart with administrative permissions.' exit 501 } }"""; \
   StatusMsg: "Register event log category ..."; Flags: runhidden logoutput dontlogparameters; Tasks: registerEventlog
+Filename: "{#MyAppURL}/blob/main/README.md"; Description: "View the README on GitHub"; Flags: shellexec postinstall nowait runasoriginaluser skipifsilent
+Filename: "{#MyAppURL}/releases/{#MyAppVersion}"; Description: "See what's new on GitHub"; Flags: shellexec postinstall nowait runasoriginaluser skipifsilent
 
 [Icons]
 Name: "{group}\{#MyAppName}"; Filename: "{app}\Start_SimpleLapsGui.bat"; IconFilename: "{app}\SimpleLapsGui.ico"
