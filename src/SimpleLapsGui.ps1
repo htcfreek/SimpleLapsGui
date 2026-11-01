@@ -1529,7 +1529,7 @@ $aboutLicenseLink.Text = "Read license file online"
 $aboutLicenseLink.add_Click({Execute-LinkCommand -LinkUri "https://github.com/htcfreek/SimpleLapsGui/blob/main/LICENSE.txt" -LinkControl $aboutLicenseLink})
 $aboutForm.Controls.Add($aboutLicenseLink)
 $tt2 = New-Object System.Windows.Forms.ToolTip
-$tt2.SetToolTip($aboutLicenseLink, "https://github.com/htcfreek/SimpleLapsGui/blob/main/LICENSE.md")
+$tt2.SetToolTip($aboutLicenseLink, "https://github.com/htcfreek/SimpleLapsGui/blob/main/LICENSE.txt")
 
 $aboutFormRepoLink = New-Object System.Windows.Forms.LinkLabel
 $aboutFormRepoLink.Font = New-Object Drawing.Font("Segeo UI", 8)
