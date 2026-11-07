@@ -1,12 +1,17 @@
+#include <.\Code.iss>
+
+// Custom uninstall parameter: /RemoveEventLog
+
 #define MyAppName "Simple LAPS GUI"
 #define MyAppVersion "2.5"
-#define MyAppPublisher "htcfreek"
 #define MyAppURL "https://github.com/htcfreek/SimpleLapsGui"
+#define MyAppPublisher "htcfreek"
 #define MyAppPublisherURL "https://github.com/htcfreek"
 #define MyAppUpdateURL "https://github.com/htcfreek/SimpleLapsGui/releases/latest"
 
-#define PowerShellExe "WindowsPowerShell\v1.0\powershell.exe"
-#define PowerShellCommandParam "-ExecutionPolicy Bypass -Command"
+#define CurrentYear        GetDateTimeString('yyyy','','')
+#define MyAppCopyright     "(c) " + CurrentYear + " " + MyAppPublisher
+
 
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application. Do not use the same AppId value in installers for other applications. 
@@ -19,12 +24,24 @@ AppPublisher={#MyAppPublisher}
 AppPublisherURL={#MyAppPublisherURL}
 AppSupportURL={#MyAppURL}
 AppUpdatesURL={#MyAppUpdateURL}
-UninstallDisplayIcon={app}\SimpleLapsGui.ico
 AppMutex=SimpleLAPSGUIApp,Global\SimpleLAPSGUIApp
+
 SetupMutex=SimpleLAPSGUISetup,Global\SimpleLAPSGUISetup
+LicenseFile=..\..\LICENSE.txt
 DefaultDirName={autopf}\{#MyAppName}
 DefaultGroupName={#MyAppName}
-LicenseFile=..\..\LICENSE.txt
+UninstallDisplayIcon={app}\SimpleLapsGui.ico
+
+; Setup version info
+VersionInfoProductName={#MyAppName}
+VersionInfoProductVersion={#MyAppVersion}
+VersionInfoProductTextVersion={#MyAppVersion}
+VersionInfoVersion={#MyAppVersion}
+VersionInfoTextVersion={#MyAppVersion}
+VersionInfoCopyright={#MyAppCopyright}
+VersionInfoCompany={#MyAppPublisher}
+
+; Setup behavior and layout
 ;SetupLogging=yes
 ;UninstallLogging=yes
 PrivilegesRequired=admin
@@ -32,7 +49,11 @@ PrivilegesRequiredOverridesAllowed=
 ArchitecturesAllowed=x64compatible
 ArchitecturesInstallIn64BitMode=x64compatible
 SolidCompression=yes
-WizardStyle=modern windows11
+WizardStyle=windows11
+DisableWelcomePage=no
+WizardImageFile=setup-large.bmp
+WizardSmallImageFile=setup-small.bmp
+
 OutputDir=..\..\Release
 OutputBaseFilename={#MyAppName} {#MyAppVersion}
 
@@ -46,7 +67,7 @@ Name: "pwsh7"; Description: "PowerShell 7 support"; Types: full
 Name: "policy"; Description: "Extract ADMX files"; Types: full
 
 [Tasks]
-Name: "registerEventlog"; Description: "Register Windows Event Log on this computer"; GroupDescription: "Additional install tasks:"; Flags: checkedonce
+Name: "registerEventlog"; Description: "Register Windows Event Log on this computer"; GroupDescription: "Additional install tasks:"; Check: IsEventLogRegistered
 Name: "installPolicy"; Description: "Install the ADMX files on this computer after extraction"; GroupDescription: "Additional install tasks:"; Components: policy; Flags: unchecked
 Name: "desktopicon"; Description: "Create desktop shortcuts"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
@@ -62,11 +83,6 @@ Source: "..\policy\*"; DestDir: "{win}\PolicyDefinitions"; Flags: ignoreversion;
 Source: "..\policy\en-us\*"; DestDir: "{win}\PolicyDefinitions\en-us"; Flags: ignoreversion; Components: policy; Tasks: installPolicy
 
 [Run]
-Filename: "{sys}\{#PowerShellExe}"; Parameters: "{#PowerShellCommandParam} \
-  ""if ((Get-EventLog -LogName *).Log -notcontains 'Simple LAPS GUI') {{ \
-  try {{ New-EventLog -LogName 'Simple LAPS GUI' -Source 'Simple LAPS GUI' -ErrorAction Stop -WarningAction Stop } \
-  catch {{ Write-Host 'Failed to initialize logging! Please restart with administrative permissions.' exit 501 } }"""; \
-  StatusMsg: "Register event log category ..."; Flags: runhidden logoutput dontlogparameters; Tasks: registerEventlog
 Filename: "{#MyAppURL}/blob/main/README.md"; Description: "View the README on GitHub"; Flags: shellexec postinstall nowait runasoriginaluser skipifsilent
 Filename: "{#MyAppURL}/releases/{#MyAppVersion}"; Description: "See what's new on GitHub"; Flags: shellexec postinstall nowait runasoriginaluser skipifsilent
 
