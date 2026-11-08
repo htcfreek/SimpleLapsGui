@@ -216,4 +216,4 @@ Product names and company names are trademarks (™) or registered (®) trademar
 ## License
 
 This Repository is licensed to you under the MIT license.<br />
-See the [LICENSE](LICENSE.md) file in the project root for more information.
+See the [LICENSE](LICENSE.txt) file in the project root for more information.
