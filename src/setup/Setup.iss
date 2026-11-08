@@ -1,6 +1,6 @@
 #include <.\Code.iss>
 
-// Custom uninstall parameter: /RemoveEventLog
+; Custom uninstall parameter: /RemoveEventLog
 
 #define MyAppName "Simple LAPS GUI"
 #define MyAppVersion "2.5"
