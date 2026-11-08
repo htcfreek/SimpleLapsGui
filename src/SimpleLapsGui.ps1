@@ -1,8 +1,8 @@
 <#
 Name: SimpleLapsGui.ps1
-Version: 2.5a
+Version: 2.5
 Developer: htcfreek (Heiko Horwedel) - https://gtihub.com/htcfreek
-Date: 2026-??-??
+Date: 2026-11-08
 Description: Gui script for Windows LAPS in AD environments.
 License: MIT License
 GitHub Repository: https://github.com/htcfreek/SimpleLapsGui
@@ -25,7 +25,7 @@ VERSION HISTORY:
 2026-02-18 / v2.2 / htcfreek / Code improvements; Improvements for screen readers; Improvements on error handling; Added indicators for long running tasks; Improvements on the code that validates the time set result.; Fixed "window not responding" crashes by moving LDAP requests into background jobs.; Fix the bug that on long error detail messages the tooltip exceeds the monitor wide.
 2026-02-24 / v2.3 / htcfreek / Fixed: Ampersand (&) is not displayed in the user name and password.; Fixed: Empty history if only one password is present in the history.
 2026-05-14 / v2.4 / htcfreek / Added support for PowerShell 7.6 and newer.; Add text formatting and zoom feature to zoom view.; Switched password font to "Cascadia Mono" and "Consolas" as fallback.; Fix escape key in zoom dialog.; Added a parameter to enforce that links are copied instead of opened.
-2026-??-?? / v2.5 / htcfreek / Added group policies and new logging Parameter.; Added logging to the app.; Implement app mutex for installer.
+2026-11-08 / v2.5 / htcfreek / Added group policies and new logging Parameter.; Added logging to the app.; Implement app mutex for installer.
 
 #>
 
@@ -42,7 +42,7 @@ param(
 )
 
 
-$scriptVersion = "2.5c"
+$scriptVersion = "2.5"
 $windowTitle = "Simple LAPS GUI"
 $appMutexName = "SimpleLAPSGUIApp"
 # set-clipboard ([Convert]::ToBase64String((Get-Content ".\images\copyIcon.ico" -Encoding Byte)))
