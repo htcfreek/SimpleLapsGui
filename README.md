@@ -31,14 +31,14 @@ A simple and fast GUI for Microsoft LAPS (legacy) and Windows LAPS. With this to
 2. Extract the downloaded archive to your preferred place or install the setup.
 3. Run the tool using one of the Batch files or the PowerShell script or desktop shortcuts.
 
-> [!TIP]
-> Using a shortcut with the `SimpleLapsGui.ico` from the downloaded zip file shows the correct window icon on your task bar.
-
-> [!NOTE]
+> [!IMPORTANT] 
 > Windows/Smart Screen will warn you on executing the setup that the publisher is not trusted. This is because the files are not digitally signed. The cost for the signing process would be too expensive for an open source project I do not earn money from.
 
-> [!NOTE]
+> [!IMPORTANT]
 > The uninstaller has a special silent parameter for deleting the Windows Event Log data: `/RemoveEventLog`
+
+> [!TIP]
+> Using a shortcut with the `SimpleLapsGui.ico` from the downloaded zip file shows the correct window icon on your task bar.
 
 ### System requirements
 
