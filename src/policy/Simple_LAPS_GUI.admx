@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <policyDefinitions xmlns="http://schemas.microsoft.com/GroupPolicy/2006/07/PolicyDefinitions" revision="1.0" schemaVersion="1.0">
   <policyNamespaces>
-    <target prefix="SimpleLapsGUI" namespace="htcfreek.Policies.SimpleLapsGUI"/>
-    <using prefix="htcfreek" namespace="htcfreek.Policies"/>
+    <target prefix="SimpleLapsGUI" namespace="SimpleLapsGUI.Policies"/>
   </policyNamespaces>
   <resources minRequiredRevision="1.0"/>
   <supportedOn>
@@ -11,9 +10,7 @@
     </definitions>
   </supportedOn>
   <categories>
-    <category name="CATEGORY_SimpleLAPSGUI" displayName="$(string.CATEGORY_SimpleLAPSGUI)">
-      <parentCategory ref="htcfreek:CATEGORY_htcfreek" />
-    </category>
+    <category name="CATEGORY_SimpleLAPSGUI" displayName="$(string.CATEGORY_SimpleLAPSGUI)" />
   </categories>
   <policies>
     <policy name="CopyLinkTargetsToClipboard" class="Both" displayName="$(string.CopyLinkTargetsToClipboard)" explainText="$(string.CopyLinkTargetsToClipboard_EXPLAIN)" key="Software\Policies\htcfreek\SimpleLapsGUI" valueName="CopyLinkTargetsToClipboard">
