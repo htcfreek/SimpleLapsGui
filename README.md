@@ -146,7 +146,7 @@ You have to create a shortcut to open the Simple Laps Gui and assign it the `Sim
 
 **How to configure Simple LAPS GUI?**
 
-You can use the script parameters or Group Policies to configure the app. See the [configuration documentation](#Configuration_of_Simple_LAPS_GUI) for more details.
+You can use the script parameters or Group Policies to configure the app. See the [configuration documentation](#configuration-of-simple-laps-gui) for more details.
 
 **Can I configure the tool to copy links instead of opening them?**
 
