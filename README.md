@@ -38,10 +38,12 @@ A simple and fast GUI for Microsoft LAPS (legacy) and Windows LAPS. With this to
 > The cost for the signing process would be too expensive for an open source project I do not earn money from.
 
 > [!Note]
-> The uninstaller has a special silent parameter for deleting the Windows Event Log data: `/RemoveEventLog`
+> The uninstaller has a special silent parameter for deleting the Windows Event Log data: `/RemoveEventLog`.
+>
+> If the uninstallation is executed in non-silent mode, it asks you to remove the Windows Event log data.
 
 > [!TIP]
-> Using a shortcut with the `SimpleLapsGui.ico` from the downloaded zip file shows the correct window icon on your task bar.
+> Using a shortcut with the `SimpleLapsGui.ico` from the downloaded zip file shows the correct window icon on your task bar. This already included in the setup.
 
 ### System requirements
 
@@ -116,9 +118,16 @@ You can get the Administrative Templates as separate downloads or as part of the
 
 No it doesn't. Unfortunately some scanners are triggered by PowerShell scripts in a zip file. (Feel free to report the download / script as false positive to the manufacturer of your scanner.)
 
+**How to remove the Windows Event Log data?**
+
+You have two options to remove this data:
+
+1. Remove them manually in the Windows Event Log console.
+2. Uninstall the app. (In silent mode, you need the parameter 'RemoveEventLog'.)
+
 **Why does Windows / Smart Screen will warn about untrusted publisher?**
 
-This is because the files are not digitally signed. The cost for the signing process would be too expensive for an open source project I do not earn money from.
+This is because the files are not digitally signed. You can safely proceed with this warning by clicking 'yes' and accepting the risk. (The cost for the signing process would be too expensive for an open source project I do not earn money from. The cost for the signing process would be too expensive for an open source project I do not earn money from.)
 
 **Why is there a copilopt-workspace directory? Have you used AI like copilot?**
 
