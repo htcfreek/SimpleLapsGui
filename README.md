@@ -32,9 +32,12 @@ A simple and fast GUI for Microsoft LAPS (legacy) and Windows LAPS. With this to
 3. Run the tool using one of the Batch files or the PowerShell script or desktop shortcuts.
 
 > [!IMPORTANT] 
-> Windows/Smart Screen will warn you on executing the setup that the publisher is not trusted. This is because the files are not digitally signed. The cost for the signing process would be too expensive for an open source project I do not earn money from.
+> Windows/Smart Screen will warn you on executing the setup that the publisher is not trusted. This is because the files are not digitally signed.
+> You can safely proceed with this warning by clicking 'yes' and accepting the risk.
+>
+> The cost for the signing process would be too expensive for an open source project I do not earn money from.
 
-> [!IMPORTANT]
+> [!Note]
 > The uninstaller has a special silent parameter for deleting the Windows Event Log data: `/RemoveEventLog`
 
 > [!TIP]
