@@ -3,7 +3,10 @@
 // Custom uninstall parameter: /RemoveEventLog
 
 #define MyAppName "Simple LAPS GUI"
-#define MyAppVersion "1.0"
+#ifndef ISCC_INVOKED
+  // Skip if compiled from command line
+  #define MyAppVersion "1.0"
+#endif
 #define MyAppURL "https://github.com/htcfreek/SimpleLapsGui"
 #define MyAppPublisher "htcfreek"
 #define MyAppPublisherURL "https://github.com/htcfreek"

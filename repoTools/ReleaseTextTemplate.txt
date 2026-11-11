@@ -1,0 +1,33 @@
+<!-- RELEASE TITLE: Simple LAPS GUI <RAppVersion> -->
+<!-- RELEASE TAG: <TAppVersion> -->
+
+> [!IMPORTANT] 
+> Windows/Smart Screen will warn you on executing the setup that the publisher is not trusted. This is because the files are not digitally signed. You can safely proceed with this warning by clicking 'yes' and accepting the risk.
+>
+> The cost for the signing process would be too expensive for an open source project I do not earn money from.
+
+
+### :star: New features
+- <write text here>
+
+<!--img goes here-->
+
+### :bug: Bug fixes
+- <write text here>
+
+### :hammer_and_wrench: Enhancements
+- <write text here>
+
+### :blue_book: Documentation
+- <write text here>
+
+### :shipit: Additional changes
+- <write text here>
+
+---
+
+| File | SHA256 hash |
+| ------------- | ------------- |
+| <AppZipName>  | <AppZipHash>  |
+| <ADMXZipName>  | <ADMXZipHash>  |
+| <SetupFileName>  | <SetupFileHash>  |
