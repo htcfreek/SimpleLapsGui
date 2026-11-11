@@ -1,9 +1,9 @@
 #include <.\Code.iss>
 
-; Custom uninstall parameter: /RemoveEventLog
+// Custom uninstall parameter: /RemoveEventLog
 
 #define MyAppName "Simple LAPS GUI"
-#define MyAppVersion "2.5"
+#define MyAppVersion "1.0"
 #define MyAppURL "https://github.com/htcfreek/SimpleLapsGui"
 #define MyAppPublisher "htcfreek"
 #define MyAppPublisherURL "https://github.com/htcfreek"
