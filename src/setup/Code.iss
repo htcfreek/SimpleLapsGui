@@ -1,6 +1,6 @@
 [Code]
 const PowerShellExe = '\system32\WindowsPowerShell\v1.0\powershell.exe';
-const PowerShellCommandParam = '-ExecutionPolicy Bypass -Command';
+const PowerShellCommandParam = '-NonInteractive -NoProfile -NoLogo -WindowStyle Hidden -ExecutionPolicy Bypass -Command';
 const CheckEventLogParam = ' "if ((Get-EventLog -LogName *).Log -contains ''Simple LAPS GUI'') { \
      Exit 700 }"';
 const RegisterEventLogParam = ' "if ((Get-EventLog -LogName *).Log -notcontains ''Simple LAPS GUI'') { \
