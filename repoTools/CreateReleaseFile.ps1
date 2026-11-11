@@ -5,7 +5,7 @@
 # Version: 2.0 for SimpleLapsGui-Repo
 # Description: Script to create the release file.
 # Author: htcfreek (Heiko) - https://github.com/htcfreek
-# Parameter: [Version]$ReleaseVersion, [[Switch]$NoHashCalculation=$False]
+# Parameter: [Version]$ReleaseVersion, [[Switch]$NoHashCalculation=$False], [[Switch]$NoSetupBuild=$False]
 
 
 
@@ -94,6 +94,7 @@ if (-Not $NoSetupBuild) {
     & 'C:\Program Files\Inno Setup 7\ISCC.exe' "-f""$($FileNameSetup)""" "-dMyAppVersion=$($AppVersion)" """$($RepoDir)\src\setup\Setup.iss"""
     if ($LASTEXITCODE -ne 0) {
         Write-Error "Build setup failed!!"
+		Exit
     }
     if (-Not $NoHashCalculation) {
         Write-Host "Calculating hash for setup file..."

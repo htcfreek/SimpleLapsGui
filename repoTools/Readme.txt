@@ -1,5 +1,5 @@
 CreateReleaseFile.ps1:
 ----------------------
-Script to generate the release .zip file and the hash checksum.
+Script to generate the release files, calculate the hash checksums and prepare the release notes.
 
 Source: Me.
