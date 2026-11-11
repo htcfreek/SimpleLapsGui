@@ -195,7 +195,7 @@ You can try if running the script in PowerShell 7 fixes this. The GUI framework 
 You have two options to remove this data:
 
 1. Remove them manually in the Windows Event Log console.
-2. Uninstall the app. (In silent mode, you need the parameter 'RemoveEventLog'.)
+2. Uninstall the app. (In silent mode, you need the parameter `/RemoveEventLog`.)
 
 ## Support and contributions
 
