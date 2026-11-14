@@ -66,20 +66,20 @@ OutputBaseFilename={#MyAppName} {#MyAppVersion}
 Name: "english"; MessagesFile: "compiler:Default.isl"
 
 [Components]
-Name: "main"; Description: "Main files"; Types: full custom; Flags: fixed
-Name: "pwsh7"; Description: "PowerShell 7 support"; Types: full
+Name: "main"; Description: "Main files"; Types: full compact custom; Flags: fixed
+Name: "pwsh7support"; Description: "PowerShell 7 support"; Types: full compact
 Name: "policy"; Description: "Extract ADMX files"; Types: full
 
 [Tasks]
-Name: "registerEventlog"; Description: "Register Windows Event Log on this computer"; GroupDescription: "Additional install tasks:"; Check: IsEventLogRegistered
+Name: "registerEventLog"; Description: "Register Windows Event Log on this computer"; GroupDescription: "Additional install tasks:"; Check: IsEventLogRegistered
 Name: "installPolicy"; Description: "Install the ADMX files on this computer after extraction"; GroupDescription: "Additional install tasks:"; Components: policy; Flags: unchecked
-Name: "desktopicon"; Description: "Create desktop shortcuts"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
+Name: "desktopicon"; Description: "Create desktop shortcuts"; GroupDescription: "{cm:AdditionalIcons}"
 
 [Files]
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files.
 Source: "..\SimpleLapsGui.ps1"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\Start_SimpleLapsGui.bat"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\Start_PS7_SimpleLapsGui.bat"; DestDir: "{app}"; Flags: ignoreversion; Components: pwsh7
+Source: "..\Start_PS7_SimpleLapsGui.bat"; DestDir: "{app}"; Flags: ignoreversion; Components: pwsh7support
 Source: "..\images\appIcon.ico"; DestDir: "{app}"; DestName: "SimpleLapsGui.ico"; Flags: ignoreversion
 Source: "..\..\LICENSE.txt"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\policy\*"; DestDir: "{app}\Administrative Templates"; Flags: ignoreversion recursesubdirs createallsubdirs; Components: policy
@@ -92,7 +92,7 @@ Filename: "{#MyAppURL}/releases/{#MyAppVersion}"; Description: "See what's new o
 
 [Icons]
 Name: "{group}\{#MyAppName}"; Filename: "{app}\Start_SimpleLapsGui.bat"; IconFilename: "{app}\SimpleLapsGui.ico"
-Name: "{group}\{#MyAppName} (PowerShell 7)"; Filename: "{app}\Start_PS7_SimpleLapsGui"; IconFilename: "{app}\SimpleLapsGui.ico"; Components: pwsh7
+Name: "{group}\{#MyAppName} (PowerShell 7)"; Filename: "{app}\Start_PS7_SimpleLapsGui"; IconFilename: "{app}\SimpleLapsGui.ico"; Components: pwsh7support
 Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\Start_SimpleLapsGui.bat"; IconFilename: "{app}\SimpleLapsGui.ico"; Tasks: desktopicon
-Name: "{autodesktop}\{#MyAppName} (PowerShell 7)"; Filename: "{app}\Start_PS7_SimpleLapsGui"; IconFilename: "{app}\SimpleLapsGui.ico"; Components: pwsh7; Tasks: desktopicon
+Name: "{autodesktop}\{#MyAppName} (PowerShell 7)"; Filename: "{app}\Start_PS7_SimpleLapsGui"; IconFilename: "{app}\SimpleLapsGui.ico"; Components: pwsh7support; Tasks: desktopicon
 

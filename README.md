@@ -37,11 +37,6 @@ A simple and fast GUI for Microsoft LAPS (legacy) and Windows LAPS. With this to
 >
 > The cost for the signing process would be too expensive for an open source project I do not earn money from.
 
-> [!Note]
-> The uninstaller has a special silent parameter for deleting the Windows Event Log data: `/RemoveEventLog`.
->
-> If the uninstallation is executed in non-silent mode, it asks you to remove the Windows Event log data.
-
 > [!TIP]
 > Using a shortcut with the `SimpleLapsGui.ico` from the downloaded zip file shows the correct window icon on your task bar. This already included in the setup.
 
@@ -54,6 +49,20 @@ A simple and fast GUI for Microsoft LAPS (legacy) and Windows LAPS. With this to
 
 > [!TIP]
 > In PowerShell 7.6 and newer the zoom view has better Unicode support and text wrapping behavior.
+
+### Silent install and uninstall
+
+The setup supports silent execution. The table contains information on how to control the silent execution.
+
+|          **Property**       | **Use case**                                               | **Selection**                    | **Note**                             |
+|-----------------------------|------------------------------------------------------------|----------------------------------|--------------------------------------|
+| Component "main"            | Installs all important files.                              | Always selected.                 |                                      |
+| Component "pwsh7support"    | Installs files and shortcuts to use SLG with PowerShell 7. | Setup types: Full, compact       |                                      |
+| Component "policy"          | Extract ADMX files to install dir.                         | Setup type: Full                 |                                      |
+| Task "registerEventLog"     | Register Windows Event Log section at install.             | Default: Yes                     | Available if not done yet.           |
+| Task "installPolicy"        | Installs the ADMX files into the Windows directory.        | Default: No                      | Requires "policy" component.         |
+| Task "desktopicon"          | Create desktop icons on public desktop.                    | Default: Yes                     |                                      |
+| Parameter "/RemoveEventLog" | Remove Windows Event Log data on uninstall.                | Default: No (Asking in UI mode.) | Parameter for silent uninstall only. |
 
 ### Permissions
 

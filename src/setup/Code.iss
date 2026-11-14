@@ -45,7 +45,7 @@ function PrepareToInstall(var NeedsRestart: Boolean): String;
       Result := '';
       Exit
     end;
-    if not WizardIsTaskSelected('registerEventlog') then begin
+    if not WizardIsTaskSelected('registerEventLog') then begin
       Result := '';
       Exit
     end;
