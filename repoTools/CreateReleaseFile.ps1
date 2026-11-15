@@ -122,7 +122,7 @@ if (-Not $NoWingetManifest) {
     Write-Host "Create winget manifest ..."
 	New-Item -Path "$RepoDir\$ReleaseDir" -Name $WgFolder -ItemType Directory -Force | Out-Null
 	Out-File -FilePath "$($RepoDir)\$($ReleaseDir)\$($WgFolder)\htcfreek.SimpleLapsGui.installer.yaml" -InputObject $wgManInstaller
-	Out-File -FilePath "$($RepoDir)\$($ReleaseDir)\$($WgFolder)\htcfreek.SimpleLapsGui.locale.en-us.yaml" -InputObject $wgManLocale
+	Out-File -FilePath "$($RepoDir)\$($ReleaseDir)\$($WgFolder)\htcfreek.SimpleLapsGui.locale.en-US.yaml" -InputObject $wgManLocale
 	Out-File -FilePath "$($RepoDir)\$($ReleaseDir)\$($WgFolder)\htcfreek.SimpleLapsGui.yaml" -InputObject $wgManVersion
 }
 
