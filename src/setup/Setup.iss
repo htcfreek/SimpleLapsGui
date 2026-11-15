@@ -28,6 +28,7 @@ AppPublisherURL={#MyAppPublisherURL}
 AppSupportURL={#MyAppURL}
 AppUpdatesURL={#MyAppUpdateURL}
 AppMutex=SimpleLAPSGUIApp,Global\SimpleLAPSGUIApp
+UninstallDisplayName={#MyAppName}
 
 SetupMutex=SimpleLAPSGUISetup,Global\SimpleLAPSGUISetup
 LicenseFile=..\..\LICENSE.txt
