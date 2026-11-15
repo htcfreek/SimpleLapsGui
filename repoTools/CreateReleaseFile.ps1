@@ -18,7 +18,7 @@ Param(
 )
 
 # Validate and convert version parameter
-if ($ReleaseVersion -match '^\d{1,2}\.\d{1,2}(\.\d{1,2}){0,1}$') {
+if ($ReleaseVersion -match '^\d{1,2}\.\d{1,2}\.\d{1,2}$') {
     $AppVersion = $ReleaseVersion
 }
 else {

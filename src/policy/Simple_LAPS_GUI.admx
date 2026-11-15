@@ -6,7 +6,7 @@
   <resources minRequiredRevision="1.0"/>
   <supportedOn>
     <definitions>
-      <definition name="SUPPORTED_Version_2_5" displayName="$(string.SUPPORTED_Version_2_5)" />
+      <definition name="SUPPORTED_Version_2_5_0" displayName="$(string.SUPPORTED_Version_2_5_0)" />
     </definitions>
   </supportedOn>
   <categories>
@@ -15,7 +15,7 @@
   <policies>
     <policy name="CopyLinkTargetsToClipboard" class="Both" displayName="$(string.CopyLinkTargetsToClipboard)" explainText="$(string.CopyLinkTargetsToClipboard_EXPLAIN)" key="Software\Policies\htcfreek\SimpleLapsGUI" valueName="CopyLinkTargetsToClipboard">
       <parentCategory ref="CATEGORY_SimpleLAPSGUI"/>
-      <supportedOn ref="SUPPORTED_Version_2_5"/>
+      <supportedOn ref="SUPPORTED_Version_2_5_0"/>
       <enabledValue>
         <decimal value="1"/>
       </enabledValue>
@@ -25,7 +25,7 @@
     </policy>
  <policy name="WindowsEventLog" class="Both" displayName="$(string.WindowsEventLog)" explainText="$(string.WindowsEventLog_EXPLAIN)" key="Software\Policies\htcfreek\SimpleLapsGUI" valueName="WindowsEventLogEnabled" presentation="$(presentation.WindowsEventLog)">
       <parentCategory ref="CATEGORY_SimpleLAPSGUI"/>
-      <supportedOn ref="SUPPORTED_Version_2_5"/>
+      <supportedOn ref="SUPPORTED_Version_2_5_0"/>
       <enabledValue>
         <decimal value="1"/>
       </enabledValue>
@@ -54,7 +54,7 @@
     </policy>
   <policy name="LogFile" class="Both" displayName="$(string.LogFile)" explainText="$(string.LogFile_EXPLAIN)" key="Software\Policies\htcfreek\SimpleLapsGUI" valueName="UseLogFile" presentation="$(presentation.LogFile)">
       <parentCategory ref="CATEGORY_SimpleLAPSGUI"/>
-      <supportedOn ref="SUPPORTED_Version_2_5"/>
+      <supportedOn ref="SUPPORTED_Version_2_5_0"/>
 	  <enabledValue>
         <decimal value="1"/>
       </enabledValue>
