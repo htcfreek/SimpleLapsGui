@@ -14,7 +14,8 @@
 Param(
     [Parameter(Mandatory=$true)][string]$ReleaseVersion,
     [Parameter(Mandatory=$false)][Switch]$NoHashCalculation=$false,
-    [Parameter(Mandatory=$false)][Switch]$NoSetupBuild=$false
+    [Parameter(Mandatory=$false)][Switch]$NoSetupBuild=$false,
+	[Parameter(Mandatory=$false)][Switch]$NoWingetManifest=$false
 )
 
 # Validate and convert version parameter
@@ -29,7 +30,8 @@ else {
 
 # Settings
 [String]$RepoDir = Resolve-Path -LiteralPath "..\"
-[String]$ReleaseDir = "\Release"
+[String]$ReleaseDir = "Release"
+[string]$WgFolder = "h_htcfreek_SimpleLapsGui_$AppVersion"
 [string]$AppName = "Simple LAPS GUI"
 
 [string]$CheckSumAlgo="SHA256"
@@ -54,17 +56,26 @@ $releaseText = $releaseText.Replace("<RAppVersion>",$AppVersion)
 $releaseText = $releaseText.Replace("<TAppVersion>",$AppVersion)
 
 
+# Read winget manifest files
+$wgManVersion = Get-Content -Path "wg_version.yaml"
+$wgManVersion = $wgManVersion.Replace("<wgAppVersion>",$AppVersion)
+$wgManLocale = Get-Content -Path "wg_defaultLocale.yaml"
+$wgManLocale = $wgManLocale.Replace("<wgAppVersion>",$AppVersion)
+$wgManInstaller = Get-Content -Path "wg_installer.yaml"
+$wgManInstaller = $wgManInstaller.Replace("<wgAppVersion>",$AppVersion)
+
+
 # Create ADMX Zip
 Write-Host "Create ADMX Zip file..."
 [String[]]$AdmxZipFiles = @(
     "$($RepoDir)\src\policy\Simple_LAPS_GUI.admx",
     "$($RepoDir)\src\policy\en-us"
 )
-Compress-Archive -Path $AdmxZipFiles -DestinationPath "$($RepoDir)$($ReleaseDir)\$($FileNameAdmxZip)"
+Compress-Archive -Path $AdmxZipFiles -DestinationPath "$($RepoDir)\$($ReleaseDir)\$($FileNameAdmxZip)"
 if (-Not $NoHashCalculation) {
     Write-Host "Calculating hash for ADMX zip file..."
-    [String]$hash = (Get-FileHash -Path "$($RepoDir)$($ReleaseDir)\$($FileNameAdmxZip)" -Algorithm $CheckSumAlgo).Hash
-    "$hash *$FileNameAdmxZip" | Out-File -FilePath "$($RepoDir)$($ReleaseDir)\$($FileNameAdmxZip).$($CheckSumAlgo)"
+    [String]$hash = (Get-FileHash -Path "$($RepoDir)\$($ReleaseDir)\$($FileNameAdmxZip)" -Algorithm $CheckSumAlgo).Hash
+    "$hash *$FileNameAdmxZip" | Out-File -FilePath "$($RepoDir)\$($ReleaseDir)\$($FileNameAdmxZip).$($CheckSumAlgo)"
     $releaseText = $releaseText.Replace("<ADMXZipName>",$FileNameAdmxZip).Replace("<ADMXZipHash>","sha256:$($hash.ToLower())")
 }
 
@@ -79,11 +90,11 @@ Write-Host "Create App Zip file..."
     "$($RepoDir)\LICENSE.md"
 )
 Copy-Item "$($RepoDir)\src\images\appIcon.ico" "$($env:temp)\SimpleLapsGui.ico" -Force
-Compress-Archive -Path $AppZipFiles -DestinationPath "$($RepoDir)$($ReleaseDir)\$($FileNameAppZip)"
+Compress-Archive -Path $AppZipFiles -DestinationPath "$($RepoDir)\$($ReleaseDir)\$($FileNameAppZip)"
 if (-Not $NoHashCalculation) {
     Write-Host "Calculating hash for App zip file..."
-    [String]$hash = (Get-FileHash -Path "$($RepoDir)$($ReleaseDir)\$($FileNameAppZip)" -Algorithm $CheckSumAlgo).Hash
-    "$hash *$FileNameAppZip" | Out-File -FilePath "$($RepoDir)$($ReleaseDir)\$($FileNameAppZip).$($CheckSumAlgo)"
+    [String]$hash = (Get-FileHash -Path "$($RepoDir)\$($ReleaseDir)\$($FileNameAppZip)" -Algorithm $CheckSumAlgo).Hash
+    "$hash *$FileNameAppZip" | Out-File -FilePath "$($RepoDir)\$($ReleaseDir)\$($FileNameAppZip).$($CheckSumAlgo)"
     $releaseText = $releaseText.Replace("<AppZipName>",$FileNameAppZip).Replace("<AppZipHash>","sha256:$($hash.ToLower())")
 }
 
@@ -98,13 +109,24 @@ if (-Not $NoSetupBuild) {
     }
     if (-Not $NoHashCalculation) {
         Write-Host "Calculating hash for setup file..."
-        [String]$hash = (Get-FileHash -Path "$($RepoDir)$($ReleaseDir)\$($FileNameSetupWithExt)" -Algorithm $CheckSumAlgo).Hash
-        "$hash *$FileNameSetupWithExt" | Out-File -FilePath "$($RepoDir)$($ReleaseDir)\$($FileNameSetupWithExt).$($CheckSumAlgo)"
+        [String]$hash = (Get-FileHash -Path "$($RepoDir)\$($ReleaseDir)\$($FileNameSetupWithExt)" -Algorithm $CheckSumAlgo).Hash
+        "$hash *$FileNameSetupWithExt" | Out-File -FilePath "$($RepoDir)\$($ReleaseDir)\$($FileNameSetupWithExt).$($CheckSumAlgo)"
         $releaseText = $releaseText.Replace("<SetupFileName>",$FileNameSetupWithExt).Replace("<SetupFileHash>","sha256:$($hash.ToLower())")
+		$wgManInstaller = $wgManInstaller.Replace("<wgSetupFile>",$FileNameSetupWithExt).Replace("<wgSetupHash>",$hash.ToUpper())
     }
+}
+
+
+if (-Not $NoWingetManifest) {
+    # Create winget manifest
+    Write-Host "Create winget manifest ..."
+	New-Item -Path "$RepoDir\$ReleaseDir" -Name $WgFolder -ItemType Directory -Force | Out-Null
+	Out-File -FilePath "$($RepoDir)\$($ReleaseDir)\$($WgFolder)\htcfreek.SimpleLapsGui.installer.yaml" -InputObject $wgManInstaller
+	Out-File -FilePath "$($RepoDir)\$($ReleaseDir)\$($WgFolder)\htcfreek.SimpleLapsGui.locale.en-us.yaml" -InputObject $wgManLocale
+	Out-File -FilePath "$($RepoDir)\$($ReleaseDir)\$($WgFolder)\htcfreek.SimpleLapsGui.yaml" -InputObject $wgManVersion
 }
 
 
 # Create release text
 Write-Host "Create release text..."
-Out-File -FilePath "$($RepoDir)$($ReleaseDir)\$($FileNameReleaseTemplate)" -InputObject $releaseText
+Out-File -FilePath "$($RepoDir)\$($ReleaseDir)\$($FileNameReleaseTemplate)" -InputObject $releaseText
