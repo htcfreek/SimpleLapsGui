@@ -23,8 +23,10 @@ Tags:
 Documentations:
   - DocumentLabel: "General information"
     DocumentUrl: https://github.com/htcfreek/SimpleLapsGui
+  - DocumentLabel: "Wiki"
+    DocumentUrl: https://github.com/htcfreek/SimpleLapsGui/wiki
   - DocumentLabel: "FAQ"
-    DocumentUrl: https://github.com/htcfreek/SimpleLapsGui#FAQ
+    DocumentUrl: https://github.com/htcfreek/SimpleLapsGui/wiki/FAQ
 ReleaseNotesUrl: https://github.com/htcfreek/SimpleLapsGui/releases/tag/<wgAppVersion>
 ManifestType: defaultLocale
 ManifestVersion: 1.12.0

@@ -1941,7 +1941,7 @@ $helpText.Text = "?"
 $helpText.ToolTipText = "Open online FAQ"
 $helpText.AccessibleName = "Open online FAQ"
 $helpText.AccessibleRole = 'Link'
-$helpText.Add_Click({Execute-LinkCommand -LinkUri "https://github.com/htcfreek/SimpleLapsGui/#faq" -LinkControl $statusBar})
+$helpText.Add_Click({Execute-LinkCommand -LinkUri "https://github.com/htcfreek/SimpleLapsGui/wiki/FAQ" -LinkControl $statusBar})
 [void]$statusBar.Items.Add($helpText)
 
 $aboutText = New-Object System.Windows.Forms.ToolStripButton

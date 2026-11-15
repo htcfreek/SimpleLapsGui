@@ -29,7 +29,7 @@ A simple and fast GUI for Microsoft LAPS (legacy) and Windows LAPS. With this to
 
 1. Download the archive or setup from [here](http://github.com/htcfreek/SimpleLapsGui/releases).
 2. Extract the downloaded archive to your preferred place or install the setup.
-3. Run the tool using one of the Batch files or the PowerShell script or desktop shortcuts.
+3. Run the tool using one of the Batch files, the PowerShell script or the desktop shortcuts.
 
 > [!IMPORTANT] 
 > Windows/Smart Screen will warn you on executing the setup that the publisher is not trusted. This is because the files are not digitally signed.
@@ -46,175 +46,23 @@ A simple and fast GUI for Microsoft LAPS (legacy) and Windows LAPS. With this to
 - Windows LAPS PowerShell module
 - Active Directory Domain joined machine and user account
 - Optional for changing the timestamp of Microsoft LAPS (legacy) passwords: Microsoft LAPS PowerShell module (AdmPwd module)
+- Permissions to access the LAPS information in the domain. (Read more in the [wiki documentation](https://github.com/htcfreek/SimpleLapsGui/wiki/2.-Domain-permission).
 
 > [!TIP]
 > In PowerShell 7.6 and newer the zoom view has better Unicode support and text wrapping behavior.
-
-### Silent install and uninstall
-
-The setup supports silent execution. The table contains information on how to control the silent execution.
-
-|          **Property**       | **Use case**                                               | **Selection**                    | **Note**                             |
-|-----------------------------|------------------------------------------------------------|----------------------------------|--------------------------------------|
-| Component "main"            | Installs all important files.                              | Always selected.                 |                                      |
-| Component "pwsh7support"    | Installs files and shortcuts to use SLG with PowerShell 7. | Setup types: Full, compact       |                                      |
-| Component "policy"          | Extract ADMX files to install dir.                         | Setup type: Full                 |                                      |
-| Task "registerEventLog"     | Register Windows Event Log section at install.             | Default: Yes                     | Available if not done yet.           |
-| Task "installPolicy"        | Installs the ADMX files into the Windows directory.        | Default: No                      | Requires "policy" component.         |
-| Task "desktopicon"          | Create desktop icons on public desktop.                    | Default: Yes                     |                                      |
-| Parameter "/RemoveEventLog" | Remove Windows Event Log data on uninstall.                | Default: No (Asking in UI mode.) | Parameter for silent uninstall only. |
-
-### Permissions
-
-The user account who uses the tool needs the following permissions:
-
-- Read LAPS password attribute(s).
-- Decrypt the Windows LAPS password.
-- [Optional:] Change expiration time attribute.
-
-> [!CAUTION]
-> As always when granting permissions, you should be careful who you grant them to. You should grant permissions only to those who need them (e.g., use administration tiering).
-
-> [!NOTE]
-> For more information please read the docs provided by Microsoft:
-> - [Windows LAPS permission concept](https://learn.microsoft.com/en-us/windows-server/identity/laps/laps-concepts#user-group-permissions)
-> - [Windows LAPS attributes and rights](https://learn.microsoft.com/en-us/windows-server/identity/laps/laps-technical-reference#extended-rights)
-> - [Windows LAPS decryption principal](https://learn.microsoft.com/en-us/windows-server/identity/laps/laps-management-policy-settings#adpasswordencryptionprincipal)
-> - [Microsoft LAPS attribute permissions](https://techcommunity.microsoft.com/t5/itops-talk-blog/step-by-step-guide-how-to-configure-microsoft-local/ba-p/2806185)
-
-### Configuration of Simple LAPS GUI
-
-The script can be configured by either using the script parameters or the policies from the Administrative Templates. (All configurations are documented based on the latest released version.)
-
-<ins>Script parameters</ins>
-
-All parameter names have to be prefixed with a minus in the command.
-
-|        **Parameter**       | **Possible Values**  | **Default Value** | **Feature**                                                          |
-|----------------------------|----------------------|-------------------|----------------------------------------------------------------------|
-| CopyLinkTargetsToClipboard |                      | _Not set._        | Links in the app are not opened and instead copied to clipboard.     |
-| WindowsEventLogEnabled     |                      | _Not set._        | Enable logging.                                                      |
-| LogLevel                   | INFO, WARNING, ERROR | WARNING           | Set the log level.                                                   |
-| LogFilePath                | File path.           | _Empty_           | Write the log into a file instead using Windows Event Log as target. |
-
-
-<ins>Group Policies</ins>
-
-You can get the Administrative Templates as separate downloads or as part of the setup file in the [download area](http://github.com/htcfreek/SimpleLapsGui/releases).
-
-|                 **Name**                | **Feature**                                                                                                                |
-|-----------------------------------------|----------------------------------------------------------------------------------------------------------------------------|
-| Copy links instead of opening them      | Control how links in the app are handled: Open or copy to clipboard.                                                       |
-| Enable logging to Windows Event Log     | Enable logging to Windows Event Log and configure log level.                                                               |
-| Log to file instead of Windows Eventlog | Write the log into a file instead using Windows Event Log as target. If disabled, Windows Event Log is enforced as target. |
-
-<ins>Registry</ins>
-
-The the following values in HKLM or HKCU under `Software\Policies\htcfreek\SimpleLapsGUI`.
-
-|                 **Name**                | **Values Enabled**                                                                       | **Values disabled**                     | **Feature**                                                                                                                |
-|-----------------------------------------|------------------------------------------------------------------------------------------|-----------------------------------------|----------------------------------------------------------------------------------------------------------------------------|
-| Copy links instead of opening them      | `CopyLinkTargetsToClipboard = DWORD: 1`                                                  | `CopyLinkTargetsToClipboard = DWORD: 0` | Control how links in the app are handled: Open or copy to clipboard.                                                       |
-| Enable logging to Windows Event Log     | `WindowsEventLogEnabled = DWORD: 1`<br />`WindowsEventLogLevel = SZ: ERROR/WARNING/INFO` | `WindowsEventLogEnabled = DWORD: 0`     | Enable logging to Windows Event Log and configure log level.                                                               |
-| Log to file instead of Windows Eventlog | `UseLogFile = DWORD: 1`<br />`LogFilePath = EXPAND_SZ: file path`                        | `UseLogFile = DWORD: 0`                 | Write the log into a file instead using Windows Event Log as target. If disabled, Windows Event Log is enforced as target. |
-
 
 ### Limitations
 
 - Microsoft Entra ID (Azure AD) is not supported.
 - Changing the expiration time of clients that use Microsoft LAPS (legacy) is not supported when searching in multi-domain mode.
 
-## FAQ
+## Documentation
 
-**Why did you create another LAPS (G)UI?**
+You can fin the documentation in the [wiki](https://github.com/htcfreek/SimpleLapsGui/wiki).
 
-1. The existing standalone LAPS UI doesn't support Windows LAPS and the Windows LAPS password history.
-2. There is a built-in Windows LAPS tab in the RSAT (Active Directory Users and Computers). But to use this you have to install the RSAT for everyone who should use it. My GUI is small and portable.
-3. The LAPS tab in the RSAT (Active Directory Users and Computers) doesn't show the Windows LAPS password history.
-4. When using my GUI you don't have to learn the PowerShell modules.
+### FAQ
 
-**Does the script version contains viruses? It is reported on "virustotal.com".**
-
-No it doesn't. Unfortunately some scanners are triggered by PowerShell scripts in a zip file. (Feel free to report the download / script as false positive to the manufacturer of your scanner.)
-
-**Why does Windows / Smart Screen will warn about untrusted publisher?**
-
-This is because the files are not digitally signed. You can safely proceed with this warning by clicking 'yes' and accepting the risk. (The cost for the signing process would be too expensive for an open source project I do not earn money from. The cost for the signing process would be too expensive for an open source project I do not earn money from.)
-
-**Why is there a copilopt-workspace directory? Have you used AI like copilot?**
-
-This folder contains a configuration file that disallows GitHub Copilot to create Issue comments and Pull Requests.
-
-> [!NOTE]
-> This tool is developed by me and not by any AI. There was no AI used to create code that is written in this script.
-
-**Can you support Windows Server 2016?**
-
-No. As long as Microsoft doesn't provide the PowerShell cmdlets on Server 2016, I can't support this OS.
-
-> [!WARNING]
-> You can find instructions on how to change my script to run on Windows Server 2016. But this is not supported by me. All manipulations of the script happens at your own risk!!!
-
-**Why don't you allow side-loading the LAPS module?**
-
-I know that such a feature would make my script usable on Windows Server 2016. But loading PowerShell modules from unknown locations is a potential security risk. And it requires to lower the execution policy level which is a security risk too.
-
-**How to get the correct window icon shown on my task bar?**
-
-You have to create a shortcut to open the Simple Laps Gui and assign it the `SimpleLapsGui.ico` icon from the downloaded zip file.
-
-**How to configure Simple LAPS GUI?**
-
-You can use the script parameters or Group Policies to configure the app. See the [configuration documentation](#configuration-of-simple-laps-gui) for more details.
-
-**Can I configure the tool to copy links instead of opening them?**
-
-Yes this is possible by starting the PowerShell script with the parameter `‑CopyLinkTargetsToClipboard` or setting the Group Policy `Copy links instead of opening them` to enabled.
-
-**Why does enabling logging require administrative permissions?**
-
-When logging into Windows Event Log is enabled and the event log category is not created by the installer, it has to be created first by the app. To create a new category in Windows Event Log, administrative permission is required.
-
-**What notations are supported for the computer name?**
-
-The following computer name notations are supported:
-
-- Sam Account Name (begins with a '$")
-- Name (for all other inputs)
-- DNS Hostname (contains at least one '.' character)
-- `<Domain>\<Computer name>`
-
-<!--Source: https://learn.microsoft.com/de-de/powershell/module/laps/get-lapsadpassword?view=windowsserver2022-ps#-identity -->
-
-**How to query an other domain than my computer/user is joined to?**
-
-To do this please use one of the following computer name notations:
-
-- DNS Hostname (contains at least one '.' character)
-- `<Domain>\<Computer name>`
-
-**Why are no passwords found?**
-
-Either you don't have the permission to read them or there are no passwords stored for this computer.
-
-**Why do some computers have no history?**
-
-To have a history it must be enabled and the computer must use Windows LAPS.
-
-**Why is the password not decrypted?**
-
-This happens if you don't have the required permission to decrypt the password.
-
-**How can I improve the range of characters supported for account name and password at the zoom view?**
-
-You can try if running the script in PowerShell 7 fixes this. The GUI framework in PowerShell 7 has better Unicode support.
-
-**How to remove the Windows Event Log data?**
-
-You have two options to remove this data:
-
-1. Remove them manually in the Windows Event Log console.
-2. Uninstall the app. (In silent mode, you need the parameter `/RemoveEventLog`.)
+Starting with the release of version 2.5.0 you can find the [FAQ in the wiki](https://github.com/htcfreek/SimpleLapsGui/wiki/FAQ).
 
 ## Support and contributions
 

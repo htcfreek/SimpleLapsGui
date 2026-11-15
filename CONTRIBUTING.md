@@ -27,7 +27,7 @@ On all your contributions and communication
 
 ## I Have a Question
 
-Before you ask a question, it is best to read the available [FAQ](https://github.com/htcfreek/SimpleLapsGui#FAQ) and to search for existing [issues](https://github.com/htcfreek/SimpleLapsGui/issues) that might help you. In case you have found a suitable issue and still need clarification, you can write your question in this issue. It is also advisable to search the internet for answers first.
+Before you ask a question, it is best to read the available [FAQ](https://github.com/htcfreek/SimpleLapsGui/wiki/FAQ) and to search for existing [issues](https://github.com/htcfreek/SimpleLapsGui/issues) that might help you. In case you have found a suitable issue and still need clarification, you can write your question in this issue. It is also advisable to search the internet for answers first.
 
 If you then still feel the need to ask a question and need clarification, I recommend the following:
 
