@@ -76,7 +76,7 @@ Write-Host "Create App Zip file..."
 	"$($RepoDir)\src\Start_SimpleLapsGui.bat",
 	"$($RepoDir)\src\Start_PS7_SimpleLapsGui.bat",
 	"$($env:temp)\SimpleLapsGui.ico",
-    "$($RepoDir)\LICENSE.txt"
+    "$($RepoDir)\LICENSE.md"
 )
 Copy-Item "$($RepoDir)\src\images\appIcon.ico" "$($env:temp)\SimpleLapsGui.ico" -Force
 Compress-Archive -Path $AppZipFiles -DestinationPath "$($RepoDir)$($ReleaseDir)\$($FileNameAppZip)"

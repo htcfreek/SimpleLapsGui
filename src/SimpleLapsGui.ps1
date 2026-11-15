@@ -1530,10 +1530,10 @@ $aboutLicenseLink.Location = "110, 105"
 $aboutLicenseLink.Size = "300, 20"
 $aboutLicenseLink.AccessibleRole = 'Link'
 $aboutLicenseLink.Text = "Read license file online"
-$aboutLicenseLink.add_Click({Execute-LinkCommand -LinkUri "https://github.com/htcfreek/SimpleLapsGui/blob/main/LICENSE.txt" -LinkControl $aboutLicenseLink})
+$aboutLicenseLink.add_Click({Execute-LinkCommand -LinkUri "https://github.com/htcfreek/SimpleLapsGui/blob/main/LICENSE.md" -LinkControl $aboutLicenseLink})
 $aboutForm.Controls.Add($aboutLicenseLink)
 $tt2 = New-Object System.Windows.Forms.ToolTip
-$tt2.SetToolTip($aboutLicenseLink, "https://github.com/htcfreek/SimpleLapsGui/blob/main/LICENSE.txt")
+$tt2.SetToolTip($aboutLicenseLink, "https://github.com/htcfreek/SimpleLapsGui/blob/main/LICENSE.md")
 
 $aboutFormRepoLink = New-Object System.Windows.Forms.LinkLabel
 $aboutFormRepoLink.Font = New-Object Drawing.Font("Segeo UI", 8)

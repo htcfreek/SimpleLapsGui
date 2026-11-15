@@ -31,7 +31,7 @@ AppMutex=SimpleLAPSGUIApp,Global\SimpleLAPSGUIApp
 UninstallDisplayName={#MyAppName}
 
 SetupMutex=SimpleLAPSGUISetup,Global\SimpleLAPSGUISetup
-LicenseFile=..\..\LICENSE.txt
+LicenseFile=..\..\LICENSE.md
 DefaultDirName={autopf}\{#MyAppName}
 DefaultGroupName={#MyAppName}
 UninstallDisplayIcon={app}\SimpleLapsGui.ico
@@ -82,7 +82,7 @@ Source: "..\SimpleLapsGui.ps1"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\Start_SimpleLapsGui.bat"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\Start_PS7_SimpleLapsGui.bat"; DestDir: "{app}"; Flags: ignoreversion; Components: pwsh7support
 Source: "..\images\appIcon.ico"; DestDir: "{app}"; DestName: "SimpleLapsGui.ico"; Flags: ignoreversion
-Source: "..\..\LICENSE.txt"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\..\LICENSE.md"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\policy\*"; DestDir: "{app}\Administrative Templates"; Flags: ignoreversion recursesubdirs createallsubdirs; Components: policy
 Source: "..\policy\*"; DestDir: "{win}\PolicyDefinitions"; Flags: ignoreversion; Components: policy; Tasks: installPolicy
 Source: "..\policy\en-us\*"; DestDir: "{win}\PolicyDefinitions\en-us"; Flags: ignoreversion; Components: policy; Tasks: installPolicy
