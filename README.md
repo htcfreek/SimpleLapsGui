@@ -102,11 +102,21 @@ All parameter names have to be prefixed with a minus in the command.
 
 You can get the Administrative Templates as separate downloads or as part of the setup file in the [download area](http://github.com/htcfreek/SimpleLapsGui/releases).
 
-|                 **Name**                | **Feature**                                                          |
-|-----------------------------------------|----------------------------------------------------------------------|
-| Copy links instead of opening them      | Control how links in the app are handled: Open or copy to clipboard. |
-| Enable logging to Windows Event Log     | Enable logging to Windows Event Log and configure log level.         |
-| Log to file instead of Windows Eventlog | Write the log into a file instead using Windows Event Log as target. |
+|                 **Name**                | **Feature**                                                                                                                |
+|-----------------------------------------|----------------------------------------------------------------------------------------------------------------------------|
+| Copy links instead of opening them      | Control how links in the app are handled: Open or copy to clipboard.                                                       |
+| Enable logging to Windows Event Log     | Enable logging to Windows Event Log and configure log level.                                                               |
+| Log to file instead of Windows Eventlog | Write the log into a file instead using Windows Event Log as target. If disabled, Windows Event Log is enforced as target. |
+
+<ins>Registry</ins>
+
+The the following values in HKLM or HKCU under `Software\Policies\htcfreek\SimpleLapsGUI`.
+
+|                 **Name**                | **Values Enabled**                                                                       | **Values disabled**                     | **Feature**                                                                                                                |
+|-----------------------------------------|------------------------------------------------------------------------------------------|-----------------------------------------|----------------------------------------------------------------------------------------------------------------------------|
+| Copy links instead of opening them      | `CopyLinkTargetsToClipboard = DWORD: 1`                                                  | `CopyLinkTargetsToClipboard = DWORD: 0` | Control how links in the app are handled: Open or copy to clipboard.                                                       |
+| Enable logging to Windows Event Log     | `WindowsEventLogEnabled = DWORD: 1`<br />`WindowsEventLogLevel = SZ: ERROR/WARNING/INFO` | `WindowsEventLogEnabled = DWORD: 0`     | Enable logging to Windows Event Log and configure log level.                                                               |
+| Log to file instead of Windows Eventlog | `UseLogFile = DWORD: 1`<br />`LogFilePath = EXPAND_SZ: file path`                        | `UseLogFile = DWORD: 0`                 | Write the log into a file instead using Windows Event Log as target. If disabled, Windows Event Log is enforced as target. |
 
 
 ### Limitations
@@ -159,7 +169,7 @@ You can use the script parameters or Group Policies to configure the app. See th
 
 **Can I configure the tool to copy links instead of opening them?**
 
-Yes this is possible by starting the PowerShell script with the parameter `‑CopyLinkTargetsToClipboard`.
+Yes this is possible by starting the PowerShell script with the parameter `‑CopyLinkTargetsToClipboard` or setting the Group Policy `Copy links instead of opening them` to enabled.
 
 **Why does enabling logging require administrative permissions?**
 
