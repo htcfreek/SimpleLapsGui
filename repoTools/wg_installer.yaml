@@ -11,9 +11,9 @@ InstallModes:
   - silentWithProgress
   - interactive
 InstallerSwitches:
-  silent: "/VERYSILENT /SUPPRESSMSGBOXES"
-  silentWithProgress: "/SILENT /SUPPRESSMSGBOXES"
-  interactive: ""
+  Silent: "/VERYSILENT /SUPPRESSMSGBOXES"
+  SilentWithProgress: "/SILENT /SUPPRESSMSGBOXES"
+  Interactive: ""
 ElevationRequirement: elevationRequired
 UnsupportedOSArchitectures:
   - arm64
