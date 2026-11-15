@@ -88,7 +88,8 @@ Source: "..\policy\*"; DestDir: "{win}\PolicyDefinitions"; Flags: ignoreversion;
 Source: "..\policy\en-us\*"; DestDir: "{win}\PolicyDefinitions\en-us"; Flags: ignoreversion; Components: policy; Tasks: installPolicy
 
 [Run]
-Filename: "{#MyAppURL}/blob/main/README.md"; Description: "View the README on GitHub"; Flags: shellexec postinstall nowait runasoriginaluser skipifsilent
+Filename: "{#MyAppURL}"; Description: "View the README on GitHub"; Flags: shellexec postinstall nowait runasoriginaluser unchecked skipifsilent 
+Filename: "{#MyAppURL}/wiki"; Description: "View the Wiki on GitHub"; Flags: shellexec postinstall nowait runasoriginaluser unchecked skipifsilent
 Filename: "{#MyAppURL}/releases/{#MyAppVersion}"; Description: "See what's new on GitHub"; Flags: shellexec postinstall nowait runasoriginaluser skipifsilent
 
 [Icons]
