@@ -36,10 +36,10 @@ else {
 
 [string]$CheckSumAlgo="SHA256"
 
-[string]$FileNameAdmxZip = "Administrative Templates_$($AppName)_v$($AppVersion).zip"
-[string]$FileNameAppZip = "$($AppName)_v$($AppVersion).zip"
-[string]$FileNameSetup = "$($AppName)_v$($AppVersion)"
-[string]$FileNameSetupWithExt = "$($AppName)_v$($AppVersion).exe"
+[string]$FileNameAdmxZip = "AdministrativeTemplates_SimpleLapsGui_v$($AppVersion).zip"
+[string]$FileNameAppZip = "SimpleLapsGui_v$($AppVersion).zip"
+[string]$FileNameSetup = "SimpleLapsGui_v$($AppVersion)"
+[string]$FileNameSetupWithExt = "SimpleLapsGui_v$($AppVersion).exe"
 [string]$FileNameReleaseTemplate = "ReleaseTextTemplate.txt"
 
 
