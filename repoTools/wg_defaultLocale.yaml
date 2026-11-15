@@ -11,7 +11,7 @@ PackageName: Simple LAPS GUI
 PackageUrl: https://github.com/htcfreek/SimpleLapsGui/releases
 License: MIT
 LicenseUrl: https://github.com/htcfreek/SimpleLapsGui/blob/main/LICENSE.md
-ShortDescription: A PowerShell-based tool to read LAPS passwords from the domain.
+ShortDescription: A PowerShell-based GUI to read LAPS passwords from the domain.
 Description: A simple and fast GUI for Microsoft LAPS (legacy) and Windows LAPS. With this tool you can query passwords and change the expiration timestamp. It is perfect for users with visual impairment.
 Tags:
   - LAPS
