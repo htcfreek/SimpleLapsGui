@@ -44,7 +44,7 @@ Starting with the release of version 2.5.0 you can find the [FAQ in the wiki](ht
 > Windows/Smart Screen will warn you on executing the setup that the publisher is not trusted. This is because the files are not digitally signed.
 > You can safely proceed with this warning by clicking 'yes' and accepting the risk.
 >
-> The cost for the signing process would be too expensive for an open source project I do not earn money from.
+> Some anti-virus scanners warn about PowerShell execution in the setup. The PowerShell commands are required for creating and deleting the Windows Event Log category.
 
 > [!TIP]
 > Using a shortcut with the `SimpleLapsGui.ico` from the downloaded zip file shows the correct window icon on your task bar. This already included in the setup.
