@@ -1,8 +1,6 @@
 [Code]
 const PowerShellExe = '\system32\WindowsPowerShell\v1.0\powershell.exe';
 const PowerShellCommandParam = '-NonInteractive -NoProfile -NoLogo -WindowStyle Hidden -ExecutionPolicy Bypass -Command';
-const CheckEventLogParam = ' "if ((Get-EventLog -LogName *).Log -contains ''Simple LAPS GUI'') { \
-     Exit 700 }"';
 const RegisterEventLogParam = ' "if ((Get-EventLog -LogName *).Log -notcontains ''Simple LAPS GUI'') { \
     try { New-EventLog -LogName ''Simple LAPS GUI'' -Source ''Simple LAPS GUI'' -ErrorAction Stop -WarningAction Stop } \
     catch { exit 501 } }"';
@@ -10,28 +8,21 @@ const RemoveEventLogParam = ' "if ((Get-EventLog -LogName *).Log -contains ''Sim
     try { Remove-EventLog -LogName ''Simple LAPS GUI'' -ErrorAction Stop -WarningAction Stop } \
     catch { exit 501 } }"';
 
-var
-  EvtLogChecked: Boolean;
-  EvtLogCheckedResult: Boolean;
 
-function IsEventLogRegistered: Boolean;
+function IsEventLogNotRegistered: Boolean;
 var
-    CheckResult: Integer;
+    CheckResult: Boolean;
 begin
-  if not EvtLogChecked then begin
-    Log('Check if Windows Event Log is registered...')
-    Exec(GetEnv('Windir') + PowerShellExe, PowerShellCommandParam + CheckEventLogParam, '', SW_HIDE, ewWaitUntilTerminated, CheckResult)
-    EvtLogChecked := True;
-    if CheckResult = 700 then begin
-      Log('Windows Event Log is registered.')
-      EvtLogCheckedResult := False
-    end
-    else begin
-      Log('Windows Event Log is not registered.')
-      EvtLogCheckedResult := True
-    end;
+  Log('Check if Windows Event Log is registered...')
+  CheckResult := RegKeyExists(HKEY_LOCAL_MACHINE, 'SYSTEM\CurrentControlSet\Services\EventLog\Simple LAPS GUI\Simple LAPS GUI')
+  if CheckResult then begin
+    Log('Windows Event Log is registered.')
+    Result := False
+  end
+  else begin
+    Log('Windows Event Log is not registered.')
+    Result := True
   end;
-  Result := EvtLogCheckedResult;
 end;
 
 

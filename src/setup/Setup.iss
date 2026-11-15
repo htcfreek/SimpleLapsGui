@@ -71,7 +71,7 @@ Name: "pwsh7support"; Description: "PowerShell 7 support"; Types: full compact
 Name: "policy"; Description: "Extract ADMX files"; Types: full
 
 [Tasks]
-Name: "registerEventLog"; Description: "Register Windows Event Log on this computer"; GroupDescription: "Additional install tasks:"; Check: IsEventLogRegistered
+Name: "registerEventLog"; Description: "Register Windows Event Log on this computer"; GroupDescription: "Additional install tasks:"; Check: IsEventLogNotRegistered
 Name: "installPolicy"; Description: "Install the ADMX files on this computer after extraction"; GroupDescription: "Additional install tasks:"; Components: policy; Flags: unchecked
 Name: "desktopicon"; Description: "Create desktop shortcuts"; GroupDescription: "{cm:AdditionalIcons}"
 
