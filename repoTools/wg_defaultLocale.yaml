@@ -1,0 +1,32 @@
+# yaml-language-server: $schema=https://aka.ms/winget-manifest.installer.1.12.0.schema.json
+
+PackageIdentifier: htcfreek.SimpleLapsGui
+PackageVersion: '<wgAppVersion>'
+PackageLocale: en-US
+Publisher: htcfreek
+PublisherUrl: https://github.com/htcfreek
+PublisherSupportUrl: https://github.com/htcfreek/SimpleLapsGui/issues
+Author: htcfreek
+PackageName: Simple LAPS GUI
+PackageUrl: https://github.com/htcfreek/SimpleLapsGui/releases
+License: MIT
+LicenseUrl: https://github.com/htcfreek/SimpleLapsGui/blob/main/LICENSE.md
+ShortDescription: A PowerShell-based GUI to read LAPS passwords from the domain.
+Description: A simple and fast GUI for Microsoft LAPS (legacy) and Windows LAPS. With this tool you can query passwords and change the expiration timestamp. It is perfect for users with visual impairment.
+Tags:
+  - LAPS
+  - Domain
+  - Administration
+  - Windows
+  - Local Administrator Password Solution
+  - Computer
+Documentations:
+  - DocumentLabel: "General information"
+    DocumentUrl: https://github.com/htcfreek/SimpleLapsGui
+  - DocumentLabel: "Wiki"
+    DocumentUrl: https://github.com/htcfreek/SimpleLapsGui/wiki
+  - DocumentLabel: "FAQ"
+    DocumentUrl: https://github.com/htcfreek/SimpleLapsGui/wiki/FAQ
+ReleaseNotesUrl: https://github.com/htcfreek/SimpleLapsGui/releases/tag/<wgAppVersion>
+ManifestType: defaultLocale
+ManifestVersion: 1.12.0

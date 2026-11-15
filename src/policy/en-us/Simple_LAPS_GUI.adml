@@ -1,0 +1,62 @@
+<?xml version="1.0" ?>
+<policyDefinitionResources xmlns="http://schemas.microsoft.com/GroupPolicy/2006/07/PolicyDefinitions" revision="1.0" schemaVersion="1.0">
+  <displayName/>
+  <description/>
+  <resources>
+    <stringTable>
+      <string id="CATEGORY_SimpleLAPSGUI">Simple LAPS GUI</string>
+	  <string id="SUPPORTED_Version_2_5_0">At least Simple LAPS GUI 2.5.0</string>
+	  
+	  <string id="CopyLinkTargetsToClipboard">Copy links instead of opening them</string>
+	  <string id="CopyLinkTargetsToClipboard_EXPLAIN">The app contains multiple web links. This policy helps you to control how they are handled.
+
+If you enable this policy, all links are copied to the clipboard.
+
+If you disable this policy, links are opened in the default browser.
+
+If you do not configure this policy, the script parameter controls the behavior.
+</string>
+	  
+	  <string id="WindowsEventLog">Enable logging to Windows Event Log</string>
+	  <string id="WindowsEventLog_EXPLAIN">Configure the app to write a log into Windows Event Log
+
+If you enable this policy, the app writes a log to Windows Event Log, and you can select the log level:
+	- Error: Error events
+	- Warning (default): Warning and error events
+	- Information: Informational, warning and error events
+
+If you disable this policy, no log is written.
+
+If you do not configure this policy, the script parameter controls the behavior.
+
+Note: To initialize this feature the app has to be installed using the setup.exe or you have to start the app once with administrative permissions.
+</string>
+	  <string id="WindowsEventLogLevel_ERROR">Error</string>
+	  <string id="WindowsEventLogLevel_WARNING">Warning (default)</string>
+	  <string id="WindowsEventLogLevel_INFO">Information</string>
+
+	  <string id="LogFile">Log to file instead of Windows Eventlog</string>
+	  <string id="LogFile_EXPLAIN">Configure the app to write the log into a file instead of using Windows Eventlog.
+
+If you enable this policy, the app writes a log to the specified file instaed the Windows Eventlog.
+
+If you disable this policy, Windows Eventlog is enforced as log target.
+
+If you do not configure this policy, the script parameter controls the behavior.
+
+Note: The folder has to exist on the disk. It is not created automatically.
+</string>
+    </stringTable>
+
+	<presentationTable>
+	  <presentation id="WindowsEventLog">
+        <dropdownList refId="WindowsEventLogLevel" noSort="true" defaultItem="1">Log level:</dropdownList>
+      </presentation>
+	  <presentation id="LogFile">
+		<textBox refId="LogFilePath">
+			<label>Log file path:</label>
+		</textBox>
+      </presentation>
+	</presentationTable>
+  </resources>
+</policyDefinitionResources>

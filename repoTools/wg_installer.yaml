@@ -1,0 +1,34 @@
+# yaml-language-server: $schema=https://aka.ms/winget-manifest.installer.1.12.0.schema.json
+
+PackageIdentifier: htcfreek.SimpleLapsGui
+PackageVersion: '<wgAppVersion>'
+MinimumOSVersion: 10.0.19042.0
+ProductCode: "{ACAFC3E6-C03C-43F9-8D30-C964F9074B1E}"
+InstallerType: inno
+Scope: machine
+InstallModes:
+  - silent
+  - silentWithProgress
+  - interactive
+InstallerSwitches:
+  Silent: "/VERYSILENT /SUPPRESSMSGBOXES"
+  SilentWithProgress: "/SILENT /SUPPRESSMSGBOXES"
+  Interactive: ""
+ElevationRequirement: elevationRequired
+UnsupportedOSArchitectures:
+  - arm64
+  - arm
+AppsAndFeaturesEntries:
+  - DisplayName: "Simple LAPS GUI"
+    DisplayVersion: "<wgAppVersion>"  
+    ProductCode: "{ACAFC3E6-C03C-43F9-8D30-C964F9074B1E}"
+    Publisher: "htcfreek"
+Installers:
+  - Architecture: x64
+    InstallerUrl: https://github.com/htcfreek/SimpleLapsGui/releases/download/<wgAppVersion>/<wgSetupFile>
+    InstallerSha256: <wgSetupHash>
+  - Architecture: x86
+    InstallerUrl: https://github.com/htcfreek/SimpleLapsGui/releases/download/<wgAppVersion>/<wgSetupFile>
+    InstallerSha256: <wgSetupHash>
+ManifestType: installer
+ManifestVersion: 1.12.0
