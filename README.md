@@ -25,6 +25,15 @@ A simple and fast GUI for Microsoft LAPS (legacy) and Windows LAPS. With this to
 - Use Administrative Templates/GPO to configure the app.
 - Logging to a file or Windows Event Log.
 
+
+## Documentation
+
+You can fin the documentation in the [wiki](https://github.com/htcfreek/SimpleLapsGui/wiki).
+
+### FAQ
+
+Starting with the release of version 2.5.0 you can find the [FAQ in the wiki](https://github.com/htcfreek/SimpleLapsGui/wiki/FAQ).
+
 ## Download and Usage
 
 1. Download the archive or setup from [here](http://github.com/htcfreek/SimpleLapsGui/releases).
@@ -55,14 +64,6 @@ A simple and fast GUI for Microsoft LAPS (legacy) and Windows LAPS. With this to
 
 - Microsoft Entra ID (Azure AD) is not supported.
 - Changing the expiration time of clients that use Microsoft LAPS (legacy) is not supported when searching in multi-domain mode.
-
-## Documentation
-
-You can fin the documentation in the [wiki](https://github.com/htcfreek/SimpleLapsGui/wiki).
-
-### FAQ
-
-Starting with the release of version 2.5.0 you can find the [FAQ in the wiki](https://github.com/htcfreek/SimpleLapsGui/wiki/FAQ).
 
 ## Support and contributions
 
