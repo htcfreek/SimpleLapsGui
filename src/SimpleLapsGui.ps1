@@ -151,6 +151,10 @@ enum SlgLogCategory {
     SetTime = 3
 }
 
+function Write-WinEventEntry([string]$Source, [string]$Message, [System.Diagnostics.EventLogEntryType]$EntryType, [int]$EventId, [int]$Category) {
+    [System.Diagnostics.EventLog]::WriteEntry($Source, $Message, $EntryType, $EventId, $Category)
+}
+
 function Write-SLGLogEntry {
     # Function to write into Windows Event Log.
     # Level config:
@@ -174,7 +178,7 @@ function Write-SLGLogEntry {
     elseif (($EventLogLevel -eq "INFO") -and ($configLogLevel -ceq "INFO")) {
         # Write INFORMATION log, if config is Info
 		if ([string]::IsNullOrWhiteSpace($configLogFilePath)) {
-			Write-EventLog -LogName "Simple LAPS GUI" -Source "Simple LAPS GUI" -EntryType Information -Category ([int]$EventCategory) -EventId $EventID -Message "$($EventMessage)`n`nAction performed by user: $($env:USERDOMAIN)\$($env:USERNAME)"
+			Write-WinEventEntry -Source "Simple LAPS GUI" -EntryType Information -Category ([int]$EventCategory) -EventId $EventID -Message "$($EventMessage)`n`nAction performed by user: $($env:USERDOMAIN)\$($env:USERNAME)"
 		} else {
 			$lText = "$(Get-Date -Format G) | INFO | $($EventCategory) | Event:$($EventID) | $($env:USERDOMAIN)\$($env:USERNAME) | $($EventMessage -replace "`n`n","; " -replace "`n"," " -replace "\* ")"
 			Out-File -FilePath $configLogFilePath -InputObject $lText -Append -ErrorAction Stop -WarningAction Stop
@@ -183,7 +187,7 @@ function Write-SLGLogEntry {
     elseif (($EventLogLevel -eq "WARNING") -and ($configLogLevel -cin "WARNING","INFO")) {
         # Write WARNING log, if config is Warning or Info
         if ([string]::IsNullOrWhiteSpace($configLogFilePath)) {
-			Write-EventLog -LogName "Simple LAPS GUI" -Source "Simple LAPS GUI" -EntryType Warning -Category ([int]$EventCategory) -EventId $EventID -Message "$($EventMessage)`n`nAction performed by user: $($env:USERDOMAIN)\$($env:USERNAME)"
+			Write-WinEventEntry -Source "Simple LAPS GUI" -EntryType Warning -Category ([int]$EventCategory) -EventId $EventID -Message "$($EventMessage)`n`nAction performed by user: $($env:USERDOMAIN)\$($env:USERNAME)"
 		} else {
 			$lText = "$(Get-Date -Format G) | WARNING | $($EventCategory) | Event:$($EventID) | $($env:USERDOMAIN)\$($env:USERNAME) | $($EventMessage -replace "`n`n","; " -replace "`n"," " -replace "\* ")"
 			Out-File -FilePath $configLogFilePath -InputObject $lText -Append -ErrorAction Stop -WarningAction Stop
@@ -192,7 +196,7 @@ function Write-SLGLogEntry {
     elseif (($EventLogLevel -eq "ERROR") -and ($configLogLevel -cin "ERROR","WARNING","INFO")) {
         # Write ERROR log, if config is Error, Warning, Info
         if ([string]::IsNullOrWhiteSpace($configLogFilePath)) {
-			Write-EventLog -LogName "Simple LAPS GUI" -Source "Simple LAPS GUI" -EntryType Error -Category ([int]$EventCategory) -EventId $EventID -Message "$($EventMessage)`n`nAction performed by user: $($env:USERDOMAIN)\$($env:USERNAME)"
+			Write-WinEventEntry -Source "Simple LAPS GUI" -EntryType Error -Category ([int]$EventCategory) -EventId $EventID -Message "$($EventMessage)`n`nAction performed by user: $($env:USERDOMAIN)\$($env:USERNAME)"
 		} else {
 			$lText = "$(Get-Date -Format G) | ERROR | $($EventCategory) | Event:$($EventID) | $($env:USERDOMAIN)\$($env:USERNAME) | $($EventMessage -replace "`n`n","; " -replace "`n"," " -replace "\* ")"
 			Out-File -FilePath $configLogFilePath -InputObject $lText -Append -ErrorAction Stop -WarningAction Stop
@@ -222,9 +226,9 @@ if ($configUseLogFile -eq 0) {$configLogFilePath = [string]::Empty}
 	# Logging enabled
 	if ([string]::IsNullOrWhiteSpace($configLogFilePath)) {
 		# Use Windows Event Logging
-		if ((Get-EventLog -LogName *).Log -notcontains "Simple LAPS GUI") {
+		if ([System.Diagnostics.EventLog]::GetEventLogs().Log -notcontains "Simple LAPS GUI") {
 			try {
-				New-EventLog -LogName "Simple LAPS GUI" -Source "Simple LAPS GUI" -ErrorAction Stop -WarningAction Stop
+				[System.Diagnostics.EventLog]::CreateEventSource("Simple LAPS GUI","Simple LAPS GUI")
 			}
 			catch {
 				[System.Windows.Forms.MessageBox]::Show("Failed to initialize logging! Please restart with administrative permissions.", $windowTitle + " - ERROR", "OK", "Error") | Out-Null;
