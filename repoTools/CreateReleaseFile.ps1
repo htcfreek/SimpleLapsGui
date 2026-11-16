@@ -2,7 +2,7 @@
 # See the LICENSE file in the project root for more information.
 
 # Name: CreateReleaseFile.ps1
-# Version: 2.0 for SimpleLapsGui-Repo
+# Version: 2.1 for SimpleLapsGui-Repo
 # Description: Script to create the release file.
 # Author: htcfreek (Heiko) - https://github.com/htcfreek
 # Parameter: [Version]$ReleaseVersion, [[Switch]$NoHashCalculation=$False], [[Switch]$NoSetupBuild=$False]
@@ -29,9 +29,17 @@ else {
 
 
 # Settings
-[String]$RepoDir = Resolve-Path -LiteralPath "..\"
+if ($psISE) {
+    [string]$ReleaseScriptDir = Resolve-Path -LiteralPath ".\"
+    [String]$RepoDir = Resolve-Path -LiteralPath "..\"
+}
+else {
+    [string]$ReleaseScriptDir = $PSScriptRoot
+    [String]$RepoDir = Resolve-Path -LiteralPath "$PSScriptRoot\..\"
+}
+
 [String]$ReleaseDir = "Release"
-[string]$WgFolder = "h_htcfreek_SimpleLapsGui_$AppVersion"
+[string]$WgFolder = "winget_h-htcfreek-SimpleLapsGui"
 [string]$AppName = "Simple LAPS GUI"
 
 [string]$CheckSumAlgo="SHA256"
@@ -51,17 +59,17 @@ New-Item -Path $RepoDir -Name $ReleaseDir -ItemType Directory -Force | Out-Null
 
 
 # Read release template
-$releaseText = Get-Content -Path $FileNameReleaseTemplate
+$releaseText = Get-Content -Path "$($ReleaseScriptDir)\$($FileNameReleaseTemplate)"
 $releaseText = $releaseText.Replace("<RAppVersion>",$AppVersion)
 $releaseText = $releaseText.Replace("<TAppVersion>",$AppVersion)
 
 
 # Read winget manifest files
-$wgManVersion = Get-Content -Path "wg_version.yaml"
+$wgManVersion = Get-Content -Path "$($ReleaseScriptDir)\wg_version.yaml"
 $wgManVersion = $wgManVersion.Replace("<wgAppVersion>",$AppVersion)
-$wgManLocale = Get-Content -Path "wg_defaultLocale.yaml"
+$wgManLocale = Get-Content -Path "$($ReleaseScriptDir)\wg_defaultLocale.yaml"
 $wgManLocale = $wgManLocale.Replace("<wgAppVersion>",$AppVersion)
-$wgManInstaller = Get-Content -Path "wg_installer.yaml"
+$wgManInstaller = Get-Content -Path "$($ReleaseScriptDir)\wg_installer.yaml"
 $wgManInstaller = $wgManInstaller.Replace("<wgAppVersion>",$AppVersion)
 
 
@@ -121,9 +129,10 @@ if (-Not $NoWingetManifest) {
     # Create winget manifest
     Write-Host "Create winget manifest ..."
 	New-Item -Path "$RepoDir\$ReleaseDir" -Name $WgFolder -ItemType Directory -Force | Out-Null
-	Out-File -FilePath "$($RepoDir)\$($ReleaseDir)\$($WgFolder)\htcfreek.SimpleLapsGui.installer.yaml" -InputObject $wgManInstaller
-	Out-File -FilePath "$($RepoDir)\$($ReleaseDir)\$($WgFolder)\htcfreek.SimpleLapsGui.locale.en-US.yaml" -InputObject $wgManLocale
-	Out-File -FilePath "$($RepoDir)\$($ReleaseDir)\$($WgFolder)\htcfreek.SimpleLapsGui.yaml" -InputObject $wgManVersion
+	New-Item -Path "$RepoDir\$ReleaseDir\$WgFolder" -Name $AppVersion -ItemType Directory -Force | Out-Null
+	Out-File -FilePath "$($RepoDir)\$($ReleaseDir)\$($WgFolder)\$AppVersion\htcfreek.SimpleLapsGui.installer.yaml" -InputObject $wgManInstaller
+	Out-File -FilePath "$($RepoDir)\$($ReleaseDir)\$($WgFolder)\$AppVersion\htcfreek.SimpleLapsGui.locale.en-US.yaml" -InputObject $wgManLocale
+	Out-File -FilePath "$($RepoDir)\$($ReleaseDir)\$($WgFolder)\$AppVersion\htcfreek.SimpleLapsGui.yaml" -InputObject $wgManVersion
 }
 
 

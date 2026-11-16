@@ -28,6 +28,6 @@
 
 | File | SHA256 hash |
 | ------------- | ------------- |
-| <ADMXZipName>  | <ADMXZipHash>  |
-| <SetupFileName>  | <SetupFileHash>  |
-| <AppZipName>  | <AppZipHash>  |
+| <ADMXZipName> | <ADMXZipHash> |
+| <SetupFileName> | <SetupFileHash> |
+| <AppZipName> | <AppZipHash> |
